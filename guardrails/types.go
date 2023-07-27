@@ -11,7 +11,7 @@ type ResourcesResponse struct {
 	}
 }
 
-type TurbotIDObject struct {
+type GuardrailsIDObject struct {
 	Turbot struct {
 		ID string
 	}
@@ -23,7 +23,7 @@ type ResourceResponse struct {
 
 type Resource struct {
 	AttachedResources struct {
-		Items []TurbotIDObject
+		Items []GuardrailsIDObject
 	}
 	Data     map[string]interface{}
 	Metadata map[string]interface{}
@@ -131,7 +131,7 @@ type ControlType struct {
 
 type GrantInfo struct {
 	Grants struct {
-		Items []Grant
+		Items  []Grant
 		Paging struct {
 			Next string
 		}
@@ -151,7 +151,7 @@ type Grant struct {
 				Title string
 			}
 		}
-		Turbot TurbotControlMetadata
+		Turbot GuardrailsControlMetadata
 	}
 	Identity struct {
 		Akas               []string
@@ -182,7 +182,7 @@ type Grant struct {
 			Title string
 		}
 	}
-	Turbot TurbotControlMetadata
+	Turbot GuardrailsControlMetadata
 }
 
 type PolicyTypesResponse struct {
@@ -329,10 +329,10 @@ type Control struct {
 		}
 		URI string
 	}
-	Turbot TurbotControlMetadata
+	Turbot GuardrailsControlMetadata
 }
 
-type TurbotControlMetadata struct {
+type GuardrailsControlMetadata struct {
 	ID              string
 	VersionID       string
 	Timestamp       string
@@ -379,14 +379,14 @@ type PolicySetting struct {
 		}
 		URI string
 	}
-	Turbot             TurbotPolicySettingMetadata
+	Turbot             GuardrailsPolicySettingMetadata
 	ValidFromTimestamp *string
 	ValidToTimestamp   *string
 	Value              interface{}
 	ValueSource        interface{}
 }
 
-type TurbotPolicySettingMetadata struct {
+type GuardrailsPolicySettingMetadata struct {
 	ID              string
 	VersionID       string
 	Timestamp       string
@@ -492,10 +492,10 @@ type Notification struct {
 
 	Grant GrantNotification
 
-	Turbot TurbotNotificationMetadata
+	Turbot GuardrailsNotificationMetadata
 }
 
-type TurbotNotificationMetadata struct {
+type GuardrailsNotificationMetadata struct {
 	ControlID                 *string
 	ControlNewVersionID       *string
 	ControlOldVersionID       *string
@@ -533,7 +533,7 @@ type Tag struct {
 	Key       string
 	Value     string
 	Resources TagResources
-	Turbot    TurbotTagMetadata
+	Turbot    GuardrailsTagMetadata
 }
 
 type TagResources struct {
@@ -546,7 +546,7 @@ type TagResource struct {
 	}
 }
 
-type TurbotTagMetadata struct {
+type GuardrailsTagMetadata struct {
 	ID              string
 	VersionID       string
 	Timestamp       string
@@ -577,7 +577,7 @@ type ActiveGrant struct {
 				Title string
 			}
 		}
-		Turbot TurbotControlMetadata
+		Turbot GuardrailsControlMetadata
 	}
 	Grant struct {
 		Identity struct {
@@ -600,7 +600,7 @@ type ActiveGrant struct {
 				Title string
 			}
 		}
-		Turbot TurbotControlMetadata
+		Turbot GuardrailsControlMetadata
 	}
 	Turbot TurbotResourceMetadata
 }
