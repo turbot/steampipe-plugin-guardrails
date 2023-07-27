@@ -21,7 +21,7 @@ const (
 func connect(ctx context.Context, d *plugin.QueryData) (*apiClient.Client, error) {
 
 	// Load connection from cache, which preserves throttling protection etc
-	cacheKey := "turbot"
+	cacheKey := "guardrails"
 	if cachedData, ok := d.ConnectionManager.Cache.Get(cacheKey); ok {
 		return cachedData.(*apiClient.Client), nil
 	}
@@ -47,10 +47,10 @@ func connect(ctx context.Context, d *plugin.QueryData) (*apiClient.Client, error
 	// Create the client
 	client, err := apiClient.CreateClient(config)
 	if err != nil {
-		return nil, fmt.Errorf("Error creating Turbot client: %s", err.Error())
+		return nil, fmt.Errorf("Error creating Turbot Guardrails client: %s", err.Error())
 	}
 	if err = client.Validate(); err != nil {
-		return nil, fmt.Errorf("Error validating Turbot client: %s", err.Error())
+		return nil, fmt.Errorf("Error validating Turbot Guardrails client: %s", err.Error())
 	}
 
 	// Save to cache
@@ -126,9 +126,9 @@ func escapeQualString(_ context.Context, quals map[string]*proto.QualValue, qual
 	return s
 }
 
-func getTurbotWorkspace(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
+func getTurbotGuardrailsWorkspace(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
 	// Load workspace name from cache
-	cacheKey := "getTurbotWorkspaceInfo"
+	cacheKey := "getTurbotGuardrailsWorkspaceInfo"
 	if cachedData, ok := d.ConnectionManager.Cache.Get(cacheKey); ok {
 		return cachedData.(string), nil
 	}
