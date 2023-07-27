@@ -1,2 +1,2 @@
-# steampipe-plugin-guradrails
-Use SQL to instantly query the Turbot Guradrails resources. Open source CLI. No DB required.
+# steampipe-plugin-guardrails
+Use SQL to instantly query the Turbot Guardrails resources. Open source CLI. No DB required.
