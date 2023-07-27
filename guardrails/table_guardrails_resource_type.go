@@ -10,10 +10,10 @@ import (
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
-func tableTurbotResourceType(ctx context.Context) *plugin.Table {
+func tableGuardrailsResourceType(ctx context.Context) *plugin.Table {
 	return &plugin.Table{
 		Name:        "guardrails_resource_type",
-		Description: "Resource types define the types of resources known to Turbot.",
+		Description: "Resource types define the types of resources known to Turbot Guardrails.",
 		List: &plugin.ListConfig{
 			Hydrate: listResourceType,
 			KeyColumns: []*plugin.KeyColumn{
@@ -150,8 +150,8 @@ func listResourceType(ctx context.Context, d *plugin.QueryData, _ *plugin.Hydrat
 	// Setting page limit
 	filters = append(filters, fmt.Sprintf("limit:%s", strconv.Itoa(int(pageLimit))))
 
-	plugin.Logger(ctx).Trace("guardrails_resource_type.listResourceType", "quals", quals)
-	plugin.Logger(ctx).Trace("guardrails_resource_type.listResourceType", "filters", filters)
+	plugin.Logger(ctx).Debug("guardrails_resource_type.listResourceType", "quals", quals)
+	plugin.Logger(ctx).Debug("guardrails_resource_type.listResourceType", "filters", filters)
 
 	nextToken := ""
 	for {

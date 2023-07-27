@@ -10,10 +10,10 @@ import (
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
-func tableTurbotControlType(ctx context.Context) *plugin.Table {
+func tableGuardrailsControlType(ctx context.Context) *plugin.Table {
 	return &plugin.Table{
 		Name:        "guardrails_control_type",
-		Description: "Control types define the types of controls known to Turbot.",
+		Description: "Control types define the types of controls known to Turbot Guardrails.",
 		List: &plugin.ListConfig{
 			Hydrate: listControlType,
 			KeyColumns: []*plugin.KeyColumn{
@@ -156,8 +156,8 @@ func listControlType(ctx context.Context, d *plugin.QueryData, _ *plugin.Hydrate
 	// Setting page limit
 	filters = append(filters, fmt.Sprintf("limit:%s", strconv.Itoa(int(pageLimit))))
 
-	plugin.Logger(ctx).Trace("guardrails_control_type.listControlType", "quals", quals)
-	plugin.Logger(ctx).Trace("guardrails_control_type.listControlType", "filters", filters)
+	plugin.Logger(ctx).Debug("guardrails_control_type.listControlType", "quals", quals)
+	plugin.Logger(ctx).Debug("guardrails_control_type.listControlType", "filters", filters)
 
 	nextToken := ""
 	for {

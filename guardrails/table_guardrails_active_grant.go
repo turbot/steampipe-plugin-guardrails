@@ -11,10 +11,10 @@ import (
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
-func tableTurbotActiveGrant(ctx context.Context) *plugin.Table {
+func tableGuardrailsActiveGrant(ctx context.Context) *plugin.Table {
 	return &plugin.Table{
 		Name:        "guardrails_active_grant",
-		Description: "All active grants of resources by Turbot.",
+		Description: "All active grants of resources by Turbot Guardrails.",
 		List: &plugin.ListConfig{
 			KeyColumns: []*plugin.KeyColumn{
 				{Name: "grant_id", Require: plugin.Optional},

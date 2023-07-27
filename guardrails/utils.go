@@ -30,18 +30,18 @@ func connect(ctx context.Context, d *plugin.QueryData) (*apiClient.Client, error
 	config := apiClient.ClientConfig{Credentials: apiClient.ClientCredentials{}}
 
 	// Prefer config options given in Steampipe
-	turbotConfig := GetConfig(d.Connection)
-	if turbotConfig.Profile != nil {
-		config.Profile = *turbotConfig.Profile
+	guardrailsConfig := GetConfig(d.Connection)
+	if guardrailsConfig.Profile != nil {
+		config.Profile = *guardrailsConfig.Profile
 	}
-	if turbotConfig.Workspace != nil {
-		config.Credentials.Workspace = *turbotConfig.Workspace
+	if guardrailsConfig.Workspace != nil {
+		config.Credentials.Workspace = *guardrailsConfig.Workspace
 	}
-	if turbotConfig.AccessKey != nil {
-		config.Credentials.AccessKey = *turbotConfig.AccessKey
+	if guardrailsConfig.AccessKey != nil {
+		config.Credentials.AccessKey = *guardrailsConfig.AccessKey
 	}
-	if turbotConfig.SecretKey != nil {
-		config.Credentials.SecretKey = *turbotConfig.SecretKey
+	if guardrailsConfig.SecretKey != nil {
+		config.Credentials.SecretKey = *guardrailsConfig.SecretKey
 	}
 
 	// Create the client
@@ -93,7 +93,7 @@ func convToString(ctx context.Context, d *transform.TransformData) (interface{},
 }
 
 func attachedResourceIDs(_ context.Context, d *transform.TransformData) (interface{}, error) {
-	objs := d.Value.([]TurbotIDObject)
+	objs := d.Value.([]GuardrailsIDObject)
 	ids := []int64{}
 	for _, o := range objs {
 		id, err := strconv.ParseInt(o.Turbot.ID, 10, 64)
@@ -137,18 +137,18 @@ func getTurbotWorkspace(ctx context.Context, d *plugin.QueryData, _ *plugin.Hydr
 	config := apiClient.ClientConfig{Credentials: apiClient.ClientCredentials{}}
 
 	// Prefer config options given in Steampipe
-	turbotConfig := GetConfig(d.Connection)
-	if turbotConfig.Profile != nil {
-		config.Profile = *turbotConfig.Profile
+	guardrailsConfig := GetConfig(d.Connection)
+	if guardrailsConfig.Profile != nil {
+		config.Profile = *guardrailsConfig.Profile
 	}
-	if turbotConfig.Workspace != nil {
-		config.Credentials.Workspace = *turbotConfig.Workspace
+	if guardrailsConfig.Workspace != nil {
+		config.Credentials.Workspace = *guardrailsConfig.Workspace
 	}
-	if turbotConfig.AccessKey != nil {
-		config.Credentials.AccessKey = *turbotConfig.AccessKey
+	if guardrailsConfig.AccessKey != nil {
+		config.Credentials.AccessKey = *guardrailsConfig.AccessKey
 	}
-	if turbotConfig.SecretKey != nil {
-		config.Credentials.SecretKey = *turbotConfig.SecretKey
+	if guardrailsConfig.SecretKey != nil {
+		config.Credentials.SecretKey = *guardrailsConfig.SecretKey
 	}
 
 	credentials, err := apiClient.GetCredentials(config)

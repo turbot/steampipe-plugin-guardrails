@@ -11,10 +11,10 @@ import (
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
-func tableTurbotGrant(ctx context.Context) *plugin.Table {
+func tableGuardrailsGrant(ctx context.Context) *plugin.Table {
 	return &plugin.Table{
 		Name:        "guardrails_grant",
-		Description: "All grants of resources by Turbot.",
+		Description: "All grants of resources by Turbot Guardrails.",
 		List: &plugin.ListConfig{
 			KeyColumns: []*plugin.KeyColumn{
 				{Name: "id", Require: plugin.Optional},
@@ -156,8 +156,8 @@ func listGrants(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData)
 		filters = append(filters, fmt.Sprintf("limit:%s", strconv.Itoa(int(pageLimit))))
 	}
 
-	plugin.Logger(ctx).Trace("guardrails_grants.listGrants", "quals", quals)
-	plugin.Logger(ctx).Trace("guardrails_grants.listGrants", "filters", filters)
+	plugin.Logger(ctx).Debug("guardrails_grants.listGrants", "quals", quals)
+	plugin.Logger(ctx).Debug("guardrails_grants.listGrants", "filters", filters)
 
 	nextToken := ""
 	for {

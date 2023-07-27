@@ -5,7 +5,7 @@ import (
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/schema"
 )
 
-type turbotConfig struct {
+type guardrailsConfig struct {
 	Profile   *string `cty:"profile"`
 	AccessKey *string `cty:"access_key"`
 	SecretKey *string `cty:"secret_key"`
@@ -28,14 +28,14 @@ var ConfigSchema = map[string]*schema.Attribute{
 }
 
 func ConfigInstance() interface{} {
-	return &turbotConfig{}
+	return &guardrailsConfig{}
 }
 
 // GetConfig :: retrieve and cast connection config from query data
-func GetConfig(connection *plugin.Connection) turbotConfig {
+func GetConfig(connection *plugin.Connection) guardrailsConfig {
 	if connection == nil || connection.Config == nil {
-		return turbotConfig{}
+		return guardrailsConfig{}
 	}
-	config, _ := connection.Config.(turbotConfig)
+	config, _ := connection.Config.(guardrailsConfig)
 	return config
 }

@@ -9,10 +9,10 @@ import (
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
-func tableTurbotModVersion(ctx context.Context) *plugin.Table {
+func tableGuardrailsModVersion(ctx context.Context) *plugin.Table {
 	return &plugin.Table{
 		Name:        "guardrails_mod_version",
-		Description: "Module versions in turbot organization.",
+		Description: "Module versions in Turbot Guardrails organization.",
 		List: &plugin.ListConfig{
 			KeyColumns: []*plugin.KeyColumn{
 				{Name: "name", Require: plugin.Optional},
@@ -92,7 +92,7 @@ func listModVersion(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateD
 		orgName = quals["org_name"].GetStringValue()
 	}
 
-	plugin.Logger(ctx).Trace("guardrails_mod_version.listModVersion", "quals", quals)
+	plugin.Logger(ctx).Debug("guardrails_mod_version.listModVersion", "quals", quals)
 	nextToken := ""
 
 	for {

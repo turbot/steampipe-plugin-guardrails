@@ -14,10 +14,10 @@ import (
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
-func tableTurbotNotification(ctx context.Context) *plugin.Table {
+func tableGuardrailsNotification(ctx context.Context) *plugin.Table {
 	return &plugin.Table{
 		Name:        "guardrails_notification",
-		Description: "Notifications from the Turbot CMDB.",
+		Description: "Notifications from the Turbot Guardrails CMDB.",
 		List: &plugin.ListConfig{
 			Hydrate: listNotification,
 			KeyColumns: plugin.KeyColumnSlice{

@@ -11,10 +11,10 @@ import (
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
-func tableTurbotTag(ctx context.Context) *plugin.Table {
+func tableGuardrailsTag(ctx context.Context) *plugin.Table {
 	return &plugin.Table{
 		Name:        "guardrails_tag",
-		Description: "All tags discovered on cloud resources by Turbot.",
+		Description: "All tags discovered on cloud resources by Turbot Guardrails.",
 		List: &plugin.ListConfig{
 			KeyColumns: []*plugin.KeyColumn{
 				{Name: "id", Require: plugin.Optional},
@@ -119,8 +119,8 @@ func listTag(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (i
 		filters = append(filters, fmt.Sprintf("limit:%s", strconv.Itoa(int(pageLimit))))
 	}
 
-	plugin.Logger(ctx).Trace("guardrails_tag.listTag", "quals", quals)
-	plugin.Logger(ctx).Trace("guardrails_tag.listTag", "filters", filters)
+	plugin.Logger(ctx).Debug("guardrails_tag.listTag", "quals", quals)
+	plugin.Logger(ctx).Debug("guardrails_tag.listTag", "filters", filters)
 
 	nextToken := ""
 	for {

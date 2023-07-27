@@ -10,7 +10,7 @@ import (
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
-func tableTurbotSmartFolder(ctx context.Context) *plugin.Table {
+func tableGuardrailsSmartFolder(ctx context.Context) *plugin.Table {
 	return &plugin.Table{
 		Name:        "guardrails_smart_folder",
 		Description: "Smart folders allow policy settings to be attached as groups to resources.",

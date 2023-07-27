@@ -1,5 +1,5 @@
-connection "turbot" {
-  plugin = "turbot"
+connection "guardrails" {
+  plugin = "guardrails"
 
   # Default credentials:
   # By default, Steampipe will use your Turbot Guardrails profiles and credentials exactly

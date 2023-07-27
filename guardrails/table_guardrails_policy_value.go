@@ -10,10 +10,10 @@ import (
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
-func tableTurbotPolicyValue(ctx context.Context) *plugin.Table {
+func tableGuardrailsPolicyValue(ctx context.Context) *plugin.Table {
 	return &plugin.Table{
 		Name:        "guardrails_policy_value",
-		Description: "Policy value define the value of policy known to Turbot.",
+		Description: "Policy value define the value of policy known to Turbot Guardrails.",
 		List: &plugin.ListConfig{
 			Hydrate: listPolicyValue,
 			KeyColumns: []*plugin.KeyColumn{

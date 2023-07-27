@@ -10,10 +10,10 @@ import (
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
-func tableTurbotPolicyType(ctx context.Context) *plugin.Table {
+func tableGuardrailsPolicyType(ctx context.Context) *plugin.Table {
 	return &plugin.Table{
 		Name:        "guardrails_policy_type",
-		Description: "Policy types define the types of controls known to Turbot.",
+		Description: "Policy types define the types of controls known to Turbot Guardrails.",
 		List: &plugin.ListConfig{
 			Hydrate: listPolicyType,
 			KeyColumns: []*plugin.KeyColumn{
@@ -176,8 +176,8 @@ func listPolicyType(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateD
 	// Setting page limit
 	filters = append(filters, fmt.Sprintf("limit:%s", strconv.Itoa(int(pageLimit))))
 
-	plugin.Logger(ctx).Trace("guardrails_policy_type.listPolicyType", "quals", quals)
-	plugin.Logger(ctx).Trace("guardrails_policy_type.listPolicyType", "filters", filters)
+	plugin.Logger(ctx).Debug("guardrails_policy_type.listPolicyType", "quals", quals)
+	plugin.Logger(ctx).Debug("guardrails_policy_type.listPolicyType", "filters", filters)
 
 	nextToken := ""
 	for {
