@@ -1,11 +1,11 @@
-![image](https://hub.steampipe.io/images/plugins/turbot/turbot-social-graphic.png)
+![image](https://hub.steampipe.io/images/plugins/turbot/guardrails-social-graphic.png)
 
-# Turbot Plugin for Steampipe
+# Turbot Guardrails Plugin for Steampipe
 
-Use SQL to query infrastructure including servers, networks, identity and more from Turbot.
+Use SQL to query infrastructure including servers, networks, identity and more from Turbot Guardrails.
 
-- **[Get started →](https://hub.steampipe.io/plugins/turbot/turbot)**
-- Documentation: [Table definitions & examples](https://hub.steampipe.io/plugins/turbot/turbot/tables)
+- **[Get started →](https://hub.steampipe.io/plugins/turbot/guardrails)**
+- Documentation: [Table definitions & examples](https://hub.steampipe.io/plugins/turbot/turbot/guardrails)
 - Community: [Slack Channel](https://steampipe.io/community/join)
 - Get involved: [Issues](https://github.com/turbot/steampipe-plugin-guardrails/issues)
 
@@ -14,7 +14,7 @@ Use SQL to query infrastructure including servers, networks, identity and more f
 Install the plugin with [Steampipe](https://steampipe.io):
 
 ```shell
-steampipe plugin install turbot
+steampipe plugin install guardrails
 ```
 
 Run a query:
@@ -64,14 +64,14 @@ Configure the plugin:
 
 ```sh
 cp config/* ~/.steampipe/config
-vi ~/.steampipe/config/turbot.spc
+vi ~/.steampipe/config/guardrails.spc
 ```
 
 Try it!
 
 ```shell
 steampipe query
-> .inspect turbot
+> .inspect guardrails
 ```
 
 Further reading:
