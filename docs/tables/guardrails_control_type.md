@@ -1,6 +1,6 @@
 # Table: guardrails_control_type
 
-List all the cloud control types known to Turbot.
+List all the cloud control types known to Turbot Guardrails.
 
 ## Examples
 

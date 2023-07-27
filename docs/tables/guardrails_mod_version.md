@@ -1,6 +1,6 @@
 # Table: guardrails_mod_version
 
-Turbot mod version table provides essential information pertaining to the different versions of mods(packaged collection of policies, controls, and guardrails that are associated with a particular cloud service) that are available in the registry.
+Turbot Guardrails mod version table provides essential information pertaining to the different versions of mods(packaged collection of policies, controls, and guardrails that are associated with a particular cloud service) that are available in the registry.
 
 ## Examples
 

@@ -1,6 +1,6 @@
 # Table: guardrails_tag
 
-Tags is a unified collection of all tags discovered by Turbot across all
+Tags is a unified collection of all tags discovered by Turbot Guardrails across all
 resources in all clouds.
 
 It is recommended that queries to this table should include (usually in the `where` clause) at least one

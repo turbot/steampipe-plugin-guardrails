@@ -1,6 +1,6 @@
 # Table: guardrails_control
 
-Controls in Turbot represent the state of a given check (control type) against
+Controls in Turbot Guardrails represent the state of a given check (control type) against
 a resource. For example, is encryption at rest enabled for an AWS EBS Volume.
 
 It is recommended that queries to this table should include (usually in the `where` clause) at least one
@@ -108,9 +108,9 @@ order by
 
 ### Query the most recent 10 controls
 
-Note: It's more efficient to have Turbot limit the results to the last 10
+Note: It's more efficient to have Turbot Guardrails limit the results to the last 10
 (`filter = 'limit:10'`), rather than using `limit 10` which will pull all rows
-from Turbot and will then filter them afterwards on the Steampipe side.
+from Turbot Guardrails and will then filter them afterwards on the Steampipe side.
 
 ```sql
 select
@@ -149,7 +149,7 @@ order by
   r.trunk_title;
 ```
 
-### Extract all controls from Turbot
+### Extract all controls from Turbot Guardrails
 
 WARNING - This is a large query and may take minutes to run. It is not recommended and may timeout.
 It's included here as a reference for those who need to extract all data.

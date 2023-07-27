@@ -1,6 +1,6 @@
 # Table: guardrails_notification
 
-Notifications represent significant events in the lifecycle of turbot infrastructure, including:
+Notifications represent significant events in the lifecycle of turbot guardrails infrastructure, including:
 
 - A history of change for a resource, e.g., my-s3-bucket.
 - A log of state changes and actions performed by a control, e.g., the Tags control for my-s3-bucket.

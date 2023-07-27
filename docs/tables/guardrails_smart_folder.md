@@ -1,6 +1,6 @@
 # Table: guardrails_smart_folder
 
-Smart folders in Turbot allow groups of policies to be applied across a
+Smart folders in Turbot Guardrails allow groups of policies to be applied across a
 collection of resources.
 
 ## Examples

@@ -1,6 +1,6 @@
 # Table: guardrails_policy_setting
 
-Policy settings in Turbot are policy definitions assigned to resources and then
+Policy settings in Turbot Guardrails are policy definitions assigned to resources and then
 applied throughout the hierarchy below (policy values).
 
 It is recommended that queries to this table specify (usually in the `where` clause) at least one

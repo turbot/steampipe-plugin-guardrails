@@ -2,7 +2,7 @@
 
 A policy value is the effective policy setting on an instance of a resource type. Every resource that is targeted by a given policy setting will have its own value for that policy, which will be the resultant calculated policy for the "winning" policy in the hierarchy.
 
-Policy settings are inherited through the resource hierarchy, and values for a resource are calculated according to policy settings at or above it in the resource hierarchy. For example, a policy setting at the Turbot level will be inherited by all resources below.
+Policy settings are inherited through the resource hierarchy, and values for a resource are calculated according to policy settings at or above it in the resource hierarchy. For example, a policy setting at the Turbot Guardrails level will be inherited by all resources below.
 
 It is recommended that queries to this table should include (usually in the `where` clause) at least one
 of these columns: `state`, `policy_type_id`, `resource_type_id`, `resource_type_uri` or `filter`.

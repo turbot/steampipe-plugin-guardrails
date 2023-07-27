@@ -1,6 +1,6 @@
 # Table: guardrails_grant
 
-A grant is the assignment of a permission to a Turbot user or group on a resource or resource group. 
+A grant is the assignment of a permission to a Turbot Guardrails user or group on a resource or resource group. 
 
 ## Examples
 

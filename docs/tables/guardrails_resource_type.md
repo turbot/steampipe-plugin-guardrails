@@ -1,6 +1,6 @@
 # Table: guardrails_resource_type
 
-List all the cloud resource types known to Turbot.
+List all the cloud resource types known to Turbot Guardrails.
 
 ## Examples
 

@@ -1,6 +1,6 @@
 # Table: guardrails_active_grant
 
-An active grant is the assignment of a permission to a Turbot user or group on a resource or resource group which is active.  
+An active grant is the assignment of a permission to a Turbot Guardrails user or group on a resource or resource group which is active.  
 
 The `guardrails_active_grant` table will only return active grants.  Use the `guardrails_grant` table to get a list of all grants.
 
@@ -34,7 +34,7 @@ select
 from
   guardrails_active_grant
 where
-  identity_email = 'abc@gmail.com'
+  identity_email = 'abc@gmail.com';
 ```
 
 ### List active grants for inactive identities
@@ -49,7 +49,7 @@ select
 from
   guardrails_active_grant
 where
-  identity_status = 'Inactive'
+  identity_status = 'Inactive';
 ```
 
 ### List inactive grants

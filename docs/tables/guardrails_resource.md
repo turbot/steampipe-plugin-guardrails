@@ -1,6 +1,6 @@
 # Table: guardrails_resource
 
-Resources in Turbot represent cloud configuration items such as users,
+Resources in Turbot Guardrails represent cloud configuration items such as users,
 networks, servers, etc.
 
 It is recommended that queries to this table should include (usually in the `where` clause) at least one
@@ -150,7 +150,7 @@ order by
   r.create_timestamp desc;
 ```
 
-### Extract all resources from Turbot
+### Extract all resources from Turbot Guardrails
 
 WARNING - This is a large query and may take minutes to run. It is not recommended and may timeout.
 It's included here as a reference for those who need to extract all data.

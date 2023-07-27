@@ -1,6 +1,6 @@
 # Table: guardrails_policy_type
 
-List all the policy types known to Turbot.
+List all the policy types known to Turbot Guardrails.
 
 ## Examples
 
