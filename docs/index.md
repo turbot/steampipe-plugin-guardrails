@@ -1,16 +1,16 @@
 ---
 organization: Turbot
 category: ["security"]
-icon_url: "/images/plugins/turbot/turbot.svg"
+icon_url: "/images/plugins/turbot/guardrails.svg"
 brand_color: "#FCC119"
-display_name: Turbot
-short_name: turbot
-description: Steampipe plugin to query resources, controls, policies and more from Turbot.
-og_description: Query Turbot with SQL! Open source CLI. No DB required.
-og_image: "/images/plugins/turbot/turbot-social-graphic.png"
+display_name: Turbot Guardrails
+short_name: guardrails
+description: Steampipe plugin to query resources, controls, policies and more from Turbot Guardrails.
+og_description: Query Turbot Guardrails with SQL! Open source CLI. No DB required.
+og_image: "/images/plugins/turbot/guardrails-social-graphic.png"
 ---
 
-# Turbot + Steampipe
+# Turbot Guardrails + Steampipe
 
 [Turbot](https://turbot.com/) is a cloud governance and security platform with a real-time CMDB for cloud resources.
 
@@ -41,25 +41,25 @@ from
 
 ## Documentation
 
-- **[Table definitions & examples →](/plugins/turbot/turbot/tables)**
+- **[Table definitions & examples →](/plugins/turbot/guardrails/tables)**
 
 ## Get started
 
 ### Install
 
-Download and install the latest Turbot plugin:
+Download and install the latest Turbot Guardrails plugin:
 
 ```bash
-steampipe plugin install turbot
+steampipe plugin install guardrails
 ```
 
 ### Credentials
 
-Installing the latest turbot plugin will create a config file (`~/.steampipe/config/turbot.spc`) with a single connection named `turbot`. By default, Steampipe will use your [Turbot profiles and credentials](https://turbot.com/v5/docs/reference/cli/installation#setup-your-turbot-credentials) exactly the same as the Turbot CLI and Turbot Terraform provider. In many cases, no extra configuration is required to use Steampipe.
+Installing the latest guardrails plugin will create a config file (`~/.steampipe/config/guardrails.spc`) with a single connection named `guardrails`. By default, Steampipe will use your [Turbot Guardrails profiles and credentials](https://turbot.com/v5/docs/reference/cli/installation#setup-your-turbot-credentials) exactly the same as the Turbot Guardrails CLI and Turbot Terraform provider. In many cases, no extra configuration is required to use Steampipe.
 
 ```hcl
-connection "turbot" {
-  plugin = "turbot"
+connection "guardrails" {
+  plugin = "guardrails"
 }
 ```
 
@@ -70,26 +70,26 @@ connection "turbot" {
 
 ## Advanced configuration options
 
-If you have a `default` profile setup using the Turbot CLI, Steampipe just works with that connection.
+If you have a `default` profile setup using the Turbot Guardrails CLI, Steampipe just works with that connection.
 
 For users with multiple workspaces and more complex authentication use cases, here are some examples of advanced configuration options:
 
 ### Credentials via key pair
 
-The Turbot plugin allows you set static credentials with the `access_key`, `secret_key`, and `workspace` arguments in any connection profile.
+The Turbot Guardrails plugin allows you set static credentials with the `access_key`, `secret_key`, and `workspace` arguments in any connection profile.
 
 ```hcl
-connection "turbot" {
-  plugin = "turbot"
+connection "guardrails" {
+  plugin = "guardrails"
   workspace  = "https://turbot-acme.cloud.turbot.com/"
   access_key = "c8e2c2ed-1ca8-429b-b369-010e3cf75aac"
   secret_key = "a3d8385d-47f7-40c5-a90c-bfdf5b43c8dd"
 }
 ```
 
-### Credentials via Turbot config profiles
+### Credentials via Turbot Guardrails config profiles
 
-You can use an existing Turbot named profile configured in `/Users/jsmyth/.config/turbot/credentials.yml`. A connect per workspace is a common configuration:
+You can use an existing Turbot Guardrails named profile configured in `/Users/jsmyth/.config/turbot/credentials.yml`. A connect per workspace is a common configuration:
 
 ```hcl
 connection "guardrails_acme" {
@@ -106,7 +106,7 @@ connection "guardrails_dmi" {
 
 ### Credentials from environment variables
 
-Environment variables provide another way to specify default Turbot CLI credentials:
+Environment variables provide another way to specify default Turbot Guardrails CLI credentials:
 
 ```sh
 export TURBOT_SECRET_KEY=3d397816-575f-4b2a-a470-a96abe29b81a
