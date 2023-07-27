@@ -12,7 +12,7 @@ og_image: "/images/plugins/turbot/guardrails-social-graphic.png"
 
 # Turbot Guardrails + Steampipe
 
-[Turbot Guardrails](https://turbot.com/guardrails) is a cloud governance and security platform with a real-time CMDB for cloud resources.
+[Turbot Guardrails](https://turbot.com/guardrails) is the leading platform for policy-based control and automatic remediation of enterprise clouds..
 
 [Steampipe](https://steampipe.io) is an open source CLI to instantly query cloud APIs using SQL.
 
@@ -55,7 +55,7 @@ steampipe plugin install guardrails
 
 ### Credentials
 
-Installing the latest guardrails plugin will create a config file (`~/.steampipe/config/guardrails.spc`) with a single connection named `guardrails`. By default, Steampipe will use your [Turbot Guardrails profiles and credentials](https://turbot.com/v5/docs/reference/cli/installation#setup-your-turbot-credentials) exactly the same as the Turbot Guardrails CLI and Turbot Terraform provider. In many cases, no extra configuration is required to use Steampipe.
+Installing the latest guardrails plugin will create a config file (`~/.steampipe/config/guardrails.spc`) with a single connection named `guardrails`. By default, Steampipe will use your [Turbot Guardrails profiles and credentials](https://turbot.com/v5/docs/reference/cli/installation#setup-your-turbot-credentials) exactly the same as the Turbot Guardrails CLI and Turbot Guardrails Terraform provider. In many cases, no extra configuration is required to use Steampipe.
 
 ```hcl
 connection "guardrails" {
@@ -71,14 +71,14 @@ For users with multiple workspaces and more complex authentication use cases, he
 
 ### Credentials via key pair
 
-The Turbot Guardrails plugin allows you set static credentials with the `access_key`, `secret_key`, and `workspace` arguments in any connection profile.
+The Turbot Guardrails plugin allows you to set static credentials with the `access_key`, `secret_key`, and `workspace` arguments in any connection profile.
 
 ```hcl
 connection "guardrails" {
   plugin = "guardrails"
-  workspace  = "https://turbot-acme.cloud.turbot.com/"
   access_key = "c8e2c2ed-1ca8-429b-b369-010e3cf75aac"
   secret_key = "a3d8385d-47f7-40c5-a90c-bfdf5b43c8dd"
+  workspace  = "https://turbot-acme.cloud.turbot.com/"
 }
 ```
 
@@ -88,12 +88,12 @@ You can use an existing Turbot Guardrails named profile configured in `/Users/js
 
 ```hcl
 connection "guardrails_acme" {
-  plugin = "turbot"
+  plugin = "guardrails"
   profile = "turbot-acme"
 }
 
 connection "guardrails_dmi" {
-  plugin = "turbot"
+  plugin = "guardrails"
   profile = "turbot-dmi"
 }
 
@@ -109,15 +109,7 @@ export TURBOT_ACCESS_KEY=86835f29-1c88-46d9-b6ce-cbe5016842d3
 export TURBOT_WORKSPACE=https://turbot-acme.cloud.turbot.com
 ```
 
-or
-
-```sh
-export GUARDRAILS_SECRET_KEY=3d397816-575f-4b2a-a470-a96abe29b81a
-export GUARDRAILS_ACCESS_KEY=86835f29-1c88-46d9-b6ce-cbe5016842d3
-export GUARDRAILS_WORKSPACE=https://turbot-acme.cloud.turbot.com
-```
-
-You can also change the default profile to a named profile with the TURBOT_PROFILE or GUARDRAILS_PROFILE environment variable:
+You can also change the default profile to a named profile with the TURBOT_PROFILE  environment variable:
 
 ```sh
 export TURBOT_PROFILE=turbot-acme

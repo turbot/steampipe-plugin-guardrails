@@ -2,11 +2,11 @@
 
 # Turbot Guardrails Plugin for Steampipe
 
-Use SQL to query infrastructure including servers, networks, identity and more from Turbot Guardrails.
+Use SQL to query infrastructure including servers, networks, identities, policy settings, grants and more from Turbot Guardrails.
 
 - **[Get started →](https://hub.steampipe.io/plugins/turbot/guardrails)**
 - Documentation: [Table definitions & examples](https://hub.steampipe.io/plugins/turbot/turbot/guardrails)
-- Community: [Join #steampipe on Slack →](https://steampipe.io/community/join)
+- Community: [Join #steampipe on Slack →](https:/turbot.com/community/join)
 - Get involved: [Issues](https://github.com/turbot/steampipe-plugin-guardrails/issues)
 
 ## Quick start
