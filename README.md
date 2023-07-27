@@ -6,7 +6,7 @@ Use SQL to query infrastructure including servers, networks, identity and more f
 
 - **[Get started →](https://hub.steampipe.io/plugins/turbot/guardrails)**
 - Documentation: [Table definitions & examples](https://hub.steampipe.io/plugins/turbot/turbot/guardrails)
-- Community: [Slack Channel](https://steampipe.io/community/join)
+- Community: [Join #steampipe on Slack →](https://steampipe.io/community/join)
 - Get involved: [Issues](https://github.com/turbot/steampipe-plugin-guardrails/issues)
 
 ## Quick start
