@@ -97,10 +97,22 @@ func getCredentialsByPrecedence(config ClientConfig) (ClientCredentials, error) 
 }
 
 func getCredentialsFromEnv() (ClientCredentials, bool) {
+	var accessKey = os.Getenv("GUARDRAILS_ACCESS_KEY")
+	var secretKey = os.Getenv("GUARDRAILS_SECRET_KEY")
+	var workspace = os.Getenv("GUARDRAILS_WORKSPACE")
+	if os.Getenv("TURBOT_ACCESS_KEY") != "" {
+		accessKey = os.Getenv("TURBOT_ACCESS_KEY")
+	}
+	if os.Getenv("TURBOT_SECRET_KEY") != "" {
+		secretKey = os.Getenv("TURBOT_SECRET_KEY")
+	}
+	if os.Getenv("TURBOT_WORKSPACE") != "" {
+		workspace = os.Getenv("TURBOT_WORKSPACE")
+	}
 	credentials := ClientCredentials{
-		AccessKey: os.Getenv("TURBOT_ACCESS_KEY"),
-		SecretKey: os.Getenv("TURBOT_SECRET_KEY"),
-		Workspace: os.Getenv("TURBOT_WORKSPACE"),
+		AccessKey: accessKey,
+		SecretKey: secretKey,
+		Workspace: workspace,
 	}
 	return credentials, CredentialsSet(credentials)
 }

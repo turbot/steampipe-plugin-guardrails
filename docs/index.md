@@ -12,7 +12,7 @@ og_image: "/images/plugins/turbot/guardrails-social-graphic.png"
 
 # Turbot Guardrails + Steampipe
 
-[Turbot](https://turbot.com/) is a cloud governance and security platform with a real-time CMDB for cloud resources.
+[Turbot Guardrails](https://turbot.com/guardrails) is a cloud governance and security platform with a real-time CMDB for cloud resources.
 
 [Steampipe](https://steampipe.io) is an open source CLI to instantly query cloud APIs using SQL.
 
@@ -63,11 +63,6 @@ connection "guardrails" {
 }
 ```
 
-## Get involved
-
-- Open source: https://github.com/turbot/steampipe-plugin-guardrails
-- Community: [Join #steampipe on Slack →](https://turbot.com/community/join)
-
 ## Advanced configuration options
 
 If you have a `default` profile setup using the Turbot Guardrails CLI, Steampipe just works with that connection.
@@ -109,13 +104,27 @@ connection "guardrails_dmi" {
 Environment variables provide another way to specify default Turbot Guardrails CLI credentials:
 
 ```sh
-export TURBOT_GUARDRAILS_SECRET_KEY=3d397816-575f-4b2a-a470-a96abe29b81a
-export TURBOT_GUARDRAILS_ACCESS_KEY=86835f29-1c88-46d9-b6ce-cbe5016842d3
-export TURBOT_GUARDRAILS_WORKSPACE=https://turbot-acme.cloud.turbot.com
+export TURBOT_SECRET_KEY=3d397816-575f-4b2a-a470-a96abe29b81a
+export TURBOT_ACCESS_KEY=86835f29-1c88-46d9-b6ce-cbe5016842d3
+export TURBOT_WORKSPACE=https://turbot-acme.cloud.turbot.com
 ```
 
-You can also change the default profile to a named profile with the TURBOT_PROFILE environment variable:
+or
+
+```sh
+export GUARDRAILS_SECRET_KEY=3d397816-575f-4b2a-a470-a96abe29b81a
+export GUARDRAILS_ACCESS_KEY=86835f29-1c88-46d9-b6ce-cbe5016842d3
+export GUARDRAILS_WORKSPACE=https://turbot-acme.cloud.turbot.com
+```
+
+You can also change the default profile to a named profile with the TURBOT_PROFILE or GUARDRAILS_PROFILE environment variable:
 
 ```sh
 export TURBOT_PROFILE=turbot-acme
 ```
+
+## Get involved
+
+- Open source: https://github.com/turbot/steampipe-plugin-guardrails
+- Community: [Join #steampipe on Slack →](https://turbot.com/community/join)
+
