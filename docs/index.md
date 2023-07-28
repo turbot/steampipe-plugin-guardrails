@@ -55,7 +55,7 @@ steampipe plugin install guardrails
 
 ### Credentials
 
-Installing the latest guardrails plugin will create a config file (`~/.steampipe/config/guardrails.spc`) with a single connection named `guardrails`. By default, Steampipe will use your [Turbot Guardrails profiles and credentials](https://turbot.com/v5/docs/reference/cli/installation#setup-your-turbot-credentials) exactly the same as the Turbot Guardrails CLI and Turbot Guardrails Terraform provider. In many cases, no extra configuration is required to use Steampipe.
+Installing the latest guardrails plugin will create a config file (`~/.steampipe/config/guardrails.spc`) with a single connection named `guardrails`. By default, Steampipe will use your [Turbot Guardrails profiles and credentials](https://turbot.com/guardrails/docs/reference/cli/installation#set-up-your-turbot-guardrails-credentials) exactly the same as the Turbot Guardrails CLI and Turbot Guardrails Terraform provider. In many cases, no extra configuration is required to use Steampipe.
 
 ```hcl
 connection "guardrails" {

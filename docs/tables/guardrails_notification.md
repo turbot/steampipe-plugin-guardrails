@@ -23,7 +23,7 @@ When querying this table, we recommend using at least one of these columns (usua
 - `create_timestamp`
 - `filter`
 
-For more information on how to construct a `filter`, please see [Notifications examples](https://turbot.com/v5/docs/reference/filter/notifications#examples).
+For more information on how to construct a `filter`, please see [Notifications examples](https://turbot.com/guardrails/docs/reference/filter/notifications#examples).
 
 ## Examples
 
