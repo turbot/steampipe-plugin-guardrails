@@ -1,3 +1,9 @@
+## v0.11.1 [2023-07-28]
+
+_Bug fixes_
+
+- Fix typo in the `docs/index.md` file.
+
 ## v0.11.0 [2023-07-28]
 
 _What's new?_
