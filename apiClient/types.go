@@ -32,6 +32,7 @@ type ResourceResponse struct {
 type Resource struct {
 	Turbot   TurbotResourceMetadata
 	Data     map[string]interface{}
+	Object   map[string]interface{}
 	Metadata map[string]interface{}
 	Type     struct {
 		Uri string
@@ -52,6 +53,7 @@ type ResourceSchema struct {
 type ReadSerializableResourceResponse struct {
 	Resource struct {
 		Data   map[string]interface{}
+		Object map[string]interface{}
 		Turbot map[string]interface{}
 		Tags   map[string]string
 		Akas   []string

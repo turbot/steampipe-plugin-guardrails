@@ -34,6 +34,7 @@ func tableGuardrailsResource(ctx context.Context) *plugin.Table {
 			// Other columns
 			{Name: "create_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromField("Turbot.CreateTimestamp"), Description: "When the resource was first discovered by Turbot. (It may have been created earlier.)"},
 			{Name: "data", Type: proto.ColumnType_JSON, Description: "Resource data."},
+			{Name: "object", Type: proto.ColumnType_JSON, Description: "Extended Resource data."},
 			{Name: "filter", Type: proto.ColumnType_STRING, Transform: transform.FromQual("filter"), Description: "Filter used for this resource list."},
 			{Name: "metadata", Type: proto.ColumnType_JSON, Description: "Resource custom metadata."},
 			{Name: "parent_id", Type: proto.ColumnType_INT, Transform: transform.FromField("Turbot.ParentID"), Description: "ID for the parent of this resource. For the Turbot root resource this is null."},
@@ -54,6 +55,7 @@ query resourceList($filter: [String!], $next_token: String) {
 	resources(filter: $filter, paging: $next_token) {
 		items {
 			data
+			object
 			metadata
 			trunk {
 				title

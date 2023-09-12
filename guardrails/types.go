@@ -26,6 +26,7 @@ type Resource struct {
 		Items []GuardrailsIDObject
 	}
 	Data     map[string]interface{}
+	Object   map[string]interface{}
 	Metadata map[string]interface{}
 	Trunk    struct {
 		Title string
@@ -446,6 +447,7 @@ type Notification struct {
 
 	Resource struct {
 		Data     interface{}
+		Object   interface{}
 		Metadata interface{}
 		Type     struct {
 			URI    string
