@@ -1,3 +1,15 @@
+## v0.12.0 [2023-09-14]
+
+_Enhancements_
+
+- Added the `resource_object` and `object` columns to `guardrails_notification` and `guardrails_resource` tables respectively. ([#7](https://github.com/turbot/steampipe-plugin-guardrails/pull/7))
+
+_Dependencies_
+
+- Recompiled plugin with [steampipe-plugin-sdk v5.5.1](https://github.com/turbot/steampipe-plugin-sdk/blob/main/CHANGELOG.md#v551-2023-07-26). ([#3](https://github.com/turbot/steampipe-plugin-guardrails/pull/3))
+- Recompiled plugin with `github.com/turbot/go-kit v0.7.0`. ([#5](https://github.com/turbot/steampipe-plugin-guardrails/pull/5))
+- Recompiled plugin with `github.com/stretchr/testify v1.8.4`. ([#4](https://github.com/turbot/steampipe-plugin-guardrails/pull/4))
+
 ## v0.11.1 [2023-07-28]
 
 _Bug fixes_
