@@ -180,6 +180,7 @@ func (client *Client) AssignResourceResults(responseData interface{}, properties
 	var resource Resource
 	// initialise map
 	resource.Data = make(map[string]interface{})
+
 	// convert turbot property to structure
 	if err := mapstructure.Decode(responseData.(map[string]interface{})["turbot"], &resource.Turbot); err != nil {
 		return nil, err
@@ -190,6 +191,9 @@ func (client *Client) AssignResourceResults(responseData interface{}, properties
 	}
 	// convert object property to structure
 	if err := mapstructure.Decode(responseData.(map[string]interface{})["data"], &resource.Data); err != nil {
+		return nil, err
+	}
+	if err := mapstructure.Decode(responseData.(map[string]interface{})["object"], &resource.Object); err != nil {
 		return nil, err
 	}
 	// write properties into a map
