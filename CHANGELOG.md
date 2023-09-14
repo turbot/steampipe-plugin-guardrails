@@ -2,7 +2,7 @@
 
 _Enhancements_
 
-- Added the `resource_object` and `object` columns to `guardrails_notification` and `guardrails_resource` tables. ([#7](https://github.com/turbot/steampipe-plugin-guardrails/pull/7))
+- Added the `resource_object` and `object` columns to `guardrails_notification` and `guardrails_resource` tables respectively. ([#7](https://github.com/turbot/steampipe-plugin-guardrails/pull/7))
 
 _Dependencies_
 
