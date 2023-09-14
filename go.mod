@@ -10,7 +10,7 @@ require (
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/pkg/errors v0.9.1
-	github.com/stretchr/testify v1.8.3
+	github.com/stretchr/testify v1.8.4
 	github.com/turbot/go-kit v0.7.0
 	github.com/turbot/steampipe-plugin-sdk/v5 v5.5.1
 	golang.org/x/net v0.8.0 // indirect
