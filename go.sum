@@ -804,8 +804,8 @@ github.com/terraform-providers/terraform-provider-openstack v1.15.0/go.mod h1:2a
 github.com/tkrajina/go-reflector v0.5.6 h1:hKQ0gyocG7vgMD2M3dRlYN6WBBOmdoOzJ6njQSepKdE=
 github.com/tkrajina/go-reflector v0.5.6/go.mod h1:ECbqLgccecY5kPmPmXg1MrHW585yMcDkVl6IvJe64T4=
 github.com/tmc/grpc-websocket-proxy v0.0.0-20171017195756-830351dc03c6/go.mod h1:ncp9v5uamzpCO7NfCPTXjqaC+bZgJeR0sMTm6dMHP7U=
-github.com/turbot/go-kit v0.7.0 h1:Jiua34hnICSWzJgYmqup/sY7G/1jlMqcElJgDIM8uFU=
-github.com/turbot/go-kit v0.7.0/go.mod h1:QIOX91BIxQ/1JEtM4rIHWDito3c3GUP2Z+dUT5F6z94=
+github.com/turbot/go-kit v0.8.1 h1:Su2RFhwiCAlbVXlG5f3w+t/8vpr1YXwfVfAIXlL+Xbc=
+github.com/turbot/go-kit v0.8.1/go.mod h1:AY17SDL/JnVnqUlQIc0Y9mQ2Gbtw0+IwEX4ErywH9bw=
 github.com/turbot/steampipe-plugin-sdk/v5 v5.5.1 h1:ta8DmaTFuPLHVG/0oyzxKoCfIChW6UT0tfg+pE7NWSA=
 github.com/turbot/steampipe-plugin-sdk/v5 v5.5.1/go.mod h1:bB45PpBccG2tU1lCAc4Y/Jiyd/097hQn6xT9aO7TSq8=
 github.com/ugorji/go v0.0.0-20180813092308-00b869d2f4a5/go.mod h1:hnLbHMwcvSihnDhEfx2/BzKp2xb0Y+ErdfYcrs9tkJQ=
