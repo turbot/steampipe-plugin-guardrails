@@ -5,7 +5,7 @@ go 1.21
 require (
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/go-yaml/yaml v2.1.0+incompatible
-	github.com/hashicorp/terraform v0.12.0
+	github.com/hashicorp/terraform v0.12.17
 	github.com/machinebox/graphql v0.2.3-0.20180904014615-9835de6386a3
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/mapstructure v1.5.0
