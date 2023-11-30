@@ -1,17 +1,22 @@
-# Table: guardrails_control
+---
+title: "Steampipe Table: guardrails_control - Query Guardrails Controls using SQL"
+description: "Allows users to query Guardrails Controls, specifically the control status, control category, and control standard, providing insights into the guardrails compliance and security posture."
+---
 
-Controls in Turbot Guardrails represent the state of a given check (control type) against
-a resource. For example, is encryption at rest enabled for an AWS EBS Volume.
+# Table: guardrails_control - Query Guardrails Controls using SQL
 
-It is recommended that queries to this table should include (usually in the `where` clause) at least one
-of these columns: `id`, `control_type_id`, `control_type_uri`,
-`resource_type_id`, `resource_type_uri`, `state` or `filter`.
+Guardrails is a governance, risk management, and compliance service that provides a set of predefined controls to help organizations manage their security and compliance posture. These controls are designed to be easily integrated into existing security and compliance processes and can be customized to meet specific organizational needs. Guardrails controls are categorized into various standards and categories to provide a comprehensive and structured approach to security and compliance management.
+
+## Table Usage Guide
+
+The `guardrails_control` table provides insights into the controls within Guardrails. As a security analyst, explore control-specific details through this table, including control status, control category, and control standard. Utilize it to uncover information about controls, such as their compliance status, the categories they fall under, and the standards they adhere to.
 
 ## Examples
 
 ### Control summary for AWS > IAM > Role > Approved
-
+Explore the status of approved roles in AWS IAM by counting their occurrence. This allows you to identify potential issues and understand the overall health of your IAM roles.
 Simple table:
+
 
 ```sql
 select
@@ -51,6 +56,7 @@ order by
 ```
 
 ### Control summary for all AWS > IAM controls
+This query helps in assessing the security posture of your AWS Identity and Access Management (IAM) controls. It aids in identifying the number of controls in different states, allowing you to quickly pinpoint areas that might need attention or remediation, thereby enhancing your overall security management.
 
 ```sql
 select
@@ -90,6 +96,7 @@ order by
 ```
 
 ### List controls for AWS > IAM > Role > Approved
+Explore the history of changes related to approved roles in AWS IAM. This can help in understanding the compliance status and identifying any unauthorized or accidental modifications.
 
 ```sql
 select
@@ -107,10 +114,11 @@ order by
 ```
 
 ### Query the most recent 10 controls
-
+Explore the latest 10 guardrail controls to understand their current state and the reasons behind it, which is crucial for maintaining system integrity and security.
 Note: It's more efficient to have Turbot Guardrails limit the results to the last 10
 (`filter = 'limit:10'`), rather than using `limit 10` which will pull all rows
 from Turbot Guardrails and will then filter them afterwards on the Steampipe side.
+
 
 ```sql
 select
@@ -128,6 +136,7 @@ order by
 ```
 
 ### Control & Resource data for for AWS > IAM > Role > Approved
+This query is used to gain insights into the status and reasons for approval of IAM roles in AWS. It helps in managing access controls by identifying roles that are approved, providing a better understanding of the security posture.
 
 ```sql
 select
@@ -150,9 +159,10 @@ order by
 ```
 
 ### Extract all controls from Turbot Guardrails
-
+Discover the segments that fall under Turbot Guardrails' controls. This can provide a comprehensive overview, aiding in the efficient management and review of security measures.
 WARNING - This is a large query and may take minutes to run. It is not recommended and may timeout.
 It's included here as a reference for those who need to extract all data.
+
 
 ```sql
 select
