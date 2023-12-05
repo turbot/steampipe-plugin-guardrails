@@ -11,6 +11,9 @@ Guardrails is a security management service that enables organizations to implem
 
 The `guardrails_active_grant` table provides insights into the current permissions and access levels within Guardrails. As a security administrator, you can explore grant-specific details through this table, including the grantee, the grantor, the permission level, and the time the grant was made. Use it to monitor and manage access levels, ensuring that only the appropriate permissions are granted and maintained.
 
+**Important Notes**
+- The `guardrails_active_grant` table will only return active grants. Use the `guardrails_grant` table to get a list of all grants.
+
 ## Examples
 
 ### Basic info
@@ -66,15 +69,15 @@ where
 Identify the grants that are currently inactive. This could be useful for auditing purposes or to clean up unused or unnecessary access permissions.
 
 ```sql
-select 
-  grant_id, 
+select
+  grant_id,
   identity_email,
   level_title,
   level_trunk_title,
   level_uri,
   resource_trunk_title,
   resource_type_trunk_title
-from 
-  guardrails_grant 
+from
+  guardrails_grant
 where grant_id not in (select grant_id from guardrails_active_grant);
 ```

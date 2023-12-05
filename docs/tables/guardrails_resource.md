@@ -11,6 +11,13 @@ Guardrails is a service that provides a unified view of the security, compliance
 
 The `guardrails_resource` table provides insights into the resources monitored by Guardrails. As a cloud security engineer, you can use this table to explore resource-specific details, including their current compliance status, potential risks, and associated metadata. This table is beneficial for identifying non-compliant resources, understanding the security posture of your cloud infrastructure, and taking necessary actions to ensure compliance and mitigate risks.
 
+**Important Notes**
+- When querying this table, we recommend using at least one of these columns (usually in the `where` clause):
+  - `id`
+  - `resource_type_id`
+  - `resource_type_uri`
+  - `filter`
+
 ## Examples
 
 ### List all AWS IAM Roles
@@ -137,28 +144,28 @@ where
 ### Search for resources created within 7 days, join with count of controls in alarm state
 Explore resources created within the past week and assess the number of controls in an alarm state. This is useful for monitoring new resources and their potential risks.
 
-```sql 
+```sql
 select
   r.id,
   r.title,
   r.trunk_title,
   r.resource_type_uri,
   to_char(r.create_timestamp, 'YYYY-MM-DD HH24:MI') as create_timestamp,
-  count(c.*) as alarm_count 
+  count(c.*) as alarm_count
 from
-  guardrails_resource as r 
+  guardrails_resource as r
   left join
-    guardrails_control as c 
-    on r.id = c.resource_id 
-    and c.state = 'alarm' 
+    guardrails_control as c
+    on r.id = c.resource_id
+    and c.state = 'alarm'
 where
-  r.filter = 'notificationType:resource timestamp:>=T-7d' 
+  r.filter = 'notificationType:resource timestamp:>=T-7d'
 group by
   r.id,
   r.title,
   r.trunk_title,
   r.resource_type_uri,
-  r.create_timestamp 
+  r.create_timestamp
 order by
   r.create_timestamp desc;
 ```

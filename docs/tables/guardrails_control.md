@@ -11,6 +11,16 @@ Guardrails is a governance, risk management, and compliance service that provide
 
 The `guardrails_control` table provides insights into the controls within Guardrails. As a security analyst, explore control-specific details through this table, including control status, control category, and control standard. Utilize it to uncover information about controls, such as their compliance status, the categories they fall under, and the standards they adhere to.
 
+**Important Notes**
+- When querying this table, we recommend using at least one of these columns (usually in the `where` clause):
+  - `id`
+  - `control_type_id`
+  - `control_type_uri`
+  - `resource_type_id`
+  - `resource_type_uri`
+  - `state`
+  - `filter`
+
 ## Examples
 
 ### Control summary for AWS > IAM > Role > Approved

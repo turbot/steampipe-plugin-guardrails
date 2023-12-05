@@ -11,6 +11,13 @@ Guardrails is a tool that helps in managing the security and compliance of cloud
 
 The `guardrails_tag` table offers a comprehensive view into Guardrails Tags within the Guardrails service. As a Security Engineer, you can leverage this table to analyze and manage tag data associated with Guardrails resources, including their names and values. This can facilitate effective organization, identification, and management of resources based on custom-defined metadata.
 
+**Important Notes**
+- When querying this table, we recommend using at least one of these columns (usually in the `where` clause):
+  - `id`
+  - `key`
+  - `value`
+  - `filter`
+
 ## Examples
 
 ### List all tags

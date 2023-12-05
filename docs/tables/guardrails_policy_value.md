@@ -11,6 +11,14 @@ Guardrails is a policy as code service that enables users to manage and enforce 
 
 The `guardrails_policy_value` table provides insights into Guardrails policy values. As a system administrator or a compliance manager, explore policy-specific details through this table, including policy value, associated metadata, and the desired state of system configuration. Utilize it to uncover information about policy values, such as those associated with specific compliance requirements, and to verify the desired state of system configuration.
 
+**Important Notes**
+- When querying this table, we recommend using at least one of these columns (usually in the `where` clause):
+  - `state`
+  - `policy_type_id`
+  - `resource_type_id`
+  - `resource_type_uri`
+  - `filter`
+
 ## Examples
 
 ### List policy values by policy type ID

@@ -11,6 +11,16 @@ Guardrails is a policy-as-code service that helps you manage and enforce your cl
 
 The `guardrails_policy_setting` table provides insights into policy settings within Guardrails. As a Security Engineer, explore policy-specific details through this table, including policy configurations, associated metadata, and the status of each policy. Utilize it to uncover information about policies, such as those which are currently active, the specific configurations of each policy, and the potential impact of these policies on your cloud resources.
 
+**Important Notes**
+- When querying this table, we recommend using at least one of these columns (usually in the `where` clause):
+  - `id`
+  - `resource_id`
+  - `exception`
+  - `orphan`
+  - `policy_type_id`
+  - `policy_type_uri`
+  - `filter`
+
 ## Examples
 
 ### Find all policy settings that are exceptions to another policy
