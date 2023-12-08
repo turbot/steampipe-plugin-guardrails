@@ -28,7 +28,7 @@ Explore the status of approved roles in AWS IAM by counting their occurrence. Th
 Simple table:
 
 
-```sql
+```sql+postgres
 select
   state,
   count(*)
@@ -42,9 +42,44 @@ order by
   count desc;
 ```
 
+```sql+sqlite
+select
+  state,
+  count(*)
+from
+  guardrails_control
+where
+  control_type_uri = 'tmod:@turbot/aws-iam#/control/types/roleApproved'
+group by
+  state
+order by
+  count(*) desc;
+```
+
 Or, if you prefer a full view of all states:
 
-```sql
+```sql+postgres
+select
+  control_type_uri,
+  sum(case when state = 'ok' then 1 else 0 end) as ok,
+  sum(case when state = 'tbd' then 1 else 0 end) as tbd,
+  sum(case when state = 'invalid' then 1 else 0 end) as invalid,
+  sum(case when state = 'alarm' then 1 else 0 end) as alarm,
+  sum(case when state = 'skipped' then 1 else 0 end) as skipped,
+  sum(case when state = 'error' then 1 else 0 end) as error,
+  sum(case when state in ('alarm', 'error', 'invalid') then 1 else 0 end) as alert,
+  count(*) as total
+from
+  guardrails_control as c
+where
+  control_type_uri = 'tmod:@turbot/aws-iam#/control/types/roleApproved'
+group by
+  control_type_uri
+order by
+  total desc;
+```
+
+```sql+sqlite
 select
   control_type_uri,
   sum(case when state = 'ok' then 1 else 0 end) as ok,
@@ -68,7 +103,7 @@ order by
 ### Control summary for all AWS > IAM controls
 This query helps in assessing the security posture of your AWS Identity and Access Management (IAM) controls. It aids in identifying the number of controls in different states, allowing you to quickly pinpoint areas that might need attention or remediation, thereby enhancing your overall security management.
 
-```sql
+```sql+postgres
 select
   state,
   count(*)
@@ -82,9 +117,44 @@ order by
   count desc;
 ```
 
+```sql+sqlite
+select
+  state,
+  count(*)
+from
+  guardrails_control
+where
+  filter = 'controlTypeId:"tmod:@turbot/aws-iam#/resource/types/iam"'
+group by
+  state
+order by
+  count(*) desc;
+```
+
 Or, if you prefer a full view of all states:
 
-```sql
+```sql+postgres
+select
+  control_type_uri,
+  sum(case when state = 'ok' then 1 else 0 end) as ok,
+  sum(case when state = 'tbd' then 1 else 0 end) as tbd,
+  sum(case when state = 'invalid' then 1 else 0 end) as invalid,
+  sum(case when state = 'alarm' then 1 else 0 end) as alarm,
+  sum(case when state = 'skipped' then 1 else 0 end) as skipped,
+  sum(case when state = 'error' then 1 else 0 end) as error,
+  sum(case when state in ('alarm', 'error', 'invalid') then 1 else 0 end) as alert,
+  count(*) as total
+from
+  guardrails_control as c
+where
+  filter = 'controlTypeId:"tmod:@turbot/aws-iam#/resource/types/iam"'
+group by
+  control_type_uri
+order by
+  total desc;
+```
+
+```sql+sqlite
 select
   control_type_uri,
   sum(case when state = 'ok' then 1 else 0 end) as ok,
@@ -108,7 +178,22 @@ order by
 ### List controls for AWS > IAM > Role > Approved
 Explore the history of changes related to approved roles in AWS IAM. This can help in understanding the compliance status and identifying any unauthorized or accidental modifications.
 
-```sql
+```sql+postgres
+select
+  timestamp,
+  state,
+  reason,
+  resource_id,
+  control_type_uri
+from
+  guardrails_control
+where
+  filter = 'controlTypeId:"tmod:@turbot/aws-iam#/control/types/roleApproved" controlTypeLevel:self'
+order by
+  timestamp desc;
+```
+
+```sql+sqlite
 select
   timestamp,
   state,
@@ -130,7 +215,22 @@ Note: It's more efficient to have Turbot Guardrails limit the results to the las
 from Turbot Guardrails and will then filter them afterwards on the Steampipe side.
 
 
-```sql
+```sql+postgres
+select
+  timestamp,
+  state,
+  reason,
+  resource_id,
+  control_type_uri
+from
+  guardrails_control
+where
+  filter = 'limit:10'
+order by
+  timestamp desc;
+```
+
+```sql+sqlite
 select
   timestamp,
   state,
@@ -148,7 +248,7 @@ order by
 ### Control & Resource data for for AWS > IAM > Role > Approved
 This query is used to gain insights into the status and reasons for approval of IAM roles in AWS. It helps in managing access controls by identifying roles that are approved, providing a better understanding of the security posture.
 
-```sql
+```sql+postgres
 select
   r.trunk_title,
   r.data ->> 'Arn' as arn,
@@ -168,13 +268,38 @@ order by
   r.trunk_title;
 ```
 
+```sql+sqlite
+select
+  r.trunk_title,
+  json_extract(r.data, '$.Arn') as arn,
+  json_extract(r.metadata, '$.aws.accountId') as account_id,
+  c.state,
+  c.reason
+from
+  guardrails_control as c,
+  guardrails_resource as r
+where
+  c.control_type_uri = 'tmod:@turbot/aws-iam#/control/types/roleApproved'
+  and r.resource_type_uri = 'tmod:@turbot/aws-iam#/resource/types/role'
+  and r.id = c.resource_id
+order by
+  r.trunk_title;
+```
+
 ### Extract all controls from Turbot Guardrails
 Discover the segments that fall under Turbot Guardrails' controls. This can provide a comprehensive overview, aiding in the efficient management and review of security measures.
 WARNING - This is a large query and may take minutes to run. It is not recommended and may timeout.
 It's included here as a reference for those who need to extract all data.
 
 
-```sql
+```sql+postgres
+select
+  *
+from
+  guardrails_control;
+```
+
+```sql+sqlite
 select
   *
 from

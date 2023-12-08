@@ -23,7 +23,17 @@ The `guardrails_tag` table offers a comprehensive view into Guardrails Tags with
 ### List all tags
 Explore all tags to understand their key-value pairings, which can help in organizing and locating specific resources within the Guardrails system.
 
-```sql
+```sql+postgres
+select
+  *
+from
+  guardrails_tag
+order by
+  key,
+  value;
+```
+
+```sql+sqlite
 select
   *
 from
@@ -36,7 +46,19 @@ order by
 ### Find all resources for the Sales department
 Explore which resources are specifically allocated for the Sales department, assisting in resource management and departmental budgeting.
 
-```sql
+```sql+postgres
+select
+  key,
+  value,
+  resource_ids
+from
+  guardrails_tag
+where
+  key = 'Department'
+  and value = 'Sales';
+```
+
+```sql+sqlite
 select
   key,
   value,
@@ -51,7 +73,7 @@ where
 ### Find departments with the most tagged resources
 Analyze the settings to understand which departments have the most resources tagged to them. This can help to identify areas that may require more oversight or resource allocation.
 
-```sql
+```sql+postgres
 select
   key,
   value,
@@ -64,10 +86,32 @@ order by
   count desc;
 ```
 
+```sql+sqlite
+select
+  key,
+  value,
+  json_array_length(resource_ids) as count
+from
+  guardrails_tag
+where
+  key = 'Department'
+order by
+  count desc;
+```
+
 ### List tags without values
 Discover the segments that contain tags without assigned values. This can be useful in identifying potential gaps or inconsistencies in your data tagging practices.
 
-```sql
+```sql+postgres
+select
+  *
+from
+  guardrails_tag
+where
+  value is null or trim(value) = '';
+```
+
+```sql+sqlite
 select
   *
 from

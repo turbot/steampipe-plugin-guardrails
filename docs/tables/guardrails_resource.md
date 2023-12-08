@@ -23,7 +23,20 @@ The `guardrails_resource` table provides insights into the resources monitored b
 ### List all AWS IAM Roles
 Explore the different roles within your AWS IAM setup to understand their configurations and creation times. This can aid in managing access controls and ensuring optimal security practices.
 
-```sql
+```sql+postgres
+select
+  id,
+  title,
+  create_timestamp,
+  metadata,
+  data
+from
+  guardrails_resource
+where
+  resource_type_uri = 'tmod:@turbot/aws-iam#/resource/types/role';
+```
+
+```sql+sqlite
 select
   id,
   title,
@@ -39,7 +52,7 @@ where
 ### List all S3 buckets with a given Owner tag
 Explore which S3 buckets are associated with a specific owner. This is useful to manage and track resources based on ownership within an AWS environment.
 
-```sql
+```sql+postgres
 select
   id,
   title,
@@ -51,10 +64,35 @@ where
   and tags ->> 'Owner' = 'Jane';
 ```
 
+```sql+sqlite
+select
+  id,
+  title,
+  tags
+from
+  guardrails_resource
+where
+  resource_type_uri = 'tmod:@turbot/aws-s3#/resource/types/bucket'
+  and json_extract(tags, '$.Owner') = 'Jane';
+```
+
 ### Get a specific resource by ID
 Determine the details of a specific resource using its unique identifier. This can be particularly useful when you need to quickly access and review the specifics of a resource in your system.
 
-```sql
+```sql+postgres
+select
+  id,
+  title,
+  create_timestamp,
+  metadata,
+  data
+from
+  guardrails_resource
+where
+  id = 216005088871602;
+```
+
+```sql+sqlite
 select
   id,
   title,
@@ -70,7 +108,7 @@ where
 ### Filter for resources using Turbot filter syntax
 Analyze the distribution of resources based on their type to understand the prevalence of specific resource types in your AWS IAM configuration. This query is particularly useful in identifying and managing resource types that are heavily utilized.
 
-```sql
+```sql+postgres
 select
   resource_type_uri,
   count(*)
@@ -84,13 +122,41 @@ order by
   count desc;
 ```
 
+```sql+sqlite
+select
+  resource_type_uri,
+  count(*)
+from
+  guardrails_resource
+where
+  filter = 'resourceTypeId:"tmod:@turbot/aws-iam#/resource/types/iam"'
+group by
+  resource_type_uri
+order by
+  count(*) desc;
+```
+
 ### Search for AWS IAM Roles by name (Turbot side)
 Explore which AWS IAM roles have 'admin' access to better understand and manage permissions within your AWS environment. This can help in enhancing security by identifying potential areas of risk.
 This query will ask Turbot to filter the resources down to the given `filter`,
 limiting the results by name.
 
 
-```sql
+```sql+postgres
+select
+  id,
+  title,
+  create_timestamp,
+  metadata,
+  data
+from
+  guardrails_resource
+where
+  resource_type_uri = 'tmod:@turbot/aws-iam#/resource/types/role'
+  and filter = 'admin';
+```
+
+```sql+sqlite
 select
   id,
   title,
@@ -110,7 +176,7 @@ This query gathers all the AWS IAM roles from Turbot and then uses Postgres
 level filters to limit the results.
 
 
-```sql
+```sql+postgres
 select
   id,
   title,
@@ -124,10 +190,24 @@ where
   and title ilike '%admin%';
 ```
 
+```sql+sqlite
+select
+  id,
+  title,
+  create_timestamp,
+  metadata,
+  data
+from
+  guardrails_resource
+where
+  resource_type_uri = 'tmod:@turbot/aws-iam#/resource/types/role'
+  and title like '%admin%';
+```
+
 ### Search for console logins within 7 days
 Determine the areas in which console logins have occurred within the past week. This can help in monitoring user activity and identifying any unusual login patterns for enhanced security.
 
-```sql
+```sql+postgres
 select
   id,
   title,
@@ -141,10 +221,14 @@ where
   filter = 'resourceTypeId:"tmod:@turbot/turbot-iam#/resource/types/profile" $.lastLoginTimestamp:>=T-7d';
 ```
 
+```sql+sqlite
+Error: SQLite does not support array_to_string and regexp_matches functions.
+```
+
 ### Search for resources created within 7 days, join with count of controls in alarm state
 Explore resources created within the past week and assess the number of controls in an alarm state. This is useful for monitoring new resources and their potential risks.
 
-```sql
+```sql+postgres
 select
   r.id,
   r.title,
@@ -170,13 +254,24 @@ order by
   r.create_timestamp desc;
 ```
 
+```sql+sqlite
+Error: The corresponding SQLite query is unavailable.
+```
+
 ### Extract all resources from Turbot Guardrails
 Explore the full range of resources available in Turbot Guardrails to gain a comprehensive understanding of the scope of your resources and their management. This is beneficial for assessing overall resource utilization and identifying areas for improvement.
 WARNING - This is a large query and may take minutes to run. It is not recommended and may timeout.
 It's included here as a reference for those who need to extract all data.
 
 
-```sql
+```sql+postgres
+select
+  *
+from
+  guardrails_resource;
+```
+
+```sql+sqlite
 select
   *
 from

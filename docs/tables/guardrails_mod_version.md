@@ -16,7 +16,17 @@ The `guardrails_mod_version` table provides insights into the different versions
 ### Version details for aws mod
 Analyze the settings to understand the status and version of the AWS module in use within your workspace. This is useful to ensure you're working with the most current version and to troubleshoot any version-related issues.
 
-```sql
+```sql+postgres
+select
+  name,
+  version,
+  status,
+  workspace
+from 
+  guardrails_mod_version where name = 'aws';
+```
+
+```sql+sqlite
 select
   name,
   version,
@@ -29,7 +39,16 @@ from
 ### Get recommended mod version for aws-acm
 Explore the recommended version status for a specific module in the Guardrails, allowing you to ensure you're using the most suitable version for optimal performance.
 
-```sql
+```sql+postgres
+select
+  name,
+  version,
+  status
+from
+  guardrails_mod_version where name = 'aws-acm' and status = 'RECOMMENDED';
+```
+
+```sql+sqlite
 select
   name,
   version,
@@ -41,7 +60,16 @@ from
 ### List available mod versions for aws-acm
 Explore the available versions of a specific module in your AWS Certificate Manager to keep track of updates or changes. This can be useful in maintaining the security and functionality of your environment.
 
-```sql
+```sql+postgres
+select
+  name,
+  version,
+  status
+from
+  guardrails_mod_version where name = 'aws-acm' and status = 'AVAILABLE';
+```
+
+```sql+sqlite
 select
   name,
   version,
@@ -53,7 +81,16 @@ from
 ### List mod versions using the filter syntax
 Explore which mod versions are currently in use and their status, specifically those associated with the 'aws-x' filter. This can be useful for understanding the distribution and application of different mod versions in your environment.
 
-```sql
+```sql+postgres
+select
+  name,
+  version,
+  status
+from
+  guardrails_mod_version where filter = 'aws-x';
+```
+
+```sql+sqlite
 select
   name,
   version,

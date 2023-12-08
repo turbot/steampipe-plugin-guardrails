@@ -16,7 +16,18 @@ The `guardrails_policy_type` table provides insights into Policy Types within Gu
 ### List all policy types
 Explore the various policy types available in your system in an organized manner to better understand your security infrastructure and manage your policies effectively. This query is useful for identifying and managing the range of policy types in your system.
 
-```sql
+```sql+postgres
+select
+  id,
+  uri,
+  trunk_title
+from
+  guardrails_policy_type
+order by
+  trunk_title;
+```
+
+```sql+sqlite
 select
   id,
   uri,
@@ -30,7 +41,7 @@ order by
 ### List all policy types with additional detail
 Explore policy settings by gaining insights into additional details such as descriptions and related links. This allows for a better understanding of each policy type and its specific configurations.
 
-```sql
+```sql+postgres
 select
   trunk_title as "policy_name",
   description,
@@ -42,10 +53,35 @@ order by
   trunk_title;
 ```
 
+```sql+sqlite
+select
+  trunk_title as "policy_name",
+  description,
+  json_extract(schema, '$.enum') as "policy_settings",
+  uri as "policy_uri"
+from
+  guardrails_policy_type
+order by
+  trunk_title;
+```
+
 ### List all policy types for AWS S3
 Discover the variety of policy types available for AWS S3 to better manage and secure your cloud storage resources. This can help you understand the different levels of control you can exert over your S3 resources.
 
-```sql
+```sql+postgres
+select
+  id,
+  uri,
+  trunk_title
+from
+  guardrails_policy_type
+where
+  mod_uri like 'tmod:@turbot/aws-s3%'
+order by
+  trunk_title;
+```
+
+```sql+sqlite
 select
   id,
   uri,
@@ -61,7 +97,17 @@ order by
 ### Count policy types by cloud provider
 Explore the distribution of policy types across different cloud providers such as AWS, Azure, and GCP to understand their usage and prevalence. This information can be beneficial for assessing your organization's cloud utilization and security posture.
 
-```sql
+```sql+postgres
+select
+  sum(case when mod_uri like 'tmod:@turbot/aws-%' then 1 else 0 end) as aws,
+  sum(case when mod_uri like 'tmod:@turbot/azure-%' then 1 else 0 end) as azure,
+  sum(case when mod_uri like 'tmod:@turbot/gcp-%' then 1 else 0 end) as gcp,
+  count(*) as total
+from
+  guardrails_policy_type;
+```
+
+```sql+sqlite
 select
   sum(case when mod_uri like 'tmod:@turbot/aws-%' then 1 else 0 end) as aws,
   sum(case when mod_uri like 'tmod:@turbot/azure-%' then 1 else 0 end) as azure,
@@ -74,7 +120,7 @@ from
 ### Policy types that target AWS > S3 > Bucket
 Explore which policy types are specifically targeting your AWS S3 buckets. This is useful to assess and manage the security and compliance of your S3 resources.
 
-```sql
+```sql+postgres
 select
   trunk_title,
   uri,
@@ -83,4 +129,8 @@ from
   guardrails_policy_type
 where
   targets ? 'tmod:@turbot/aws-s3#/resource/types/bucket';
+```
+
+```sql+sqlite
+Error: SQLite does not support the "?" operator used in JSON queries.
 ```
