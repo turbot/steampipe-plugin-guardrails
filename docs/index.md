@@ -116,8 +116,4 @@ You can also change the default profile to a named profile with the TURBOT_PROFI
 export TURBOT_PROFILE=turbot-acme
 ```
 
-## Get involved
-
-- Open source: https://github.com/turbot/steampipe-plugin-guardrails
-- Community: [Join #steampipe on Slack →](https://turbot.com/community/join)
 
