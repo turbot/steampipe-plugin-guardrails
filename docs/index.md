@@ -8,6 +8,7 @@ short_name: guardrails
 description: Steampipe plugin to query resources, controls, policies and more from Turbot Guardrails.
 og_description: Query Turbot Guardrails with SQL! Open source CLI. No DB required.
 og_image: "/images/plugins/turbot/guardrails-social-graphic.png"
+engines: ["steampipe", "sqlite", "postgres", "export"]
 ---
 
 # Turbot Guardrails + Steampipe
