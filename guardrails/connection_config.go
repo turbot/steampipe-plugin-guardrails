@@ -2,13 +2,29 @@ package turbot
 
 import (
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"
+	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/schema"
 )
 
 type guardrailsConfig struct {
-	Profile   *string `hcl:"profile"`
-	AccessKey *string `hcl:"access_key"`
-	SecretKey *string `hcl:"secret_key"`
-	Workspace *string `hcl:"workspace"`
+	Profile   *string `cty:"profile"`
+	AccessKey *string `cty:"access_key"`
+	SecretKey *string `cty:"secret_key"`
+	Workspace *string `cty:"workspace"`
+}
+
+var ConfigSchema = map[string]*schema.Attribute{
+	"profile": {
+		Type: schema.TypeString,
+	},
+	"access_key": {
+		Type: schema.TypeString,
+	},
+	"secret_key": {
+		Type: schema.TypeString,
+	},
+	"workspace": {
+		Type: schema.TypeString,
+	},
 }
 
 func ConfigInstance() interface{} {
