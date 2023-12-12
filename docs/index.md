@@ -8,13 +8,14 @@ short_name: guardrails
 description: Steampipe plugin to query resources, controls, policies and more from Turbot Guardrails.
 og_description: Query Turbot Guardrails with SQL! Open source CLI. No DB required.
 og_image: "/images/plugins/turbot/guardrails-social-graphic.png"
+engines: ["steampipe", "sqlite", "postgres", "export"]
 ---
 
 # Turbot Guardrails + Steampipe
 
 [Turbot Guardrails](https://turbot.com/guardrails) is the leading platform for policy-based control and automatic remediation of enterprise clouds.
 
-[Steampipe](https://steampipe.io) is an open source CLI to instantly query cloud APIs using SQL.
+[Steampipe](https://steampipe.io) is an open-source zero-ETL engine to instantly query cloud APIs using SQL.
 
 For example:
 
@@ -115,8 +116,4 @@ You can also change the default profile to a named profile with the TURBOT_PROFI
 export TURBOT_PROFILE=turbot-acme
 ```
 
-## Get involved
-
-- Open source: https://github.com/turbot/steampipe-plugin-guardrails
-- Community: [Join #steampipe on Slack →](https://turbot.com/community/join)
 
