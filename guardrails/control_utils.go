@@ -3,6 +3,7 @@ package turbot
 import (
     "context"
     "fmt"
+    "reflect"
     "slices"
 
     "github.com/turbot/steampipe-plugin-sdk/v5/plugin"
@@ -25,6 +26,11 @@ func controlColumnIncludes(m *map[string]interface{}, cols []string) {
     (*m)["includeControlResourceTypeId"] = slices.Contains(cols, "resource_type_id")
     (*m)["includeControlResourceTypeUri"] = slices.Contains(cols, "resource_type_uri")
     (*m)["includeControlMetadata"] = slices.Contains(cols, "metadata")
+    if reflect.DeepEqual(cols, []string{"metadata"}) {
+        (*m)["includeControlItems"] = false
+    } else {
+        (*m)["includeControlItems"] = true
+    }
 
 }
 

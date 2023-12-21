@@ -3,6 +3,7 @@ package turbot
 import (
 	"context"
 	"fmt"
+	"reflect"
 	"regexp"
 	"strconv"
 
@@ -55,14 +56,14 @@ func tableGuardrailsControl(ctx context.Context) *plugin.Table {
 
 const (
 	queryControlList = `
-	query controlList($filter: [String!], $next_token: String, $includeControlState: Boolean!, $includeControlReason: Boolean!, $includeControlDetails: Boolean!, $includeControlResourceTypeUri: Boolean!, $includeControlResourceTrunkTitle: Boolean!, $includeControlTypeUri: Boolean!, $includeControlTypeTrunkTitle: Boolean!, $includeControlId: Boolean!, $includeControlTimestamp: Boolean!, $includeControlCreateTimestamp: Boolean!, $includeControlUpdateTimestamp: Boolean!, $includeControlVersionId: Boolean!, $includeControlTypeId: Boolean!, $includeControlResourceId: Boolean!, $includeControlResourceTypeId: Boolean!, $includeControlMetadata: Boolean!) {
+	query controlList($filter: [String!], $next_token: String, $includeControlState: Boolean!, $includeControlReason: Boolean!, $includeControlDetails: Boolean!, $includeControlResourceTypeUri: Boolean!, $includeControlResourceTrunkTitle: Boolean!, $includeControlTypeUri: Boolean!, $includeControlTypeTrunkTitle: Boolean!, $includeControlId: Boolean!, $includeControlTimestamp: Boolean!, $includeControlCreateTimestamp: Boolean!, $includeControlUpdateTimestamp: Boolean!, $includeControlVersionId: Boolean!, $includeControlTypeId: Boolean!, $includeControlResourceId: Boolean!, $includeControlResourceTypeId: Boolean!, $includeControlMetadata: Boolean!, $includeControlItems: Boolean!) {
 	controls(filter: $filter, paging: $next_token) {
 		metadata @include(if: $includeControlMetadata){
       stats {
         total
       }
     }
-		items {
+		items @include(if: $includeControlItems){
 			state @include(if: $includeControlState)
 			reason @include(if: $includeControlReason)
 			details @include(if: $includeControlDetails)
@@ -173,12 +174,17 @@ func listControl(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData
 			plugin.Logger(ctx).Error("guardrails_control.listControl", "query_error", err)
 			return nil, err
 		}
-		for _, r := range result.Controls.Items {
-			d.StreamListItem(ctx, ControlItem{result.Controls.Metadata, r})
+		if len(result.Controls.Items) == 0 {
+			d.StreamListItem(ctx, ControlItem{result.Controls.Metadata, Control{}})
+			break
+		} else {
+			for _, r := range result.Controls.Items {
+				d.StreamListItem(ctx, ControlItem{result.Controls.Metadata, r})
 
-			// Context can be cancelled due to manual cancellation or the limit has been hit
-			if d.RowsRemaining(ctx) == 0 {
-				return nil, nil
+				// Context can be cancelled due to manual cancellation or the limit has been hit
+				if d.RowsRemaining(ctx) == 0 {
+					return nil, nil
+				}
 			}
 		}
 		if !pageResults || result.Controls.Paging.Next == "" {
