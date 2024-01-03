@@ -11,13 +11,13 @@ import (
 func tableGuardrailsControlMetadata(ctx context.Context) *plugin.Table {
 	return &plugin.Table{
 		Name:        "guardrails_control_metadata",
-		Description: "Controls show the current state of checks in the Turbot Guardrails workspace.",
+		Description: "Guardrails Control Metadata.",
 		List: &plugin.ListConfig{
 			Hydrate: listControlMetadata,
 		},
 		Columns: []*plugin.Column{
 			// Top columns
-			{Name: "id", Type: proto.ColumnType_INT, Transform: transform.FromValue(), Description: "Unique identifier of the control."},
+			{Name: "total", Type: proto.ColumnType_INT, Transform: transform.FromField("Controls.Metadata.stats.total"), Description: "The total number of controls."},
 			{Name: "workspace", Type: proto.ColumnType_STRING, Hydrate: plugin.HydrateFunc(getTurbotGuardrailsWorkspace).WithCache(), Transform: transform.FromValue(), Description: "Specifies the workspace URL."},
 		},
 	}
