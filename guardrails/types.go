@@ -627,3 +627,9 @@ type GrantNotification struct {
 		ProfileID *string
 	}
 }
+
+type ControlMetadataResponse struct {
+	Controls struct {
+		Metadata interface{}
+	}
+}

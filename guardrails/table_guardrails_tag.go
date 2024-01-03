@@ -26,16 +26,16 @@ func tableGuardrailsTag(ctx context.Context) *plugin.Table {
 		},
 		Columns: []*plugin.Column{
 			// Top columns
-			{Name: "id", Type: proto.ColumnType_INT, Transform: transform.FromField("Turbot.ID"), Description: "Unique identifier of the tag."},
-			{Name: "key", Type: proto.ColumnType_STRING, Description: "Tag key."},
-			{Name: "value", Type: proto.ColumnType_STRING, Description: "Tag value."},
-			{Name: "resource_ids", Type: proto.ColumnType_JSON, Transform: transform.FromField("Resources").Transform(tagResourcesToIdArray), Description: "Turbot IDs of resources with this tag."},
+			{Name: "id", Type: proto.ColumnType_INT, Transform: transform.FromValue(), Description: "Unique identifier of the tag.", Hydrate: tagHydrateId},
+			{Name: "key", Type: proto.ColumnType_STRING, Description: "Tag key.", Transform: transform.FromValue(), Hydrate: tagHydrateKey},
+			{Name: "value", Type: proto.ColumnType_STRING, Description: "Tag value.", Transform: transform.FromValue(), Hydrate: tagHydrateValue},
+			{Name: "resource_ids", Type: proto.ColumnType_JSON, Transform: transform.FromValue().Transform(tagResourcesToIdArray), Description: "Turbot IDs of resources with this tag.", Hydrate: tagHydrateResources},
 			// Other columns
-			{Name: "create_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromField("Turbot.CreateTimestamp"), Description: "When the tag was first discovered by Turbot. (It may have been created earlier.)"},
+			{Name: "create_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromValue(), Description: "When the tag was first discovered by Turbot. (It may have been created earlier.)", Hydrate: tagHydrateCreateTimestamp},
 			{Name: "filter", Type: proto.ColumnType_STRING, Transform: transform.FromQual("filter"), Description: "Filter used for this tag list."},
-			{Name: "timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromField("Turbot.Timestamp"), Description: "Timestamp when the tag was last modified (created, updated or deleted)."},
-			{Name: "update_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromField("Turbot.UpdateTimestamp"), Description: "When the tag was last updated in Turbot."},
-			{Name: "version_id", Type: proto.ColumnType_INT, Transform: transform.FromField("Turbot.VersionID"), Description: "Unique identifier for this version of the tag."},
+			{Name: "timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromValue(), Description: "Timestamp when the tag was last modified (created, updated or deleted).", Hydrate: tagHydrateTimestamp},
+			{Name: "update_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromValue(), Description: "When the tag was last updated in Turbot.", Hydrate: tagHydrateUpdateTimestamp},
+			{Name: "version_id", Type: proto.ColumnType_INT, Transform: transform.FromValue(), Description: "Unique identifier for this version of the tag.", Hydrate: tagHydrateVersionID},
 			{Name: "workspace", Type: proto.ColumnType_STRING, Hydrate: plugin.HydrateFunc(getTurbotGuardrailsWorkspace).WithCache(), Transform: transform.FromValue(), Description: "Specifies the workspace URL."},
 		},
 	}
@@ -43,30 +43,30 @@ func tableGuardrailsTag(ctx context.Context) *plugin.Table {
 
 const (
 	queryTagList = `
-query tagList($filter: [String!], $paging: String) {
-	tags(filter: $filter, paging: $paging) {
-		items {
-			key
-			value
-			turbot {
-				id
-				timestamp
-				createTimestamp
-				updateTimestamp
-				versionId
-			}
-			resources {
-				items {
-					turbot {
-						id
-					}
-				}
-			}
-		}
-		paging {
-			next
-		}
-	}
+query tagList($filter: [String!], $paging: String, $includeTagKey: Boolean!, $includeTagValue: Boolean!, $includeTagTurbotId: Boolean!, $includeTagTurbotTimestamp: Boolean!, $includeTagTurbotCreateTimestamp: Boolean!, $includeTagTurbotUpdateTimestamp: Boolean!, $includeTagTurbotVersionId: Boolean!, $includeTagResources: Boolean!) {
+  tags(filter: $filter, paging: $paging) {
+    items {
+      key @include(if: $includeTagKey)
+      value @include(if: $includeTagValue)
+      turbot {
+        id @include(if: $includeTagTurbotId)
+        timestamp @include(if: $includeTagTurbotTimestamp)
+        createTimestamp @include(if: $includeTagTurbotCreateTimestamp)
+        updateTimestamp @include(if: $includeTagTurbotUpdateTimestamp)
+        versionId @include(if: $includeTagTurbotVersionId)
+      }
+      resources @include(if: $includeTagResources) {
+        items {
+          turbot {
+            id
+          }
+        }
+      }
+    }
+    paging {
+      next
+    }
+  }
 }
 `
 )
@@ -122,10 +122,16 @@ func listTag(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (i
 	plugin.Logger(ctx).Debug("guardrails_tag.listTag", "quals", quals)
 	plugin.Logger(ctx).Debug("guardrails_tag.listTag", "filters", filters)
 
-	nextToken := ""
+	variables := map[string]interface{}{
+		"filter":     filters,
+		"next_token": "",
+	}
+
+	appendTagColumnIncludes(&variables, d.QueryContext.Columns)
+
 	for {
 		result := &TagsResponse{}
-		err = conn.DoRequest(queryTagList, map[string]interface{}{"filter": filters, "next_token": nextToken}, result)
+		err = conn.DoRequest(queryTagList, variables, result)
 		if err != nil {
 			plugin.Logger(ctx).Error("guardrails_tag.listTag", "query_error", err)
 			// TODO - this is a bit risk and should not be necessary, but there is a
@@ -143,7 +149,7 @@ func listTag(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (i
 		if !pageResults || result.Tags.Paging.Next == "" {
 			break
 		}
-		nextToken = result.Tags.Paging.Next
+		variables["next_token"] = result.Tags.Paging.Next
 	}
 
 	return nil, nil

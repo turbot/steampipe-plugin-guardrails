@@ -27,24 +27,23 @@ func tableGuardrailsControlType(ctx context.Context) *plugin.Table {
 		},
 		Columns: []*plugin.Column{
 			// Top columns
-			{Name: "id", Type: proto.ColumnType_INT, Transform: transform.FromField("Turbot.ID"), Description: "Unique identifier of the control type."},
-			{Name: "uri", Type: proto.ColumnType_STRING, Description: "URI of the control type."},
-			{Name: "title", Type: proto.ColumnType_STRING, Description: "Title of the control type."},
-			{Name: "trunk_title", Type: proto.ColumnType_STRING, Transform: transform.FromField("Trunk.Title"), Description: "Title with full path of the control type."},
-			{Name: "description", Type: proto.ColumnType_STRING, Description: "Description of the control type."},
-			{Name: "targets", Type: proto.ColumnType_JSON, Description: "URIs of the resource types targeted by this control type."},
+			{Name: "id", Type: proto.ColumnType_INT, Transform: transform.FromValue(), Description: "Unique identifier of the control type.", Hydrate: controlTypeHydrateId},
+			{Name: "uri", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "URI of the control type.", Hydrate: controlTypeHydrateUri},
+			{Name: "title", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "Title of the control type.", Hydrate: controlTypeHydrateTitle},
+			{Name: "trunk_title", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "Title with full path of the control type.", Hydrate: controlTypeHydrateTrunkTitle},
+			{Name: "description", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "Description of the control type.", Hydrate: controlTypeHydrateDescription},
+			{Name: "targets", Type: proto.ColumnType_JSON, Transform: transform.FromValue(), Description: "URIs of the resource types targeted by this control type.", Hydrate: controlTypeHydrateTargets},
 			// Other columns
-			{Name: "akas", Type: proto.ColumnType_JSON, Transform: transform.FromField("Turbot.Akas"), Description: "AKA (also known as) identifiers for the control type."},
-			{Name: "category_id", Type: proto.ColumnType_INT, Transform: transform.FromField("Category.Turbot.ID"), Description: "ID of the control category for the control type."},
-			{Name: "category_uri", Type: proto.ColumnType_STRING, Transform: transform.FromField("Category.URI"), Description: "URI of the control category for the control type."},
-			{Name: "create_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromField("Turbot.CreateTimestamp"), Description: "When the control type was first discovered by Turbot. (It may have been created earlier.)"},
-			{Name: "icon", Type: proto.ColumnType_STRING, Description: "Icon of the control type."},
-			{Name: "mod_uri", Type: proto.ColumnType_STRING, Description: "URI of the mod that contains the control type."},
-			{Name: "parent_id", Type: proto.ColumnType_STRING, Transform: transform.FromField("Turbot.ParentID"), Description: "ID for the parent of this control type."},
-			{Name: "path", Type: proto.ColumnType_JSON, Transform: transform.FromField("Turbot.Path").Transform(pathToArray), Description: "Hierarchy path with all identifiers of ancestors of the control type."},
-			// TODO - does not work {Name: "resource_target_ids", Type: proto.ColumnType_JSON, Description: "IDs of the resource types targeted by this control type."},
-			{Name: "update_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromField("Turbot.UpdateTimestamp"), Description: "When the control type was last updated in Turbot."},
-			{Name: "version_id", Type: proto.ColumnType_INT, Transform: transform.FromField("Turbot.VersionID"), Description: "Unique identifier for this version of the control type."},
+			{Name: "akas", Type: proto.ColumnType_JSON, Transform: transform.FromValue(), Description: "AKA (also known as) identifiers for the control type.", Hydrate: controlTypeHydrateAkas},
+			{Name: "category_id", Type: proto.ColumnType_INT, Transform: transform.FromValue(), Description: "ID of the control category for the control type.", Hydrate: controlTypeHydrateCategoryId},
+			{Name: "category_uri", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "URI of the control category for the control type.", Hydrate: controlTypeHydrateCategoryUri},
+			{Name: "create_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromValue(), Description: "When the control type was first discovered by Turbot. (It may have been created earlier.)", Hydrate: controlTypeHydrateCreateTimestamp},
+			{Name: "icon", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "Icon of the control type.", Hydrate: controlTypeHydrateIcon},
+			{Name: "mod_uri", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "URI of the mod that contains the control type.", Hydrate: controlTypeHydrateModUri},
+			{Name: "parent_id", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "ID for the parent of this control type.", Hydrate: controlTypeHydrateParentId},
+			{Name: "path", Type: proto.ColumnType_JSON, Transform: transform.FromValue().Transform(pathToArray), Description: "Hierarchy path with all identifiers of ancestors of the control type.", Hydrate: controlTypeHydratePath},
+			{Name: "update_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromValue(), Description: "When the control type was last updated in Turbot.", Hydrate: controlTypeHydrateUpdateTimestamp},
+			{Name: "version_id", Type: proto.ColumnType_INT, Transform: transform.FromValue(), Description: "Unique identifier for this version of the control type.", Hydrate: controlTypeHydrateVersionId},
 			{Name: "workspace", Type: proto.ColumnType_STRING, Hydrate: plugin.HydrateFunc(getTurbotGuardrailsWorkspace).WithCache(), Transform: transform.FromValue(), Description: "Specifies the workspace URL."},
 		},
 	}
@@ -52,73 +51,67 @@ func tableGuardrailsControlType(ctx context.Context) *plugin.Table {
 
 const (
 	queryControlTypeList = `
-query controlTypeList($filter: [String!], $next_token: String) {
-	controlTypes(filter: $filter, paging: $next_token) {
-		items {
-			category {
-				turbot {
-					id
-				}
-				uri
-			}
-			description
-			icon
-			modUri
-			targets
-			title
-			trunk {
-				title
-			}
-			turbot {
-				akas
-				createTimestamp
-				id
-				parentId
-				path
-				#resourceTargetIds
-				title
-				updateTimestamp
-				versionId
-			}
-			uri
-		}
-		paging {
-			next
-		}
-	}
+query controlTypeList($filter: [String!], $next_token: String, $includeControlTypeCategoryId: Boolean!, $includeControlTypeCategoryUri: Boolean!, $includeControlTypeDescription: Boolean!, $includeControlTypeIcon: Boolean!, $includeControlTypeModUri: Boolean!, $includeControlTypeTargets: Boolean!, $includeControlTypeTitle: Boolean!, $includeControlTypeTrunkTitle: Boolean!, $includeControlTypeTurbotAkas: Boolean!, $includeControlTypeTurbotCreateTimestamp: Boolean!, $includeControlTypeTurbotParentId: Boolean!, $includeControlTypeTurbotPath: Boolean!, $includeControlTypeTurbotUpdateTimestamp: Boolean!, $includeControlTypeTurbotVersionId: Boolean!, $includeControlTypeUri: Boolean!) {
+  controlTypes(filter: $filter, paging: $next_token) {
+    items {
+      category {
+        turbot {
+          id @include(if: $includeControlTypeCategoryId)
+        }
+        uri @include(if: $includeControlTypeCategoryUri)
+      }
+      description @include(if: $includeControlTypeDescription)
+      icon @include(if: $includeControlTypeIcon)
+      modUri @include(if: $includeControlTypeModUri)
+      targets @include(if: $includeControlTypeTargets)
+      title @include(if: $includeControlTypeTitle)
+      trunk {
+        title @include(if: $includeControlTypeTrunkTitle)
+      }
+      turbot {
+        akas @include(if: $includeControlTypeTurbotAkas)
+        createTimestamp @include(if: $includeControlTypeTurbotCreateTimestamp)
+        parentId @include(if: $includeControlTypeTurbotParentId)
+        path @include(if: $includeControlTypeTurbotPath)
+        updateTimestamp @include(if: $includeControlTypeTurbotUpdateTimestamp)
+        versionId @include(if: $includeControlTypeTurbotVersionId)
+      }
+      uri @include(if: $includeControlTypeUri)
+    }
+    paging {
+      next
+    }
+  }
 }
 `
 
 	queryControlTypeGet = `
-query controlTypeGet($id: ID!) {
-	controlType(id: $id) {
-		category {
-			turbot {
-				id
-			}
-			uri
-		}
-		description
-		icon
-		modUri
-		targets
-		title
-		trunk {
-			title
-		}
-		turbot {
-			akas
-			createTimestamp
-			id
-			parentId
-			path
-			#resourceTargetIds
-			title
-			updateTimestamp
-			versionId
-		}
-		uri
-	}
+query controlTypeGet($id: ID!, $includeControlTypeCategoryId: Boolean!, $includeControlTypeCategoryUri: Boolean!, $includeControlTypeDescription: Boolean!, $includeControlTypeIcon: Boolean!, $includeControlTypeModUri: Boolean!, $includeControlTypeTargets: Boolean!, $includeControlTypeTitle: Boolean!, $includeControlTypeTrunkTitle: Boolean!, $includeControlTypeTurbotAkas: Boolean!, $includeControlTypeTurbotCreateTimestamp: Boolean!, $includeControlTypeTurbotParentId: Boolean!, $includeControlTypeTurbotPath: Boolean!, $includeControlTypeTurbotUpdateTimestamp: Boolean!, $includeControlTypeTurbotVersionId: Boolean!, $includeControlTypeUri: Boolean!) {
+  controlType(id: $id) {
+    category {
+      turbot {
+        id @include(if: $includeControlTypeCategoryId)
+      }
+      uri @include(if: $includeControlTypeCategoryUri)
+    }
+    description @include(if: $includeControlTypeDescription)
+    icon @include(if: $includeControlTypeIcon)
+    modUri @include(if: $includeControlTypeModUri)
+    targets @include(if: $includeControlTypeTargets)
+    title @include(if: $includeControlTypeTitle)
+    trunk {
+      title @include(if: $includeControlTypeTrunkTitle)
+    }
+    turbot {
+      akas @include(if: $includeControlTypeTurbotAkas)
+      createTimestamp @include(if: $includeControlTypeTurbotCreateTimestamp)
+      parentId @include(if: $includeControlTypeTurbotParentId)
+      path @include(if: $includeControlTypeTurbotPath)
+      updateTimestamp @include(if: $includeControlTypeTurbotUpdateTimestamp)
+      versionId @include(if: $includeControlTypeTurbotVersionId)
+    }
+    uri @include(if: $includeControlTypeUri)
+  }
 }
 `
 )
@@ -159,10 +152,16 @@ func listControlType(ctx context.Context, d *plugin.QueryData, _ *plugin.Hydrate
 	plugin.Logger(ctx).Debug("guardrails_control_type.listControlType", "quals", quals)
 	plugin.Logger(ctx).Debug("guardrails_control_type.listControlType", "filters", filters)
 
-	nextToken := ""
+	variables := map[string]interface{}{
+		"filter":     filters,
+		"next_token": "",
+	}
+
+	appendControlTypeColumnIncludes(&variables, d.QueryContext.Columns)
+
 	for {
 		result := &ControlTypesResponse{}
-		err = conn.DoRequest(queryControlTypeList, map[string]interface{}{"filter": filters, "next_token": nextToken}, result)
+		err = conn.DoRequest(queryControlTypeList, variables, result)
 		if err != nil {
 			plugin.Logger(ctx).Error("guardrails_control_type.listControlType", "query_error", err)
 			return nil, err
@@ -178,7 +177,7 @@ func listControlType(ctx context.Context, d *plugin.QueryData, _ *plugin.Hydrate
 		if result.ControlTypes.Paging.Next == "" {
 			break
 		}
-		nextToken = result.ControlTypes.Paging.Next
+		variables["next_token"] = result.ControlTypes.Paging.Next
 	}
 
 	return nil, nil
@@ -192,8 +191,15 @@ func getControlType(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateD
 	}
 	quals := d.EqualsQuals
 	id := quals["id"].GetInt64Value()
+
+	variables := map[string]interface{}{
+		"id": id,
+	}
+
+	appendControlTypeColumnIncludes(&variables, d.QueryContext.Columns)
+
 	result := &ControlTypeResponse{}
-	err = conn.DoRequest(queryControlTypeGet, map[string]interface{}{"id": id}, result)
+	err = conn.DoRequest(queryControlTypeGet, variables, result)
 	if err != nil {
 		plugin.Logger(ctx).Error("guardrails_control_type.getControlType", "query_error", err)
 		return nil, err

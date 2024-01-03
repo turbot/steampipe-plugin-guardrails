@@ -24,13 +24,13 @@ func tableGuardrailsModVersion(ctx context.Context) *plugin.Table {
 		},
 		Columns: []*plugin.Column{
 			// Top columns
-			{Name: "name", Type: proto.ColumnType_STRING, Description: "The name of the mod."},
-			{Name: "identity_name", Type: proto.ColumnType_STRING, Description: "The indentity name of the mod."},
+			{Name: "name", Type: proto.ColumnType_STRING, Description: "The name of the mod.", Transform: transform.FromValue(), Hydrate: modVersionHydrateName},
+			{Name: "identity_name", Type: proto.ColumnType_STRING, Description: "The indentity name of the mod.", Transform: transform.FromValue(), Hydrate: modVersionHydrateIdentityName},
 			{Name: "org_name", Type: proto.ColumnType_STRING, Transform: transform.FromQual("org_name"), Description: "The name of the organization."},
-			{Name: "status", Type: proto.ColumnType_STRING, Description: "The status of the mod version."},
-			{Name: "version", Type: proto.ColumnType_STRING, Description: "The version of the mod."},
+			{Name: "status", Type: proto.ColumnType_STRING, Description: "The status of the mod version.", Transform: transform.FromValue(), Hydrate: modVersionHydrateStatus},
+			{Name: "version", Type: proto.ColumnType_STRING, Description: "The version of the mod.", Transform: transform.FromValue(), Hydrate: modVersionHydrateVersion},
 			{Name: "filter", Type: proto.ColumnType_STRING, Transform: transform.FromQual("filter"), Description: "Filter used to search for mod versions."},
-			{Name: "mod_peer_dependency", Type: proto.ColumnType_JSON, Transform: transform.FromField("Head.PeerDependencies"), Description: "Peer dependencies of the mod."},
+			{Name: "mod_peer_dependency", Type: proto.ColumnType_JSON, Description: "Peer dependencies of the mod.", Transform: transform.FromValue(), Hydrate: modVersionHydratePeerDependencies},
 			// Other columns
 			{Name: "workspace", Type: proto.ColumnType_STRING, Hydrate: plugin.HydrateFunc(getTurbotGuardrailsWorkspace).WithCache(), Transform: transform.FromValue(), Description: "Specifies the workspace URL."},
 		},
@@ -47,15 +47,15 @@ type ModVersionInfo struct {
 
 const (
 	queryModVersions = `
-query modVersionSearchByName($search: String, $modName: String, $orgName: String, $status: [ModVersionStatus!]) {
+query modVersionSearchByName($search: String, $modName: String, $orgName: String, $status: [ModVersionStatus!],$includeModIdentityName: Boolean!, $includeModName: Boolean!, $includeModVersion: Boolean!, $includeModStatus: Boolean!, $includeModHead: Boolean!) {
   modVersionSearches(search: $search, modName: $modName, orgName: $orgName, status: $status) {
 	items {
-	identityName
-	name
+	identityName @include(if: $includeModIdentityName)
+	name @include(if: $includeModName)
 	versions {
-		version
-		status
-		head
+		version @include(if: $includeModVersion)
+		status @include(if: $includeModStatus)
+		head @include(if: $includeModHead)
 	}
 	}
 	paging {
@@ -93,39 +93,87 @@ func listModVersion(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateD
 	}
 
 	plugin.Logger(ctx).Debug("guardrails_mod_version.listModVersion", "quals", quals)
-	nextToken := ""
 
-	for {
-		result := &ModVersionResponse{}
-		if status != nil {
-			err = conn.DoRequest(queryModVersions, map[string]interface{}{"search": searchText, "orgName": orgName, "modName": modName, "status": status, "next_token": nextToken}, result)
-		} else {
-			err = conn.DoRequest(queryModVersions, map[string]interface{}{"search": searchText, "orgName": orgName, "modName": modName, "next_token": nextToken}, result)
+	if status != nil {
+		variablesWithStatus := map[string]interface{}{
+			"search":     searchText,
+			"orgName":    orgName,
+			"modName":    modName,
+			"status":     status,
+			"next_token": "",
 		}
 
-		if err != nil {
-			plugin.Logger(ctx).Error("guardrails_mod_version.listModVersion", "query_error", err)
-			return nil, err
-		}
-		for _, r := range result.ModVersionSearches.Items {
+		appendModVersionColumnIncludes(&variablesWithStatus, d.QueryContext.Columns)
 
-			for _, resp := range r.Versions {
-				d.StreamListItem(ctx, ModVersionInfo{
-					IdentityName: r.IdentityName,
-					Name:         r.Name,
-					Status:       resp.Status,
-					Version:      resp.Version,
-					Head:         resp.Head,
-				})
+		for {
+			result := &ModVersionResponse{}
+			err = conn.DoRequest(queryModVersions, variablesWithStatus, result)
+
+			if err != nil {
+				plugin.Logger(ctx).Error("guardrails_mod_version.listModVersion", "query_error", err)
+				return nil, err
+			}
+			for _, r := range result.ModVersionSearches.Items {
+
+				for _, resp := range r.Versions {
+					d.StreamListItem(ctx, ModVersionInfo{
+						IdentityName: r.IdentityName,
+						Name:         r.Name,
+						Status:       resp.Status,
+						Version:      resp.Version,
+						Head:         resp.Head,
+					})
+				}
+
+				// Context can be cancelled due to manual cancellation or the limit has been hit
+				if d.RowsRemaining(ctx) == 0 {
+					return nil, nil
+				}
+			}
+			if result.ModVersionSearches.Paging.Next == "" {
+				break
 			}
 
-			// Context can be cancelled due to manual cancellation or the limit has been hit
-			if d.RowsRemaining(ctx) == 0 {
-				return nil, nil
-			}
+			variablesWithStatus["next_token"] = result.ModVersionSearches.Paging.Next
 		}
-		if result.ModVersionSearches.Paging.Next == "" {
-			break
+	} else {
+		variablesWithoutStatus := map[string]interface{}{
+			"search":     searchText,
+			"orgName":    orgName,
+			"modName":    modName,
+			"next_token": "",
+		}
+		appendModVersionColumnIncludes(&variablesWithoutStatus, d.QueryContext.Columns)
+		for {
+			result := &ModVersionResponse{}
+			err = conn.DoRequest(queryModVersions, variablesWithoutStatus, result)
+
+			if err != nil {
+				plugin.Logger(ctx).Error("guardrails_mod_version.listModVersion", "query_error", err)
+				return nil, err
+			}
+			for _, r := range result.ModVersionSearches.Items {
+
+				for _, resp := range r.Versions {
+					d.StreamListItem(ctx, ModVersionInfo{
+						IdentityName: r.IdentityName,
+						Name:         r.Name,
+						Status:       resp.Status,
+						Version:      resp.Version,
+						Head:         resp.Head,
+					})
+				}
+
+				// Context can be cancelled due to manual cancellation or the limit has been hit
+				if d.RowsRemaining(ctx) == 0 {
+					return nil, nil
+				}
+			}
+			if result.ModVersionSearches.Paging.Next == "" {
+				break
+			}
+
+			variablesWithoutStatus["next_token"] = result.ModVersionSearches.Paging.Next
 		}
 	}
 

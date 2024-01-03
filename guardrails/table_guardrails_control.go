@@ -48,21 +48,15 @@ func tableGuardrailsControl(ctx context.Context) *plugin.Table {
 			{Name: "update_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromValue(), Description: "When the control was last updated in Turbot.", Hydrate: controlHydrateUpdateTimestamp},
 			{Name: "version_id", Type: proto.ColumnType_INT, Transform: transform.FromValue(), Description: "Unique identifier for this version of the control.", Hydrate: controlHydrateVersionId},
 			{Name: "workspace", Type: proto.ColumnType_STRING, Hydrate: plugin.HydrateFunc(getTurbotGuardrailsWorkspace).WithCache(), Transform: transform.FromValue(), Description: "Specifies the workspace URL."},
-			{Name: "metadata", Type: proto.ColumnType_JSON, Hydrate: controlHydrateMetadata, Transform: transform.FromValue(), Description: "The control metadata."},
 		},
 	}
 }
 
 const (
 	queryControlList = `
-	query controlList($filter: [String!], $next_token: String, $includeControlState: Boolean!, $includeControlReason: Boolean!, $includeControlDetails: Boolean!, $includeControlResourceTypeUri: Boolean!, $includeControlResourceTrunkTitle: Boolean!, $includeControlTypeUri: Boolean!, $includeControlTypeTrunkTitle: Boolean!, $includeControlId: Boolean!, $includeControlTimestamp: Boolean!, $includeControlCreateTimestamp: Boolean!, $includeControlUpdateTimestamp: Boolean!, $includeControlVersionId: Boolean!, $includeControlTypeId: Boolean!, $includeControlResourceId: Boolean!, $includeControlResourceTypeId: Boolean!, $includeControlMetadata: Boolean!, $includeControlItems: Boolean!) {
+	query controlList($filter: [String!], $next_token: String, $includeControlState: Boolean!, $includeControlReason: Boolean!, $includeControlDetails: Boolean!, $includeControlResourceTypeUri: Boolean!, $includeControlResourceTrunkTitle: Boolean!, $includeControlTypeUri: Boolean!, $includeControlTypeTrunkTitle: Boolean!, $includeControlId: Boolean!, $includeControlTimestamp: Boolean!, $includeControlCreateTimestamp: Boolean!, $includeControlUpdateTimestamp: Boolean!, $includeControlVersionId: Boolean!, $includeControlTypeId: Boolean!, $includeControlResourceId: Boolean!, $includeControlResourceTypeId: Boolean!) {
 	controls(filter: $filter, paging: $next_token) {
-		metadata @include(if: $includeControlMetadata){
-      stats {
-        total
-      }
-    }
-		items @include(if: $includeControlItems){
+		items {
 			state @include(if: $includeControlState)
 			reason @include(if: $includeControlReason)
 			details @include(if: $includeControlDetails)
@@ -138,13 +132,13 @@ func listControl(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData
 	// Default to a very large page size. Page sizes earlier in the filter string
 	// win, so this is only used as a fallback.
 	pageResults := false
+	var pageLimit int64 = 5000
 	// Add a limit if they haven't given one in the filter field
 	re := regexp.MustCompile(`(^|\s)limit:[0-9]+($|\s)`)
 	if !re.MatchString(filter) {
 		// The caller did not specify a limit, so set a high limit and page all
 		// results.
 		pageResults = true
-		var pageLimit int64 = 5000
 
 		// Adjust page limit, if less than default value
 		limit := d.QueryContext.Limit
@@ -173,17 +167,12 @@ func listControl(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData
 			plugin.Logger(ctx).Error("guardrails_control.listControl", "query_error", err)
 			return nil, err
 		}
-		if len(result.Controls.Items) == 0 {
-			d.StreamListItem(ctx, ControlItem{result.Controls.Metadata, Control{}})
-			break
-		} else {
-			for _, r := range result.Controls.Items {
-				d.StreamListItem(ctx, ControlItem{result.Controls.Metadata, r})
+		for _, r := range result.Controls.Items {
+			d.StreamListItem(ctx, r)
 
-				// Context can be cancelled due to manual cancellation or the limit has been hit
-				if d.RowsRemaining(ctx) == 0 {
-					return nil, nil
-				}
+			// Context can be cancelled due to manual cancellation or the limit has been hit
+			if d.RowsRemaining(ctx) == 0 {
+				return nil, nil
 			}
 		}
 		if !pageResults || result.Controls.Paging.Next == "" {
@@ -193,9 +182,4 @@ func listControl(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData
 	}
 
 	return nil, nil
-}
-
-type ControlItem struct {
-	Metadata interface{}
-	Item     Control
 }
