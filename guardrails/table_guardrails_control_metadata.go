@@ -18,6 +18,7 @@ func tableGuardrailsControlMetadata(ctx context.Context) *plugin.Table {
 		Columns: []*plugin.Column{
 			// Top columns
 			{Name: "total", Type: proto.ColumnType_INT, Transform: transform.FromField("Controls.Metadata.stats.total"), Description: "The total number of controls."},
+			{Name: "control", Type: proto.ColumnType_JSON, Transform: transform.FromField("Controls.Metadata.stats.control"), Description: "The control stat."},
 			{Name: "workspace", Type: proto.ColumnType_STRING, Hydrate: plugin.HydrateFunc(getTurbotGuardrailsWorkspace).WithCache(), Transform: transform.FromValue(), Description: "Specifies the workspace URL."},
 		},
 	}
