@@ -29,6 +29,7 @@ func Plugin(ctx context.Context) *plugin.Plugin {
 			"guardrails_policy_setting": tableGuardrailsPolicySetting(ctx),
 			"guardrails_policy_type":    tableGuardrailsPolicyType(ctx),
 			"guardrails_policy_value":   tableGuardrailsPolicyValue(ctx),
+			"guardrails_query":          tableGuardrailsQuery(ctx),
 			"guardrails_resource":       tableGuardrailsResource(ctx),
 			"guardrails_resource_type":  tableGuardrailsResourceType(ctx),
 			"guardrails_smart_folder":   tableGuardrailsSmartFolder(ctx),
