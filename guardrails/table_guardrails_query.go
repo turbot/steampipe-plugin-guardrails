@@ -39,7 +39,7 @@ func getQueryOutput(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateD
 	if err != nil {
 		plugin.Logger(ctx).Error("guardrails_query.getQueryOutput", "query_error", err)
 	}
-	plugin.Logger(ctx).Error("guardrails_query.getQueryOutput", "result", result)
+
 	d.StreamListItem(ctx, result)
 
 	return nil, nil
