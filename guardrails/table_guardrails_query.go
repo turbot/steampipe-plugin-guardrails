@@ -32,8 +32,10 @@ func getQueryOutput(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateD
 		return nil, err
 	}
 
+	query := d.EqualsQualString("query")
+
 	var result interface{}
-	err = conn.DoRequest(d.EqualsQualString("query"), nil, result)
+	err = conn.DoRequest(query, nil, &result)
 	if err != nil {
 		plugin.Logger(ctx).Error("guardrails_query.getQueryOutput", "query_error", err)
 	}
