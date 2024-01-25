@@ -21,6 +21,7 @@ func tableGuardrailsQuery(ctx context.Context) *plugin.Table {
 		Columns: []*plugin.Column{
 			{Name: "output", Type: proto.ColumnType_JSON, Transform: transform.FromValue(), Description: "The output of the query."},
 			{Name: "query", Type: proto.ColumnType_STRING, Transform: transform.FromQual("query"), Description: "The graphql query."},
+			{Name: "workspace", Type: proto.ColumnType_STRING, Hydrate: plugin.HydrateFunc(getTurbotGuardrailsWorkspace).WithCache(), Transform: transform.FromValue(), Description: "Specifies the workspace URL."},
 		},
 	}
 }
