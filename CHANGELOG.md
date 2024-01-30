@@ -1,3 +1,10 @@
+## v0.15.0 [2024-01-30]
+
+_What's new?_
+
+- New tables added
+  - [guardrails_query](https://hub.steampipe.io/plugins/turbot/guardrails/tables/guardrails_query) ([#31](https://github.com/turbot/steampipe-plugin-guardrails/pull/31))
+
 ## v0.14.0 [2023-12-12]
 
 _What's new?_
