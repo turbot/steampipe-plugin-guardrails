@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/turbot/go-kit/helpers"
 	"github.com/turbot/steampipe-plugin-sdk/v5/grpc/proto"
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
@@ -125,7 +126,7 @@ func tableGuardrailsNotification(ctx context.Context) *plugin.Table {
 
 const (
 	queryNotificationList = `
-	   query notificationList($filter: [String!], $next_token: String, $includeNotificationIcon: Boolean!, $includeNotificationMessage: Boolean!, $includeNotificationType: Boolean!, $includeNotificationActorIdentityTrunkTitle: Boolean!, $includeNotificationActorIdentityTurbotTitle: Boolean!, $includeNotificationActorIdentityTurbotId: Boolean!, $includeNotificationActorIdentityTurbotActorIdentityId: Boolean!, $includeNotificationControlState: Boolean!, $includeNotificationControlReason: Boolean!, $includeNotificationControlDetails: Boolean!, $includeNotificationControlTypeUri: Boolean!, $includeNotificationControlTypeTrunkTitle: Boolean!, $includeNotificationControlTypeTurbotId: Boolean!, $includeNotificationResourceData: Boolean!, $includeNotificationResourceObject: Boolean!, $includeNotificationResourceTrunkTitle: Boolean!, $includeNotificationResourceTurbotAkas: Boolean!, $includeNotificationResourceTurbotParentId: Boolean!, $includeNotificationResourceTurbotPath: Boolean!, $includeNotificationResourceTurbotTags: Boolean!, $includeNotificationResourceTurbotTitle: Boolean!, $includeNotificationResourceTypeUri: Boolean!, $includeNotificationResourceTypeTrunkTitle: Boolean!, $includeNotificationResourceTypeTurbotId: Boolean!, $includeNotificationPolicySettingIsCalculated: Boolean!, $includeNotificationPolicySettingTypeUri: Boolean!, $includeNotificationPolicySettingTypeReadOnly: Boolean!, $includeNotificationPolicySettingTypeDefaultTemplate: Boolean!, $includeNotificationPolicySettingTypeDefaultTemplateInput: Boolean!, $includeNotificationPolicySettingTypeSecret: Boolean!, $includeNotificationPolicySettingTypeTrunkTitle: Boolean!, $includeNotificationPolicySettingTypeTurbotId: Boolean!, $includeNotificationPolicySettingValue: Boolean!, $includeNotificationGrantRoleName: Boolean!, $includeNotificationGrantPermissionTypeId: Boolean!, $includeNotificationGrantPermissionLevelId: Boolean!, $includeNotificationGrantValidToTimestamp: Boolean!, $includeNotificationGrantLevelTitle: Boolean!, $includeNotificationGrantTypeTitle: Boolean!, $includeNotificationGrantIdentityTrunkTitle: Boolean!, $includeNotificationGrantIdentityProfileId: Boolean!, $includeNotificationActiveGrantRoleName: Boolean!, $includeNotificationActiveGrantPermissionTypeId: Boolean!, $includeNotificationActiveGrantPermissionLevelId: Boolean!, $includeNotificationActiveGrantValidToTimestamp: Boolean!, $includeNotificationActiveGrantLevelTitle: Boolean!, $includeNotificationActiveGrantTypeTitle: Boolean!, $includeNotificationActiveGrantIdentityTrunkTitle: Boolean!, $includeNotificationActiveGrantIdentityProfileId: Boolean!, $includeNotificationTurbotControlId: Boolean!, $includeNotificationTurbotControlNewVersionId: Boolean!, $includeNotificationTurbotControlOldVersionId: Boolean!, $includeNotificationTurbotCreateTimestamp: Boolean!, $includeNotificationTurbotGrantId: Boolean!, $includeNotificationTurbotGrantNewVersionId: Boolean!, $includeNotificationTurbotGrantOldVersionId: Boolean!, $includeNotificationTurbotId: Boolean!, $includeNotificationTurbotPolicySettingId: Boolean!, $includeNotificationTurbotPolicySettingNewVersionId: Boolean!, $includeNotificationTurbotPolicySettingOldVersionId: Boolean!, $includeNotificationTurbotProcessId: Boolean!, $includeNotificationTurbotResourceId: Boolean!, $includeNotificationTurbotResourceNewVersionId: Boolean!, $includeNotificationTurbotResourceOldVersionId: Boolean!, $includeNotificationTurbotActiveGrantsId: Boolean!, $includeNotificationTurbotActiveGrantsNewVersionId: Boolean!, $includeNotificationTurbotActiveGrantsOldVersionId: Boolean!) {
+	   query notificationList($filter: [String!], $next_token: String, $includeNotificationIcon: Boolean!, $includeNotificationMessage: Boolean!, $includeNotificationType: Boolean!, $includeNotificationActorIdentityTrunkTitle: Boolean!, $includeNotificationActorIdentityTurbotId: Boolean!, $includeNotificationControlState: Boolean!, $includeNotificationControlReason: Boolean!, $includeNotificationControlDetails: Boolean!, $includeNotificationControlTypeUri: Boolean!, $includeNotificationControlTypeTrunkTitle: Boolean!, $includeNotificationControlTypeTurbotId: Boolean!, $includeNotificationResourceData: Boolean!, $includeNotificationResourceObject: Boolean!, $includeNotificationResourceTrunkTitle: Boolean!, $includeNotificationResourceTurbotAkas: Boolean!, $includeNotificationResourceTurbotParentId: Boolean!, $includeNotificationResourceTurbotPath: Boolean!, $includeNotificationResourceTurbotTags: Boolean!, $includeNotificationResourceTurbotTitle: Boolean!, $includeNotificationResourceTypeUri: Boolean!, $includeNotificationResourceTypeTrunkTitle: Boolean!, $includeNotificationResourceTypeTurbotId: Boolean!, $includeNotificationPolicySettingIsCalculated: Boolean!, $includeNotificationPolicySettingTypeUri: Boolean!, $includeNotificationPolicySettingTypeReadOnly: Boolean!, $includeNotificationPolicySettingTypeDefaultTemplate: Boolean!, $includeNotificationPolicySettingTypeDefaultTemplateInput: Boolean!, $includeNotificationPolicySettingTypeSecret: Boolean!, $includeNotificationPolicySettingTypeTrunkTitle: Boolean!, $includeNotificationPolicySettingTypeTurbotId: Boolean!, $includeNotificationPolicySettingValue: Boolean!, $includeNotificationGrantRoleName: Boolean!, $includeNotificationGrantPermissionTypeId: Boolean!, $includeNotificationGrantPermissionLevelId: Boolean!, $includeNotificationGrantValidToTimestamp: Boolean!, $includeNotificationGrantLevelTitle: Boolean!, $includeNotificationGrantTypeTitle: Boolean!, $includeNotificationGrantIdentityTrunkTitle: Boolean!, $includeNotificationGrantIdentityProfileId: Boolean!, $includeNotificationActiveGrantRoleName: Boolean!, $includeNotificationActiveGrantPermissionTypeId: Boolean!, $includeNotificationActiveGrantPermissionLevelId: Boolean!, $includeNotificationActiveGrantValidToTimestamp: Boolean!, $includeNotificationActiveGrantLevelTitle: Boolean!, $includeNotificationActiveGrantTypeTitle: Boolean!, $includeNotificationActiveGrantIdentityTrunkTitle: Boolean!, $includeNotificationActiveGrantIdentityProfileId: Boolean!, $includeNotificationTurbotControlId: Boolean!, $includeNotificationTurbotControlNewVersionId: Boolean!, $includeNotificationTurbotControlOldVersionId: Boolean!, $includeNotificationTurbotCreateTimestamp: Boolean!, $includeNotificationTurbotGrantId: Boolean!, $includeNotificationTurbotGrantNewVersionId: Boolean!, $includeNotificationTurbotGrantOldVersionId: Boolean!, $includeNotificationTurbotId: Boolean!, $includeNotificationTurbotPolicySettingId: Boolean!, $includeNotificationTurbotPolicySettingNewVersionId: Boolean!, $includeNotificationTurbotPolicySettingOldVersionId: Boolean!, $includeNotificationTurbotProcessId: Boolean!, $includeNotificationTurbotResourceId: Boolean!, $includeNotificationTurbotResourceNewVersionId: Boolean!, $includeNotificationTurbotResourceOldVersionId: Boolean!, $includeNotificationTurbotActiveGrantsId: Boolean!, $includeNotificationTurbotActiveGrantsNewVersionId: Boolean!, $includeNotificationTurbotActiveGrantsOldVersionId: Boolean!) {
             notifications(filter: $filter, paging: $next_token) {
                 items {
                     icon @include(if: $includeNotificationIcon)
@@ -135,9 +136,7 @@ const (
                         identity {
                             trunk { title @include(if: $includeNotificationActorIdentityTrunkTitle) }
                             turbot {
-                                title @include(if: $includeNotificationActorIdentityTurbotTitle)
                                 id @include(if: $includeNotificationActorIdentityTurbotId)
-                                actorIdentityId @include(if: $includeNotificationActorIdentityTurbotActorIdentityId)
                             }
                         }
                     }
@@ -258,7 +257,7 @@ const (
 	`
 
 	queryNotificationGet = `
-		query notificationGet($id: ID!, $includeNotificationIcon: Boolean!, $includeNotificationMessage: Boolean!, $includeNotificationType: Boolean!, $includeNotificationActorIdentityTrunkTitle: Boolean!, $includeNotificationActorIdentityTurbotTitle: Boolean!, $includeNotificationActorIdentityTurbotId: Boolean!, $includeNotificationActorIdentityTurbotActorIdentityId: Boolean!, $includeNotificationControlState: Boolean!, $includeNotificationControlReason: Boolean!, $includeNotificationControlDetails: Boolean!, $includeNotificationControlTypeUri: Boolean!, $includeNotificationControlTypeTrunkTitle: Boolean!, $includeNotificationControlTypeTurbotId: Boolean!, $includeNotificationResourceData: Boolean!, $includeNotificationResourceObject: Boolean!, $includeNotificationResourceTrunkTitle: Boolean!, $includeNotificationResourceTurbotAkas: Boolean!, $includeNotificationResourceTurbotParentId: Boolean!, $includeNotificationResourceTurbotPath: Boolean!, $includeNotificationResourceTurbotTags: Boolean!, $includeNotificationResourceTurbotTitle: Boolean!, $includeNotificationResourceTypeUri: Boolean!, $includeNotificationResourceTypeTrunkTitle: Boolean!, $includeNotificationResourceTypeTurbotId: Boolean!, $includeNotificationPolicySettingIsCalculated: Boolean!, $includeNotificationPolicySettingTypeUri: Boolean!, $includeNotificationPolicySettingTypeReadOnly: Boolean!, $includeNotificationPolicySettingTypeDefaultTemplate: Boolean!, $includeNotificationPolicySettingTypeDefaultTemplateInput: Boolean!, $includeNotificationPolicySettingTypeSecret: Boolean!, $includeNotificationPolicySettingTypeTrunkTitle: Boolean!, $includeNotificationPolicySettingTypeTurbotId: Boolean!, $includeNotificationPolicySettingValue: Boolean!, $includeNotificationGrantRoleName: Boolean!, $includeNotificationGrantPermissionTypeId: Boolean!, $includeNotificationGrantPermissionLevelId: Boolean!, $includeNotificationGrantValidToTimestamp: Boolean!, $includeNotificationGrantLevelTitle: Boolean!, $includeNotificationGrantTypeTitle: Boolean!, $includeNotificationGrantIdentityTrunkTitle: Boolean!, $includeNotificationGrantIdentityProfileId: Boolean!, $includeNotificationActiveGrantRoleName: Boolean!, $includeNotificationActiveGrantPermissionTypeId: Boolean!, $includeNotificationActiveGrantPermissionLevelId: Boolean!, $includeNotificationActiveGrantValidToTimestamp: Boolean!, $includeNotificationActiveGrantLevelTitle: Boolean!, $includeNotificationActiveGrantTypeTitle: Boolean!, $includeNotificationActiveGrantIdentityTrunkTitle: Boolean!, $includeNotificationActiveGrantIdentityProfileId: Boolean!, $includeNotificationTurbotControlId: Boolean!, $includeNotificationTurbotControlNewVersionId: Boolean!, $includeNotificationTurbotControlOldVersionId: Boolean!, $includeNotificationTurbotCreateTimestamp: Boolean!, $includeNotificationTurbotGrantId: Boolean!, $includeNotificationTurbotGrantNewVersionId: Boolean!, $includeNotificationTurbotGrantOldVersionId: Boolean!, $includeNotificationTurbotId: Boolean!, $includeNotificationTurbotPolicySettingId: Boolean!, $includeNotificationTurbotPolicySettingNewVersionId: Boolean!, $includeNotificationTurbotPolicySettingOldVersionId: Boolean!, $includeNotificationTurbotProcessId: Boolean!, $includeNotificationTurbotResourceId: Boolean!, $includeNotificationTurbotResourceNewVersionId: Boolean!, $includeNotificationTurbotResourceOldVersionId: Boolean!, $includeNotificationTurbotActiveGrantsId: Boolean!, $includeNotificationTurbotActiveGrantsNewVersionId: Boolean!, $includeNotificationTurbotActiveGrantsOldVersionId: Boolean!) {
+		query notificationGet($id: ID!, $includeNotificationIcon: Boolean!, $includeNotificationMessage: Boolean!, $includeNotificationType: Boolean!, $includeNotificationActorIdentityTrunkTitle: Boolean!, $includeNotificationActorIdentityTurbotId: Boolean!, $includeNotificationControlState: Boolean!, $includeNotificationControlReason: Boolean!, $includeNotificationControlDetails: Boolean!, $includeNotificationControlTypeUri: Boolean!, $includeNotificationControlTypeTrunkTitle: Boolean!, $includeNotificationControlTypeTurbotId: Boolean!, $includeNotificationResourceData: Boolean!, $includeNotificationResourceObject: Boolean!, $includeNotificationResourceTrunkTitle: Boolean!, $includeNotificationResourceTurbotAkas: Boolean!, $includeNotificationResourceTurbotParentId: Boolean!, $includeNotificationResourceTurbotPath: Boolean!, $includeNotificationResourceTurbotTags: Boolean!, $includeNotificationResourceTurbotTitle: Boolean!, $includeNotificationResourceTypeUri: Boolean!, $includeNotificationResourceTypeTrunkTitle: Boolean!, $includeNotificationResourceTypeTurbotId: Boolean!, $includeNotificationPolicySettingIsCalculated: Boolean!, $includeNotificationPolicySettingTypeUri: Boolean!, $includeNotificationPolicySettingTypeReadOnly: Boolean!, $includeNotificationPolicySettingTypeDefaultTemplate: Boolean!, $includeNotificationPolicySettingTypeDefaultTemplateInput: Boolean!, $includeNotificationPolicySettingTypeSecret: Boolean!, $includeNotificationPolicySettingTypeTrunkTitle: Boolean!, $includeNotificationPolicySettingTypeTurbotId: Boolean!, $includeNotificationPolicySettingValue: Boolean!, $includeNotificationGrantRoleName: Boolean!, $includeNotificationGrantPermissionTypeId: Boolean!, $includeNotificationGrantPermissionLevelId: Boolean!, $includeNotificationGrantValidToTimestamp: Boolean!, $includeNotificationGrantLevelTitle: Boolean!, $includeNotificationGrantTypeTitle: Boolean!, $includeNotificationGrantIdentityTrunkTitle: Boolean!, $includeNotificationGrantIdentityProfileId: Boolean!, $includeNotificationActiveGrantRoleName: Boolean!, $includeNotificationActiveGrantPermissionTypeId: Boolean!, $includeNotificationActiveGrantPermissionLevelId: Boolean!, $includeNotificationActiveGrantValidToTimestamp: Boolean!, $includeNotificationActiveGrantLevelTitle: Boolean!, $includeNotificationActiveGrantTypeTitle: Boolean!, $includeNotificationActiveGrantIdentityTrunkTitle: Boolean!, $includeNotificationActiveGrantIdentityProfileId: Boolean!, $includeNotificationTurbotControlId: Boolean!, $includeNotificationTurbotControlNewVersionId: Boolean!, $includeNotificationTurbotControlOldVersionId: Boolean!, $includeNotificationTurbotCreateTimestamp: Boolean!, $includeNotificationTurbotGrantId: Boolean!, $includeNotificationTurbotGrantNewVersionId: Boolean!, $includeNotificationTurbotGrantOldVersionId: Boolean!, $includeNotificationTurbotId: Boolean!, $includeNotificationTurbotPolicySettingId: Boolean!, $includeNotificationTurbotPolicySettingNewVersionId: Boolean!, $includeNotificationTurbotPolicySettingOldVersionId: Boolean!, $includeNotificationTurbotProcessId: Boolean!, $includeNotificationTurbotResourceId: Boolean!, $includeNotificationTurbotResourceNewVersionId: Boolean!, $includeNotificationTurbotResourceOldVersionId: Boolean!, $includeNotificationTurbotActiveGrantsId: Boolean!, $includeNotificationTurbotActiveGrantsNewVersionId: Boolean!, $includeNotificationTurbotActiveGrantsOldVersionId: Boolean!) {
   notification(id: $id) {
     icon @include(if: $includeNotificationIcon)
     message @include(if: $includeNotificationMessage)
@@ -269,9 +268,7 @@ const (
           title @include(if: $includeNotificationActorIdentityTrunkTitle)
         }
         turbot {
-          title @include(if: $includeNotificationActorIdentityTurbotTitle)
           id @include(if: $includeNotificationActorIdentityTurbotId)
-          actorIdentityId @include(if: $includeNotificationActorIdentityTurbotActorIdentityId)
         }
       }
     }
@@ -572,36 +569,36 @@ func formatPolicyFieldsValue(_ context.Context, d *transform.TransformData) (int
 	return nil, nil
 }
 
-// transform.FromField:: generates a value by retrieving a field or a set of fields from the source item
-// func transform.FromField(fieldNames ...string) *transform.ColumnTransforms {
-// 	var fieldNameArray []string
-// 	fieldNameArray = append(fieldNameArray, fieldNames...)
-// 	return &transform.ColumnTransforms{Transforms: []*transform.TransformCall{{Transform: fieldValue, Param: fieldNameArray}}}
-// }
+// fromField:: generates a value by retrieving a field or a set of fields from the source item
+func fromField(fieldNames ...string) *transform.ColumnTransforms {
+	var fieldNameArray []string
+	fieldNameArray = append(fieldNameArray, fieldNames...)
+	return &transform.ColumnTransforms{Transforms: []*transform.TransformCall{{Transform: fieldValue, Param: fieldNameArray}}}
+}
 
 // fieldValue function is intended for the start of a transform chain.
 // This returns a field value of either the hydrate call result (if present)  or the root item if not
 // the field name is in the 'Param'
-// func fieldValue(ctx context.Context, d *transform.TransformData) (interface{}, error) {
-// 	var item = d.HydrateItem
-// 	var fieldNames []string
+func fieldValue(ctx context.Context, d *transform.TransformData) (interface{}, error) {
+	var item = d.HydrateItem
+	var fieldNames []string
 
-// 	switch p := d.Param.(type) {
-// 	case []string:
-// 		fieldNames = p
-// 	case string:
-// 		fieldNames = []string{p}
-// 	default:
-// 		return nil, fmt.Errorf("'FieldValue' requires one or more string parameters containing property path but received %v", d.Param)
-// 	}
+	switch p := d.Param.(type) {
+	case []string:
+		fieldNames = p
+	case string:
+		fieldNames = []string{p}
+	default:
+		return nil, fmt.Errorf("'FieldValue' requires one or more string parameters containing property path but received %v", d.Param)
+	}
 
-// 	for _, propertyPath := range fieldNames {
-// 		fieldValue, ok := helpers.GetNestedFieldValueFromInterface(item, propertyPath)
-// 		if ok && !helpers.IsNil(fieldValue) {
-// 			return fieldValue, nil
+	for _, propertyPath := range fieldNames {
+		fieldValue, ok := helpers.GetNestedFieldValueFromInterface(item, propertyPath)
+		if ok && !helpers.IsNil(fieldValue) {
+			return fieldValue, nil
 
-// 		}
+		}
 
-// 	}
-// 	return nil, nil
-// }
+	}
+	return nil, nil
+}

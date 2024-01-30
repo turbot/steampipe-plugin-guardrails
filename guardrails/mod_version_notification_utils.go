@@ -22,15 +22,15 @@ func appendNotificationColumnIncludes(m *map[string]interface{}, cols []string) 
     (*m)["includeNotificationMessage"] = slices.Contains(cols, "message")
     (*m)["includeNotificationType"] = slices.Contains(cols, "notification_type")
     (*m)["includeNotificationActorIdentityTrunkTitle"] = slices.Contains(cols, "actor_identity_trunk_title")
-    (*m)["includeNotificationActorIdentityId"] = slices.Contains(cols, "actor_identity_id")
+    (*m)["includeNotificationActorIdentityTurbotId"] = slices.Contains(cols, "actor_identity_id")
     (*m)["includeNotificationResourceData"] = slices.Contains(cols, "resource_data")
     (*m)["includeNotificationResourceObject"] = slices.Contains(cols, "resource_object")
     (*m)["includeNotificationResourceTrunkTitle"] = slices.Contains(cols, "resource_trunk_title")
     (*m)["includeNotificationResourceTurbotTitle"] = slices.Contains(cols, "resource_title")
     (*m)["includeNotificationResourceTurbotAkas"] = slices.Contains(cols, "resource_akas")
-    (*m)["includeNotificationResourceParentId"] = slices.Contains(cols, "resource_parent_id")
-    (*m)["includeNotificationResourcePath"] = slices.Contains(cols, "resource_path")
-    (*m)["includeNotificationResourceTags"] = slices.Contains(cols, "resource_tags")
+    (*m)["includeNotificationResourceTurbotParentId"] = slices.Contains(cols, "resource_parent_id")
+    (*m)["includeNotificationResourceTurbotPath"] = slices.Contains(cols, "resource_path")
+    (*m)["includeNotificationResourceTurbotTags"] = slices.Contains(cols, "resource_tags")
     (*m)["includeNotificationPolicySettingIsCalculated"] = slices.Contains(cols, "policy_setting_is_calculated")
     (*m)["includeNotificationPolicySettingTypeUri"] = slices.Contains(cols, "policy_setting_type_uri")
     (*m)["includeNotificationPolicySettingTypeReadOnly"] = slices.Contains(cols, "policy_setting_type_read_only")
@@ -45,35 +45,35 @@ func appendNotificationColumnIncludes(m *map[string]interface{}, cols []string) 
     (*m)["includeNotificationTurbotActiveGrantsId"] = slices.Contains(cols, "active_grant_id")
     (*m)["includeNotificationTurbotActiveGrantsNewVersionId"] = slices.Contains(cols, "active_grant_new_version_id")
     (*m)["includeNotificationTurbotActiveGrantsOldVersionId"] = slices.Contains(cols, "active_grant_old_version_id")
-    (*m)["includeNotificationTurbotActiveGrantsValidToTimestamp"] = slices.Contains(cols, "active_grant_valid_to_timestamp")
-    (*m)["includeNotificationTurbotActiveGrantsIdentityProfileId"] = slices.Contains(cols, "active_grant_identity_profile_id")
-    (*m)["includeNotificationTurbotActiveGrantsIdentityTrunkTitle"] = slices.Contains(cols, "active_grant_identity_trunk_title")
-    (*m)["includeNotificationTurbotActiveGrantsLevelTitle"] = slices.Contains(cols, "active_grant_level_title")
-    (*m)["includeNotificationTurbotActiveGrantsPermissionLevelId"] = slices.Contains(cols, "active_grant_permission_level_id")
-    (*m)["includeNotificationTurbotActiveGrantsPermissionTypeId"] = slices.Contains(cols, "active_grant_permission_type_id")
-    (*m)["includeNotificationTurbotActiveGrantsRoleName"] = slices.Contains(cols, "active_grant_role_name")
-    (*m)["includeNotificationTurbotActiveGrantsTypeTitle"] = slices.Contains(cols, "active_grant_type_title")
+    (*m)["includeNotificationActiveGrantValidToTimestamp"] = slices.Contains(cols, "active_grant_valid_to_timestamp")
+    (*m)["includeNotificationActiveGrantIdentityProfileId"] = slices.Contains(cols, "active_grant_identity_profile_id")
+    (*m)["includeNotificationActiveGrantIdentityTrunkTitle"] = slices.Contains(cols, "active_grant_identity_trunk_title")
+    (*m)["includeNotificationActiveGrantLevelTitle"] = slices.Contains(cols, "active_grant_level_title")
+    (*m)["includeNotificationActiveGrantPermissionLevelId"] = slices.Contains(cols, "active_grant_permission_level_id")
+    (*m)["includeNotificationActiveGrantPermissionTypeId"] = slices.Contains(cols, "active_grant_permission_type_id")
+    (*m)["includeNotificationActiveGrantRoleName"] = slices.Contains(cols, "active_grant_role_name")
+    (*m)["includeNotificationActiveGrantTypeTitle"] = slices.Contains(cols, "active_grant_type_title")
     (*m)["includeNotificationTurbotGrantId"] = slices.Contains(cols, "grant_id")
     (*m)["includeNotificationTurbotGrantNewVersionId"] = slices.Contains(cols, "grant_new_version_id")
     (*m)["includeNotificationTurbotGrantOldVersionId"] = slices.Contains(cols, "grant_old_version_id")
-    (*m)["includeNotificationTurbotGrantValidToTimestamp"] = slices.Contains(cols, "grant_valid_to_timestamp")
-    (*m)["includeNotificationTurbotGrantIdentityProfileId"] = slices.Contains(cols, "grant_identity_profile_id")
-    (*m)["includeNotificationTurbotGrantIdentityTrunkTitle"] = slices.Contains(cols, "grant_identity_trunk_title")
-    (*m)["includeNotificationTurbotGrantLevelTitle"] = slices.Contains(cols, "grant_level_title")
-    (*m)["includeNotificationTurbotGrantPermissionLevelId"] = slices.Contains(cols, "grant_permission_level_id")
-    (*m)["includeNotificationTurbotGrantPermissionTypeId"] = slices.Contains(cols, "grant_permission_type_id")
-    (*m)["includeNotificationTurbotGrantRoleName"] = slices.Contains(cols, "grant_role_name")
-    (*m)["includeNotificationTurbotGrantTypeTitle"] = slices.Contains(cols, "grant_type_title")
+    (*m)["includeNotificationGrantValidToTimestamp"] = slices.Contains(cols, "grant_valid_to_timestamp")
+    (*m)["includeNotificationGrantIdentityProfileId"] = slices.Contains(cols, "grant_identity_profile_id")
+    (*m)["includeNotificationGrantIdentityTrunkTitle"] = slices.Contains(cols, "grant_identity_trunk_title")
+    (*m)["includeNotificationGrantLevelTitle"] = slices.Contains(cols, "grant_level_title")
+    (*m)["includeNotificationGrantPermissionLevelId"] = slices.Contains(cols, "grant_permission_level_id")
+    (*m)["includeNotificationGrantPermissionTypeId"] = slices.Contains(cols, "grant_permission_type_id")
+    (*m)["includeNotificationGrantRoleName"] = slices.Contains(cols, "grant_role_name")
+    (*m)["includeNotificationGrantTypeTitle"] = slices.Contains(cols, "grant_type_title")
     (*m)["includeNotificationTurbotControlId"] = slices.Contains(cols, "control_id")
     (*m)["includeNotificationTurbotControlNewVersionId"] = slices.Contains(cols, "control_new_version_id")
     (*m)["includeNotificationTurbotControlOldVersionId"] = slices.Contains(cols, "control_old_version_id")
-    (*m)["includeNotificationTurbotControlTypeId"] = slices.Contains(cols, "control_type_id")
+    (*m)["includeNotificationControlTypeTurbotId"] = slices.Contains(cols, "control_type_id")
     (*m)["includeNotificationTurbotPolicySettingId"] = slices.Contains(cols, "policy_setting_id")
     (*m)["includeNotificationTurbotPolicySettingNewVersionId"] = slices.Contains(cols, "policy_setting_new_version_id")
     (*m)["includeNotificationTurbotPolicySettingOldVersionId"] = slices.Contains(cols, "policy_setting_old_version_id")
-    (*m)["includeNotificationTurbotPolicySettingDefaultTemplate"] = slices.Contains(cols, "policy_setting_default_template")
-    (*m)["includeNotificationTurbotPolicySettingDefaultTemplateInput"] = slices.Contains(cols, "policy_setting_default_template_input")
-    (*m)["includeNotificationTurbotPolicySettingTypeId"] = slices.Contains(cols, "policy_setting_type_id")
+    (*m)["includeNotificationPolicySettingTypeDefaultTemplate"] = slices.Contains(cols, "policy_setting_default_template")
+    (*m)["includeNotificationPolicySettingTypeDefaultTemplateInput"] = slices.Contains(cols, "policy_setting_default_template_input")
+    (*m)["includeNotificationPolicySettingTypeTurbotId"] = slices.Contains(cols, "policy_setting_type_id")
 }
 
 func extractNotificationFromHydrateItem(h *plugin.HydrateData) (Notification, error) {
@@ -97,7 +97,11 @@ func notificationHydrateResourceNewVersionID(ctx context.Context, d *plugin.Quer
     if err != nil {
         return nil, err
     }
-    return notification.Turbot.ResourceNewVersionID, nil
+
+    if notification.Turbot.ResourceNewVersionID != nil {
+        return notification.Turbot.ResourceNewVersionID, nil
+    }
+    return nil, nil
 }
 
 func notificationHydrateResourceOldVersionID(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
@@ -105,7 +109,11 @@ func notificationHydrateResourceOldVersionID(ctx context.Context, d *plugin.Quer
     if err != nil {
         return nil, err
     }
-    return notification.Turbot.ResourceOldVersionID, nil
+
+    if notification.Turbot.ResourceOldVersionID != nil {
+        return notification.Turbot.ResourceOldVersionID, nil
+    }
+    return nil, nil
 }
 
 func notificationHydrateProcessId(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
@@ -113,7 +121,11 @@ func notificationHydrateProcessId(ctx context.Context, d *plugin.QueryData, h *p
     if err != nil {
         return nil, err
     }
-    return notification.Turbot.ProcessID, nil
+
+    if notification.Turbot.ProcessID != nil {
+        return notification.Turbot.ProcessID, nil
+    }
+    return nil, nil
 }
 
 func notificationHydrateCreateTimestamp(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
@@ -121,6 +133,7 @@ func notificationHydrateCreateTimestamp(ctx context.Context, d *plugin.QueryData
     if err != nil {
         return nil, err
     }
+
     return notification.Turbot.CreateTimestamp, nil
 }
 
@@ -129,7 +142,11 @@ func notificationHydrateResourceID(ctx context.Context, d *plugin.QueryData, h *
     if err != nil {
         return nil, err
     }
-    return notification.Turbot.ResourceID, nil
+
+    if notification.Turbot.ResourceID != nil {
+        return notification.Turbot.ResourceID, nil
+    }
+    return nil, nil
 }
 
 func notificationHydrateResourceTypeURI(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
@@ -265,7 +282,11 @@ func notificationHydratePolicySettingIsCalculated(ctx context.Context, d *plugin
     if err != nil {
         return nil, err
     }
-    return notification.PolicySetting.isCalculated, nil
+
+    if notification.PolicySetting != nil {
+        return notification.PolicySetting.isCalculated, nil
+    }
+    return nil, nil
 }
 
 func notificationHydratePolicySettingTypeUri(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
@@ -273,7 +294,11 @@ func notificationHydratePolicySettingTypeUri(ctx context.Context, d *plugin.Quer
     if err != nil {
         return nil, err
     }
-    return notification.PolicySetting.Type.URI, nil
+
+    if notification.PolicySetting != nil {
+        return notification.PolicySetting.Type.URI, nil
+    }
+    return nil, nil
 }
 
 func notificationHydratePolicySettingTypeReadOnly(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
@@ -281,7 +306,11 @@ func notificationHydratePolicySettingTypeReadOnly(ctx context.Context, d *plugin
     if err != nil {
         return nil, err
     }
-    return notification.PolicySetting.Type.ReadOnly, nil
+
+    if notification.PolicySetting != nil {
+        return notification.PolicySetting.Type.ReadOnly, nil
+    }
+    return nil, nil
 }
 
 func notificationHydratePolicySettingTypeSecret(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
@@ -289,7 +318,11 @@ func notificationHydratePolicySettingTypeSecret(ctx context.Context, d *plugin.Q
     if err != nil {
         return nil, err
     }
-    return notification.PolicySetting.Type.Secret, nil
+
+    if notification.PolicySetting != nil {
+        return notification.PolicySetting.Type.Secret, nil
+    }
+    return nil, nil
 }
 
 func notificationHydratePolicySettingTypeTrunkTitle(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
@@ -297,7 +330,11 @@ func notificationHydratePolicySettingTypeTrunkTitle(ctx context.Context, d *plug
     if err != nil {
         return nil, err
     }
-    return notification.PolicySetting.Type.Trunk.Title, nil
+
+    if notification.PolicySetting != nil {
+        return notification.PolicySetting.Type.Trunk.Title, nil
+    }
+    return nil, nil
 }
 
 func notificationHydratePolicySettingValue(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
@@ -305,7 +342,11 @@ func notificationHydratePolicySettingValue(ctx context.Context, d *plugin.QueryD
     if err != nil {
         return nil, err
     }
-    return notification.PolicySetting.Value, nil
+
+    if notification.PolicySetting != nil {
+        return notification.PolicySetting.Value, nil
+    }
+    return nil, nil
 }
 
 func notificationHydrateControlState(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
@@ -585,7 +626,11 @@ func notificationHydrateTurbotPolicySettingDefaultTemplate(ctx context.Context, 
     if err != nil {
         return nil, err
     }
-    return notification.PolicySetting.Type.DefaultTemplate, nil
+
+    if notification.PolicySetting != nil {
+        return notification.PolicySetting.Type.DefaultTemplate, nil
+    }
+    return nil, nil
 }
 
 func notificationHydrateTurbotPolicySettingDefaultTemplateInput(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
@@ -593,7 +638,11 @@ func notificationHydrateTurbotPolicySettingDefaultTemplateInput(ctx context.Cont
     if err != nil {
         return nil, err
     }
-    return notification.PolicySetting.Type.DefaultTemplateInput, nil
+
+    if notification.PolicySetting != nil {
+        return notification.PolicySetting.Type.DefaultTemplateInput, nil
+    }
+    return nil, nil
 }
 
 func notificationHydrateTurbotPolicySettingTypeId(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
@@ -601,7 +650,11 @@ func notificationHydrateTurbotPolicySettingTypeId(ctx context.Context, d *plugin
     if err != nil {
         return nil, err
     }
-    return notification.PolicySetting.Type.Turbot.ID, nil
+
+    if notification.PolicySetting != nil {
+        return notification.PolicySetting.Type.Turbot.ID, nil
+    }
+    return nil, nil
 }
 
 func appendModVersionColumnIncludes(m *map[string]interface{}, cols []string) {
