@@ -2,7 +2,7 @@
 
 _Enhancements_
 
-- Updated all the tables to use dynamic columns. ([#30](https://github.com/turbot/steampipe-plugin-guardrails/pull/30))
+- Updated all the tables to fetch the column data using hydrate functions to optimize the API calls and increase query speed when querying specific columns. ([#30](https://github.com/turbot/steampipe-plugin-guardrails/pull/30))
 
 ## v0.15.0 [2024-01-30]
 
