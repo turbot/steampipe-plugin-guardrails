@@ -418,29 +418,29 @@ func policyTypeHydrateVersionId(ctx context.Context, d *plugin.QueryData, h *plu
 }
 
 func appendPolicySettingColumnIncludes(m *map[string]interface{}, cols []string) {
-    (*m)["includePolicySettingId"] = slices.Contains(cols, "id")
+    (*m)["includePolicySettingTurbotId"] = slices.Contains(cols, "id")
     (*m)["includePolicySettingPrecedence"] = slices.Contains(cols, "precedence")
-    (*m)["includePolicySettingResourceId"] = slices.Contains(cols, "resource_id")
+    (*m)["includePolicySettingTurbotResourceId"] = slices.Contains(cols, "resource_id")
     (*m)["includePolicySettingResourceTrunkTitle"] = slices.Contains(cols, "resource_trunk_title")
-    (*m)["includePolicySettingPolicyTypeUri"] = slices.Contains(cols, "policy_type_uri")
-    (*m)["includePolicySettingPolicyTypeTrunkTitle"] = slices.Contains(cols, "policy_type_trunk_title")
+    (*m)["includePolicySettingTypeUri"] = slices.Contains(cols, "policy_type_uri")
+    (*m)["includePolicySettingTypeTrunkTitle"] = slices.Contains(cols, "policy_type_trunk_title")
     (*m)["includePolicySettingValue"] = slices.Contains(cols, "value")
     (*m)["includePolicySettingIsCalculated"] = slices.Contains(cols, "is_calculated")
     (*m)["includePolicySettingException"] = slices.Contains(cols, "exception")
     (*m)["includePolicySettingOrphan"] = slices.Contains(cols, "orphan")
     (*m)["includePolicySettingNote"] = slices.Contains(cols, "note")
-    (*m)["includePolicySettingCreateTimestamp"] = slices.Contains(cols, "create_timestamp")
+    (*m)["includePolicySettingTurbotCreateTimestamp"] = slices.Contains(cols, "create_timestamp")
     (*m)["includePolicySettingDefault"] = slices.Contains(cols, "default")
     (*m)["includePolicySettingInput"] = slices.Contains(cols, "input")
-    (*m)["includePolicySettingPolicyTypeId"] = slices.Contains(cols, "policy_type_id")
+    (*m)["includePolicySettingTurbotPolicyTypeId"] = slices.Contains(cols, "policy_type_id")
     (*m)["includePolicySettingTemplate"] = slices.Contains(cols, "template")
     (*m)["includePolicySettingTemplateInput"] = slices.Contains(cols, "template_input")
-    (*m)["includePolicySettingTimestamp"] = slices.Contains(cols, "timestamp")
-    (*m)["includePolicySettingUpdateTimestamp"] = slices.Contains(cols, "update_timestamp")
+    (*m)["includePolicySettingTurbotTimestamp"] = slices.Contains(cols, "timestamp")
+    (*m)["includePolicySettingTurbotUpdateTimestamp"] = slices.Contains(cols, "update_timestamp")
     (*m)["includePolicySettingValidFromTimestamp"] = slices.Contains(cols, "valid_from_timestamp")
     (*m)["includePolicySettingValidToTimestamp"] = slices.Contains(cols, "valid_to_timestamp")
     (*m)["includePolicySettingValueSource"] = slices.Contains(cols, "value_source")
-    (*m)["includePolicySettingVersionId"] = slices.Contains(cols, "version_id")
+    (*m)["includePolicySettingTurbotVersionId"] = slices.Contains(cols, "version_id")
 }
 
 func extractPolicySettingFromHydrateItem(h *plugin.HydrateData) (PolicySetting, error) {

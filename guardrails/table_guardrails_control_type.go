@@ -51,7 +51,7 @@ func tableGuardrailsControlType(ctx context.Context) *plugin.Table {
 
 const (
 	queryControlTypeList = `
-query controlTypeList($filter: [String!], $next_token: String, $includeControlTypeCategoryId: Boolean!, $includeControlTypeCategoryUri: Boolean!, $includeControlTypeDescription: Boolean!, $includeControlTypeIcon: Boolean!, $includeControlTypeModUri: Boolean!, $includeControlTypeTargets: Boolean!, $includeControlTypeTitle: Boolean!, $includeControlTypeTrunkTitle: Boolean!, $includeControlTypeTurbotAkas: Boolean!, $includeControlTypeTurbotCreateTimestamp: Boolean!, $includeControlTypeTurbotParentId: Boolean!, $includeControlTypeTurbotPath: Boolean!, $includeControlTypeTurbotUpdateTimestamp: Boolean!, $includeControlTypeTurbotVersionId: Boolean!, $includeControlTypeUri: Boolean!) {
+query controlTypeList($filter: [String!], $next_token: String, $includeControlTypeCategoryId: Boolean!, $includeControlTypeCategoryUri: Boolean!, $includeControlTypeDescription: Boolean!, $includeControlTypeIcon: Boolean!, $includeControlTypeModUri: Boolean!, $includeControlTypeTargets: Boolean!, $includeControlTypeTitle: Boolean!, $includeControlTypeTrunkTitle: Boolean!, $includeControlTypeTurbotAkas: Boolean!, $includeControlTypeTurbotCreateTimestamp: Boolean!, $includeControlTypeTurbotParentId: Boolean!, $includeControlTypeTurbotPath: Boolean!, $includeControlTypeTurbotUpdateTimestamp: Boolean!, $includeControlTypeTurbotVersionId: Boolean!, $includeControlTypeUri: Boolean!, $includeControlTypeId: Boolean!) {
   controlTypes(filter: $filter, paging: $next_token) {
     items {
       category {
@@ -69,6 +69,7 @@ query controlTypeList($filter: [String!], $next_token: String, $includeControlTy
         title @include(if: $includeControlTypeTrunkTitle)
       }
       turbot {
+				id @include(if: $includeControlTypeId)
         akas @include(if: $includeControlTypeTurbotAkas)
         createTimestamp @include(if: $includeControlTypeTurbotCreateTimestamp)
         parentId @include(if: $includeControlTypeTurbotParentId)
@@ -86,7 +87,7 @@ query controlTypeList($filter: [String!], $next_token: String, $includeControlTy
 `
 
 	queryControlTypeGet = `
-query controlTypeGet($id: ID!, $includeControlTypeCategoryId: Boolean!, $includeControlTypeCategoryUri: Boolean!, $includeControlTypeDescription: Boolean!, $includeControlTypeIcon: Boolean!, $includeControlTypeModUri: Boolean!, $includeControlTypeTargets: Boolean!, $includeControlTypeTitle: Boolean!, $includeControlTypeTrunkTitle: Boolean!, $includeControlTypeTurbotAkas: Boolean!, $includeControlTypeTurbotCreateTimestamp: Boolean!, $includeControlTypeTurbotParentId: Boolean!, $includeControlTypeTurbotPath: Boolean!, $includeControlTypeTurbotUpdateTimestamp: Boolean!, $includeControlTypeTurbotVersionId: Boolean!, $includeControlTypeUri: Boolean!) {
+query controlTypeGet($id: ID!, $includeControlTypeCategoryId: Boolean!, $includeControlTypeCategoryUri: Boolean!, $includeControlTypeDescription: Boolean!, $includeControlTypeIcon: Boolean!, $includeControlTypeModUri: Boolean!, $includeControlTypeTargets: Boolean!, $includeControlTypeTitle: Boolean!, $includeControlTypeTrunkTitle: Boolean!, $includeControlTypeTurbotAkas: Boolean!, $includeControlTypeTurbotCreateTimestamp: Boolean!, $includeControlTypeTurbotParentId: Boolean!, $includeControlTypeTurbotPath: Boolean!, $includeControlTypeTurbotUpdateTimestamp: Boolean!, $includeControlTypeTurbotVersionId: Boolean!, $includeControlTypeUri: Boolean!, $includeControlTypeId: Boolean!) {
   controlType(id: $id) {
     category {
       turbot {
@@ -103,6 +104,7 @@ query controlTypeGet($id: ID!, $includeControlTypeCategoryId: Boolean!, $include
       title @include(if: $includeControlTypeTrunkTitle)
     }
     turbot {
+			id @include(if: $includeControlTypeId)
       akas @include(if: $includeControlTypeTurbotAkas)
       createTimestamp @include(if: $includeControlTypeTurbotCreateTimestamp)
       parentId @include(if: $includeControlTypeTurbotParentId)
