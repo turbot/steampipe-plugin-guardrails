@@ -1,3 +1,9 @@
+## v0.16.0 [2024-02-05]
+
+_Enhancements_
+
+- Updated all the tables to use dynamic columns. ([#30](https://github.com/turbot/steampipe-plugin-guardrails/pull/30))
+
 ## v0.15.0 [2024-01-30]
 
 _What's new?_
