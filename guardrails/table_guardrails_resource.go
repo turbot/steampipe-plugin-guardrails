@@ -26,24 +26,24 @@ func tableGuardrailsResource(ctx context.Context) *plugin.Table {
 		},
 		Columns: []*plugin.Column{
 			// Top columns
-			{Name: "id", Type: proto.ColumnType_INT, Transform: transform.FromField("Turbot.ID"), Description: "Unique identifier of the resource."},
-			{Name: "title", Type: proto.ColumnType_STRING, Transform: transform.FromField("Turbot.Title"), Description: "Title of the resource."},
-			{Name: "trunk_title", Type: proto.ColumnType_STRING, Transform: transform.FromField("Trunk.Title"), Description: "Title with full path of the resource."},
-			{Name: "tags", Type: proto.ColumnType_JSON, Transform: transform.FromField("Turbot.Tags"), Description: "Tags for the resource."},
-			{Name: "akas", Type: proto.ColumnType_JSON, Transform: transform.FromField("Turbot.Akas"), Description: "AKA (also known as) identifiers for the resource."},
+			{Name: "id", Type: proto.ColumnType_INT, Transform: transform.FromValue(), Description: "Unique identifier of the resource.", Hydrate: resourceHydrateId},
+			{Name: "title", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "Title of the resource.", Hydrate: resourceHydrateTitle},
+			{Name: "trunk_title", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "Title with full path of the resource.", Hydrate: resourceHydrateTrunkTitle},
+			{Name: "tags", Type: proto.ColumnType_JSON, Transform: transform.FromValue(), Description: "Tags for the resource.", Hydrate: resourceHydrateTags},
+			{Name: "akas", Type: proto.ColumnType_JSON, Transform: transform.FromValue(), Description: "AKA (also known as) identifiers for the resource.", Hydrate: resourceHydrateAkas},
 			// Other columns
-			{Name: "create_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromField("Turbot.CreateTimestamp"), Description: "When the resource was first discovered by Turbot. (It may have been created earlier.)"},
-			{Name: "data", Type: proto.ColumnType_JSON, Description: "Resource data."},
-			{Name: "object", Type: proto.ColumnType_JSON, Description: "Extended Resource data."},
+			{Name: "create_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromValue(), Description: "When the resource was first discovered by Turbot. (It may have been created earlier.)", Hydrate: resourceHydrateCreateTimestamp},
+			{Name: "data", Type: proto.ColumnType_JSON, Description: "Resource data.", Transform: transform.FromValue(), Hydrate: resourceHydrateData},
+			{Name: "object", Type: proto.ColumnType_JSON, Description: "Extended Resource data.", Transform: transform.FromValue(), Hydrate: resourceHydrateObject},
 			{Name: "filter", Type: proto.ColumnType_STRING, Transform: transform.FromQual("filter"), Description: "Filter used for this resource list."},
-			{Name: "metadata", Type: proto.ColumnType_JSON, Description: "Resource custom metadata."},
-			{Name: "parent_id", Type: proto.ColumnType_INT, Transform: transform.FromField("Turbot.ParentID"), Description: "ID for the parent of this resource. For the Turbot root resource this is null."},
-			{Name: "path", Type: proto.ColumnType_JSON, Transform: transform.FromField("Turbot.Path").Transform(pathToArray), Description: "Hierarchy path with all identifiers of ancestors of the resource."},
-			{Name: "resource_type_id", Type: proto.ColumnType_INT, Transform: transform.FromField("Turbot.ResourceTypeID"), Description: "ID of the resource type for this resource."},
-			{Name: "resource_type_uri", Type: proto.ColumnType_STRING, Transform: transform.FromField("Type.URI"), Description: "URI of the resource type for this resource."},
-			{Name: "timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromField("Turbot.Timestamp"), Description: "Timestamp when the resource was last modified (created, updated or deleted)."},
-			{Name: "update_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromField("Turbot.UpdateTimestamp"), Description: "When the resource was last updated in Turbot."},
-			{Name: "version_id", Type: proto.ColumnType_INT, Transform: transform.FromField("Turbot.VersionID"), Description: "Unique identifier for this version of the resource."},
+			{Name: "metadata", Type: proto.ColumnType_JSON, Description: "Resource custom metadata.", Transform: transform.FromValue(), Hydrate: resourceHydrateMetadata},
+			{Name: "parent_id", Type: proto.ColumnType_INT, Transform: transform.FromValue(), Description: "ID for the parent of this resource. For the Turbot root resource this is null.", Hydrate: resourceHydrateParentId},
+			{Name: "path", Type: proto.ColumnType_JSON, Transform: transform.FromValue().Transform(pathToArray), Description: "Hierarchy path with all identifiers of ancestors of the resource.", Hydrate: resourceHydratePath},
+			{Name: "resource_type_id", Type: proto.ColumnType_INT, Transform: transform.FromValue(), Description: "ID of the resource type for this resource.", Hydrate: resourceHydrateResourceTypeId},
+			{Name: "resource_type_uri", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "URI of the resource type for this resource.", Hydrate: resourceHydrateResourceTypeUri},
+			{Name: "timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromValue(), Description: "Timestamp when the resource was last modified (created, updated or deleted).", Hydrate: resourceHydrateTimestamp},
+			{Name: "update_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromValue(), Description: "When the resource was last updated in Turbot.", Hydrate: resourceHydrateUpdateTimestamp},
+			{Name: "version_id", Type: proto.ColumnType_INT, Transform: transform.FromValue(), Description: "Unique identifier for this version of the resource.", Hydrate: resourceHydrateVersionId},
 			{Name: "workspace", Type: proto.ColumnType_STRING, Hydrate: plugin.HydrateFunc(getTurbotGuardrailsWorkspace).WithCache(), Transform: transform.FromValue(), Description: "Specifies the workspace URL."},
 		},
 	}
@@ -51,36 +51,36 @@ func tableGuardrailsResource(ctx context.Context) *plugin.Table {
 
 const (
 	queryResourceList = `
-query resourceList($filter: [String!], $next_token: String) {
-	resources(filter: $filter, paging: $next_token) {
-		items {
-			data
-			object
-			metadata
-			trunk {
-				title
-			}
-			turbot {
-				id
-				title
-				tags
-				akas
-				timestamp
-				createTimestamp
-				updateTimestamp
-				versionId
-				parentId
-				path
-				resourceTypeId
-			}
-			type {
-				uri
-			}
-		}
-		paging {
-			next
-		}
-	}
+query resourceList($filter: [String!], $next_token: String, $includeResourceObject: Boolean!, $includeResourceData: Boolean!, $includeResourceMetadata: Boolean!, $includeResourceTrunkTitle: Boolean!, $includeResourceId: Boolean!, $includeResourceTitle: Boolean!, $includeResourceTags: Boolean!, $includeResourceAkas: Boolean!, $includeResourceTimestamp: Boolean!, $includeResourceCreateTimestamp: Boolean!, $includeResourceUpdateTimestamp: Boolean!, $includeResourceVersionId: Boolean!, $includeResourceParentId: Boolean!, $includeResourcePath: Boolean!, $includeResourceTypeId: Boolean!, $includeResourceTypeUri: Boolean!) {
+  resources(filter: $filter, paging: $next_token) {
+    items {
+      data @include(if: $includeResourceData)
+      object @include(if: $includeResourceObject)
+      metadata @include(if: $includeResourceMetadata)
+      trunk {
+        title @include(if: $includeResourceTrunkTitle)
+      }
+      turbot {
+        id @include(if: $includeResourceId)
+        title @include(if: $includeResourceTitle)
+        tags @include(if: $includeResourceTags)
+        akas @include(if: $includeResourceAkas)
+        timestamp @include(if: $includeResourceTimestamp)
+        createTimestamp @include(if: $includeResourceCreateTimestamp)
+        updateTimestamp @include(if: $includeResourceUpdateTimestamp)
+        versionId @include(if: $includeResourceVersionId)
+        parentId @include(if: $includeResourceParentId)
+        path @include(if: $includeResourcePath)
+        resourceTypeId @include(if: $includeResourceTypeId)
+      }
+      type {
+        uri @include(if: $includeResourceTypeUri)
+      }
+    }
+    paging {
+      next
+    }
+  }
 }
 `
 )
@@ -136,10 +136,16 @@ func listResource(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateDat
 	plugin.Logger(ctx).Debug("guardrails_resource.listResource", "quals", quals)
 	plugin.Logger(ctx).Debug("guardrails_resource.listResource", "filters", filters)
 
-	nextToken := ""
+	variables := map[string]interface{}{
+		"filter":     filters,
+		"next_token": "",
+	}
+
+	appendResourceColumnIncludes(&variables, d.QueryContext.Columns)
+
 	for {
 		result := &ResourcesResponse{}
-		err = conn.DoRequest(queryResourceList, map[string]interface{}{"filter": filters, "next_token": nextToken}, result)
+		err = conn.DoRequest(queryResourceList, variables, result)
 		if err != nil {
 			plugin.Logger(ctx).Error("guardrails_resource.listResource", "query_error", err)
 			return nil, err
@@ -155,7 +161,7 @@ func listResource(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateDat
 		if !pageResults || result.Resources.Paging.Next == "" {
 			break
 		}
-		nextToken = result.Resources.Paging.Next
+		variables["next_token"] = result.Resources.Paging.Next
 	}
 
 	return nil, nil

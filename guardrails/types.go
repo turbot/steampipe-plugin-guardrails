@@ -301,8 +301,9 @@ type TurbotResourceMetadata struct {
 
 type ControlsResponse struct {
 	Controls struct {
-		Items  []Control
-		Paging struct {
+		Metadata interface{}
+		Items    []Control
+		Paging   struct {
 			Next string
 		}
 	}
@@ -624,5 +625,11 @@ type GrantNotification struct {
 			Title *string
 		}
 		ProfileID *string
+	}
+}
+
+type ControlMetadataResponse struct {
+	Controls struct {
+		Metadata interface{}
 	}
 }

@@ -29,31 +29,32 @@ func tableGuardrailsPolicySetting(ctx context.Context) *plugin.Table {
 		},
 		Columns: []*plugin.Column{
 			// Top columns
-			{Name: "id", Type: proto.ColumnType_INT, Transform: transform.FromField("Turbot.ID"), Description: "Unique identifier of the policy setting."},
-			{Name: "precedence", Type: proto.ColumnType_STRING, Description: "Precedence of the setting: REQUIRED or RECOMMENDED."},
-			{Name: "resource_id", Type: proto.ColumnType_INT, Transform: transform.FromField("Turbot.ResourceID"), Description: "ID of the resource this policy setting is associated with."},
-			{Name: "resource_trunk_title", Type: proto.ColumnType_STRING, Transform: transform.FromField("Resource.Trunk.Title"), Description: "Full title (including ancestor trunk) of the resource."},
-			{Name: "policy_type_uri", Type: proto.ColumnType_STRING, Transform: transform.FromField("Type.URI"), Description: "URI of the policy type for this policy setting."},
-			{Name: "policy_type_trunk_title", Type: proto.ColumnType_STRING, Transform: transform.FromField("Type.Trunk.Title"), Description: "Full title (including ancestor trunk) of the policy type."},
-			{Name: "value", Type: proto.ColumnType_STRING, Description: "Value of the policy setting (for non-calculated policy settings)."},
-			{Name: "is_calculated", Type: proto.ColumnType_BOOL, Description: "True if this is a policy setting will be calculated for each value."},
-			{Name: "exception", Type: proto.ColumnType_BOOL, Transform: transform.FromField("Exception").Transform(intToBool), Description: "True if this setting is an exception to a higher level setting."},
-			{Name: "orphan", Type: proto.ColumnType_BOOL, Transform: transform.FromField("Orphan").Transform(intToBool), Description: "True if this setting is orphaned by a higher level setting."},
-			{Name: "note", Type: proto.ColumnType_STRING, Description: "Optional note or comment for the setting."},
+			{Name: "id", Type: proto.ColumnType_INT, Transform: transform.FromValue(), Description: "Unique identifier of the policy setting.", Hydrate: policySettingHydrateId},
+			{Name: "precedence", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "Precedence of the setting: REQUIRED or RECOMMENDED.", Hydrate: policySettingHydratePrecedence},
+			{Name: "resource_id", Type: proto.ColumnType_INT, Transform: transform.FromValue(), Description: "ID of the resource this policy setting is associated with.", Hydrate: policySettingHydrateResourceId},
+			{Name: "resource_trunk_title", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "Full title (including ancestor trunk) of the resource.", Hydrate: policySettingHydrateResourceTrunkTitle},
+			{Name: "policy_type_uri", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "URI of the policy type for this policy setting.", Hydrate: policySettingHydratePolicyTypeUri},
+			{Name: "policy_type_trunk_title", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "Full title (including ancestor trunk) of the policy type.", Hydrate: policySettingHydratePolicyTypeTrunkTitle},
+			{Name: "value", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "Value of the policy setting (for non-calculated policy settings).", Hydrate: policySettingHydrateValue},
+			{Name: "is_calculated", Type: proto.ColumnType_BOOL, Transform: transform.FromValue(), Description: "True if this is a policy setting will be calculated for each value.", Hydrate: policySettingHydrateIsCalculated},
+			{Name: "exception", Type: proto.ColumnType_BOOL, Transform: transform.FromValue().Transform(intToBool), Description: "True if this setting is an exception to a higher level setting.", Hydrate: policySettingHydrateException},
+			{Name: "orphan", Type: proto.ColumnType_BOOL, Transform: transform.FromValue().Transform(intToBool), Description: "True if this setting is orphaned by a higher level setting.", Hydrate: policySettingHydrateOrphan},
+			{Name: "note", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "Optional note or comment for the setting.", Hydrate: policySettingHydrateNote},
 			// Other columns
-			{Name: "create_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromField("Turbot.CreateTimestamp"), Description: "When the policy setting was first discovered by Turbot. (It may have been created earlier.)"},
-			{Name: "default", Type: proto.ColumnType_BOOL, Description: "True if this policy setting is the default."},
+			{Name: "create_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromValue(), Description: "When the policy setting was first discovered by Turbot. (It may have been created earlier.)", Hydrate: policySettingHydrateCreateTimestamp},
+			{Name: "default", Type: proto.ColumnType_BOOL, Transform: transform.FromValue(), Description: "True if this policy setting is the default.", Hydrate: policySettingHydrateDefault},
 			{Name: "filter", Type: proto.ColumnType_STRING, Transform: transform.FromQual("filter"), Description: "Filter used for this policy setting list."},
-			{Name: "input", Type: proto.ColumnType_STRING, Description: "For calculated policy settings, this is the input GraphQL query."},
-			{Name: "policy_type_id", Type: proto.ColumnType_INT, Transform: transform.FromField("Turbot.PolicyTypeID"), Description: "ID of the policy type for this policy setting."},
-			{Name: "template", Type: proto.ColumnType_STRING, Description: "For a calculated policy setting, this is the nunjucks template string defining a YAML string which is parsed to get the value."},
-			{Name: "template_input", Type: proto.ColumnType_STRING, Description: "For calculated policy settings, this GraphQL query is run and used as input to the template."},
-			{Name: "timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromField("Turbot.Timestamp"), Description: "Timestamp when the policy setting was last modified (created, updated or deleted)."},
-			{Name: "update_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromField("Turbot.UpdateTimestamp"), Description: "When the policy setting was last updated in Turbot."},
-			{Name: "valid_from_timestamp", Type: proto.ColumnType_TIMESTAMP, Description: "Timestamp when the policy setting becomes valid."},
-			{Name: "valid_to_timestamp", Type: proto.ColumnType_TIMESTAMP, Description: "Timestamp when the policy setting expires."},
-			{Name: "value_source", Type: proto.ColumnType_STRING, Description: "The raw value in YAML format. If the setting was made via YAML template including comments, these will be included here."},
-			{Name: "version_id", Type: proto.ColumnType_INT, Transform: transform.FromField("Turbot.VersionID"), Description: "Unique identifier for this version of the policy setting."},
+			{Name: "input", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "For calculated policy settings, this is the input GraphQL query.", Hydrate: policySettingHydrateInput},
+			{Name: "policy_type_id", Type: proto.ColumnType_INT, Transform: transform.FromValue(), Description: "ID of the policy type for this policy setting.", Hydrate: policySettingHydratePolicyTypeId},
+
+			{Name: "template", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "For a calculated policy setting, this is the nunjucks template string defining a YAML string which is parsed to get the value.", Hydrate: policySettingHydrateTemplate},
+			{Name: "template_input", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "For calculated policy settings, this GraphQL query is run and used as input to the template.", Hydrate: policySettingHydrateTemplateInput},
+			{Name: "timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromValue(), Description: "Timestamp when the policy setting was last modified (created, updated or deleted).", Hydrate: policySettingHydrateTimestamp},
+			{Name: "update_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromValue(), Description: "When the policy setting was last updated in Turbot.", Hydrate: policySettingHydrateUpdateTimestamp},
+			{Name: "valid_from_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromValue(), Description: "Timestamp when the policy setting becomes valid.", Hydrate: policySettingHydrateValidFromTimestamp},
+			{Name: "valid_to_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromValue(), Description: "Timestamp when the policy setting expires.", Hydrate: policySettingHydrateValidToTimestamp},
+			{Name: "value_source", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "The raw value in YAML format. If the setting was made via YAML template including comments, these will be included here.", Hydrate: policySettingHydrateValueSource},
+			{Name: "version_id", Type: proto.ColumnType_INT, Transform: transform.FromValue(), Description: "Unique identifier for this version of the policy setting.", Hydrate: policySettingHydrateVersionId},
 			{Name: "workspace", Type: proto.ColumnType_STRING, Hydrate: plugin.HydrateFunc(getTurbotGuardrailsWorkspace).WithCache(), Transform: transform.FromValue(), Description: "Specifies the workspace URL."},
 		},
 	}
@@ -61,49 +62,47 @@ func tableGuardrailsPolicySetting(ctx context.Context) *plugin.Table {
 
 const (
 	queryPolicySettingList = `
-query policySettingList($filter: [String!], $next_token: String) {
-	policySettings(filter: $filter, paging: $next_token) {
-		items {
-			default
-			exception
-			input
-			isCalculated
-			note
-			orphan
-			precedence
-			resource {
-				trunk {
-					title
-				}
-			}
-			#secretValue
-			#secretValueSource
-			template
-			templateInput
-			type {
-				uri
-				trunk {
-					title
-				}
-			}
-			turbot {
-				id
-				timestamp
-				createTimestamp
-				updateTimestamp
-				versionId
-				policyTypeId
-				resourceId
-			}
-			validFromTimestamp
-			validToTimestamp
-			value
-			valueSource
-		}
-		paging {
-			next
-		}
-	}
+query policySettingList($filter: [String!], $next_token: String, $includePolicySettingDefault: Boolean!, $includePolicySettingException: Boolean!, $includePolicySettingInput: Boolean!, $includePolicySettingIsCalculated: Boolean!, $includePolicySettingNote: Boolean!, $includePolicySettingOrphan: Boolean!, $includePolicySettingPrecedence: Boolean!, $includePolicySettingResourceTrunkTitle: Boolean!, $includePolicySettingTemplate: Boolean!, $includePolicySettingTemplateInput: Boolean!, $includePolicySettingTypeUri: Boolean!, $includePolicySettingTypeTrunkTitle: Boolean!, $includePolicySettingTurbotId: Boolean!, $includePolicySettingTurbotTimestamp: Boolean!, $includePolicySettingTurbotCreateTimestamp: Boolean!, $includePolicySettingTurbotUpdateTimestamp: Boolean!, $includePolicySettingTurbotVersionId: Boolean!, $includePolicySettingTurbotPolicyTypeId: Boolean!, $includePolicySettingTurbotResourceId: Boolean!, $includePolicySettingValidFromTimestamp: Boolean!, $includePolicySettingValidToTimestamp: Boolean!, $includePolicySettingValue: Boolean!, $includePolicySettingValueSource: Boolean!) {
+  policySettings(filter: $filter, paging: $next_token) {
+    items {
+      default @include(if: $includePolicySettingDefault)
+      exception @include(if: $includePolicySettingException)
+      input @include(if: $includePolicySettingInput)
+      isCalculated @include(if: $includePolicySettingIsCalculated)
+      note @include(if: $includePolicySettingNote)
+      orphan @include(if: $includePolicySettingOrphan)
+      precedence @include(if: $includePolicySettingPrecedence)
+      resource {
+        trunk {
+          title @include(if: $includePolicySettingResourceTrunkTitle)
+        }
+      }
+      template @include(if: $includePolicySettingTemplate)
+      templateInput @include(if: $includePolicySettingTemplateInput)
+      type {
+        uri @include(if: $includePolicySettingTypeUri)
+        trunk {
+          title @include(if: $includePolicySettingTypeTrunkTitle)
+        }
+      }
+      turbot {
+        id @include(if: $includePolicySettingTurbotId)
+        timestamp @include(if: $includePolicySettingTurbotTimestamp)
+        createTimestamp @include(if: $includePolicySettingTurbotCreateTimestamp)
+        updateTimestamp @include(if: $includePolicySettingTurbotUpdateTimestamp)
+        versionId @include(if: $includePolicySettingTurbotVersionId)
+        policyTypeId @include(if: $includePolicySettingTurbotPolicyTypeId)
+        resourceId @include(if: $includePolicySettingTurbotResourceId)
+      }
+      validFromTimestamp @include(if: $includePolicySettingValidFromTimestamp)
+      validToTimestamp @include(if: $includePolicySettingValidToTimestamp)
+      value @include(if: $includePolicySettingValue)
+      valueSource @include(if: $includePolicySettingValueSource)
+    }
+    paging {
+      next
+    }
+  }
 }
 `
 )
@@ -182,10 +181,15 @@ func listPolicySetting(ctx context.Context, d *plugin.QueryData, _ *plugin.Hydra
 
 	plugin.Logger(ctx).Debug("guardrails_policy_setting.listPolicySetting", "filters", filters)
 
-	nextToken := ""
+	variables := map[string]interface{}{
+		"filter":     filters,
+		"next_token": "",
+	}
+	appendPolicySettingColumnIncludes(&variables, d.QueryContext.Columns)
+
 	for {
 		result := &PolicySettingsResponse{}
-		err = conn.DoRequest(queryPolicySettingList, map[string]interface{}{"filter": filters, "next_token": nextToken}, result)
+		err = conn.DoRequest(queryPolicySettingList, variables, result)
 		if err != nil {
 			plugin.Logger(ctx).Error("guardrails_policy_setting.listPolicySetting", "query_error", err)
 			return nil, err
@@ -201,7 +205,7 @@ func listPolicySetting(ctx context.Context, d *plugin.QueryData, _ *plugin.Hydra
 		if !pageResults || result.PolicySettings.Paging.Next == "" {
 			break
 		}
-		nextToken = result.PolicySettings.Paging.Next
+		variables["next_token"] = result.PolicySettings.Paging.Next
 	}
 
 	return nil, nil

@@ -29,23 +29,24 @@ func tableGuardrailsControl(ctx context.Context) *plugin.Table {
 		},
 		Columns: []*plugin.Column{
 			// Top columns
-			{Name: "id", Type: proto.ColumnType_INT, Transform: transform.FromField("Turbot.ID"), Description: "Unique identifier of the control."},
-			{Name: "state", Type: proto.ColumnType_STRING, Description: "State of the control."},
-			{Name: "reason", Type: proto.ColumnType_STRING, Description: "Reason for this control state."},
-			{Name: "details", Type: proto.ColumnType_JSON, Description: "Details associated with this control state."},
-			{Name: "resource_id", Type: proto.ColumnType_INT, Transform: transform.FromField("Turbot.ResourceID"), Description: "ID of the resource this control is associated with."},
-			{Name: "resource_trunk_title", Type: proto.ColumnType_STRING, Transform: transform.FromField("Resource.Trunk.Title"), Description: "Full title (including ancestor trunk) of the resource."},
-			{Name: "control_type_trunk_title", Type: proto.ColumnType_STRING, Transform: transform.FromField("Type.Trunk.Title"), Description: "Full title (including ancestor trunk) of the control type."},
+			{Name: "id", Type: proto.ColumnType_INT, Transform: transform.FromValue(), Description: "Unique identifier of the control.", Hydrate: controlHydrateId},
+			{Name: "state", Type: proto.ColumnType_STRING, Description: "State of the control.", Transform: transform.FromValue(), Hydrate: controlHydrateState},
+			{Name: "reason", Type: proto.ColumnType_STRING, Description: "Reason for this control state.", Transform: transform.FromValue(), Hydrate: controlHydrateReason},
+			{Name: "details", Type: proto.ColumnType_JSON, Description: "Details associated with this control state.", Transform: transform.FromValue(), Hydrate: controlHydrateDetails},
+			{Name: "resource_id", Type: proto.ColumnType_INT, Transform: transform.FromValue(), Description: "ID of the resource this control is associated with.", Hydrate: controlHydrateResourceId},
+			{Name: "resource_trunk_title", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "Full title (including ancestor trunk) of the resource.", Hydrate: controlHydrateResourceTrunkTitle},
+			{Name: "control_type_trunk_title", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "Full title (including ancestor trunk) of the control type.", Hydrate: controlHydrateControlTypeTrunkTitle},
+
 			// Other columns
-			{Name: "control_type_id", Type: proto.ColumnType_INT, Transform: transform.FromField("Turbot.ControlTypeID"), Description: "ID of the control type for this control."},
-			{Name: "control_type_uri", Type: proto.ColumnType_STRING, Transform: transform.FromField("Type.URI"), Description: "URI of the control type for this control."},
-			{Name: "create_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromField("Turbot.CreateTimestamp"), Description: "When the control was first discovered by Turbot. (It may have been created earlier.)"},
+			{Name: "control_type_id", Type: proto.ColumnType_INT, Transform: transform.FromValue(), Description: "ID of the control type for this control.", Hydrate: controlHydrateControlTypeId},
+			{Name: "control_type_uri", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "URI of the control type for this control.", Hydrate: controlHydrateControlTypeUri},
+			{Name: "create_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromValue(), Description: "When the control was first discovered by Turbot. (It may have been created earlier.)", Hydrate: controlHydrateCreateTimestamp},
 			{Name: "filter", Type: proto.ColumnType_STRING, Transform: transform.FromQual("filter"), Description: "Filter used for this control list."},
-			{Name: "resource_type_id", Type: proto.ColumnType_INT, Transform: transform.FromField("Turbot.ResourceTypeID"), Description: "ID of the resource type for this control."},
-			{Name: "resource_type_uri", Type: proto.ColumnType_STRING, Transform: transform.FromField("Resource.Type.URI"), Description: "URI of the resource type for this control."},
-			{Name: "timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromField("Turbot.Timestamp"), Description: "Timestamp when the control was last modified (created, updated or deleted)."},
-			{Name: "update_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromField("Turbot.UpdateTimestamp"), Description: "When the control was last updated in Turbot."},
-			{Name: "version_id", Type: proto.ColumnType_INT, Transform: transform.FromField("Turbot.VersionID"), Description: "Unique identifier for this version of the control."},
+			{Name: "resource_type_id", Type: proto.ColumnType_INT, Transform: transform.FromValue(), Description: "ID of the resource type for this control.", Hydrate: controlHydrateResourceTypeId},
+			{Name: "resource_type_uri", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "URI of the resource type for this control.", Hydrate: controlHydrateResourceTypeUri},
+			{Name: "timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromValue(), Description: "Timestamp when the control was last modified (created, updated or deleted).", Hydrate: controlHydrateTimestamp},
+			{Name: "update_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromValue(), Description: "When the control was last updated in Turbot.", Hydrate: controlHydrateUpdateTimestamp},
+			{Name: "version_id", Type: proto.ColumnType_INT, Transform: transform.FromValue(), Description: "Unique identifier for this version of the control.", Hydrate: controlHydrateVersionId},
 			{Name: "workspace", Type: proto.ColumnType_STRING, Hydrate: plugin.HydrateFunc(getTurbotGuardrailsWorkspace).WithCache(), Transform: transform.FromValue(), Description: "Specifies the workspace URL."},
 		},
 	}
@@ -53,35 +54,35 @@ func tableGuardrailsControl(ctx context.Context) *plugin.Table {
 
 const (
 	queryControlList = `
-query controlList($filter: [String!], $next_token: String) {
+	query controlList($filter: [String!], $next_token: String, $includeControlState: Boolean!, $includeControlReason: Boolean!, $includeControlDetails: Boolean!, $includeControlResourceTypeUri: Boolean!, $includeControlResourceTrunkTitle: Boolean!, $includeControlTypeUri: Boolean!, $includeControlTypeTrunkTitle: Boolean!, $includeControlId: Boolean!, $includeControlTimestamp: Boolean!, $includeControlCreateTimestamp: Boolean!, $includeControlUpdateTimestamp: Boolean!, $includeControlVersionId: Boolean!, $includeControlTypeId: Boolean!, $includeControlResourceId: Boolean!, $includeControlResourceTypeId: Boolean!) {
 	controls(filter: $filter, paging: $next_token) {
 		items {
-			state
-			reason
-			details
+			state @include(if: $includeControlState)
+			reason @include(if: $includeControlReason)
+			details @include(if: $includeControlDetails)
 			resource {
 				type {
-					uri
+					uri @include(if: $includeControlResourceTypeUri)
 				}
 				trunk {
-					title
+					title @include(if: $includeControlResourceTrunkTitle)
 				}
 			}
 			type {
-				uri
+				uri @include(if: $includeControlTypeUri)
 				trunk {
-					title
+					title @include(if: $includeControlTypeTrunkTitle)
 				}
 			}
 			turbot {
-				id
-				timestamp
-				createTimestamp
-				updateTimestamp
-				versionId
-				controlTypeId
-				resourceId
-				resourceTypeId
+				id @include(if: $includeControlId)
+				timestamp @include(if: $includeControlTimestamp)
+				createTimestamp @include(if: $includeControlCreateTimestamp)
+				updateTimestamp @include(if: $includeControlUpdateTimestamp)
+				versionId @include(if: $includeControlVersionId)
+				controlTypeId @include(if: $includeControlTypeId)
+				resourceId @include(if: $includeControlResourceId)
+				resourceTypeId @include(if: $includeControlResourceTypeId)
 			}
 		}
 		paging {
@@ -131,13 +132,13 @@ func listControl(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData
 	// Default to a very large page size. Page sizes earlier in the filter string
 	// win, so this is only used as a fallback.
 	pageResults := false
+	var pageLimit int64 = 5000
 	// Add a limit if they haven't given one in the filter field
 	re := regexp.MustCompile(`(^|\s)limit:[0-9]+($|\s)`)
 	if !re.MatchString(filter) {
 		// The caller did not specify a limit, so set a high limit and page all
 		// results.
 		pageResults = true
-		var pageLimit int64 = 5000
 
 		// Adjust page limit, if less than default value
 		limit := d.QueryContext.Limit
@@ -152,10 +153,16 @@ func listControl(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData
 	plugin.Logger(ctx).Debug("guardrails_control.listControl", "quals", quals)
 	plugin.Logger(ctx).Debug("guardrails_control.listControl", "filters", filters)
 
-	nextToken := ""
+	variables := map[string]interface{}{
+		"filter":     filters,
+		"next_token": "",
+	}
+
+	controlColumnIncludes(&variables, d.QueryContext.Columns)
+
 	for {
 		result := &ControlsResponse{}
-		err = conn.DoRequest(queryControlList, map[string]interface{}{"filter": filters, "next_token": nextToken}, result)
+		err = conn.DoRequest(queryControlList, variables, result)
 		if err != nil {
 			plugin.Logger(ctx).Error("guardrails_control.listControl", "query_error", err)
 			return nil, err
@@ -171,7 +178,7 @@ func listControl(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData
 		if !pageResults || result.Controls.Paging.Next == "" {
 			break
 		}
-		nextToken = result.Controls.Paging.Next
+		variables["next_token"] = result.Controls.Paging.Next
 	}
 
 	return nil, nil

@@ -18,34 +18,33 @@ func tableGuardrailsGrant(ctx context.Context) *plugin.Table {
 		List: &plugin.ListConfig{
 			KeyColumns: []*plugin.KeyColumn{
 				{Name: "id", Require: plugin.Optional},
+				{Name: "filter", Require: plugin.Optional},
 			},
 			Hydrate: listGrants,
 		},
 		Columns: []*plugin.Column{
-			// Top columns
-			{Name: "id", Type: proto.ColumnType_INT, Transform: transform.FromField("Turbot.ID"), Description: "Unique identifier of the grant."},
-			{Name: "resource_id", Type: proto.ColumnType_INT, Transform: transform.FromField("Resource.Turbot.ID"), Description: "Unique identifier of the resource."},
-			{Name: "identity_status", Type: proto.ColumnType_STRING, Transform: transform.FromField("Identity.Status"), Description: "Status of the identity."},
-			{Name: "identity_display_name", Type: proto.ColumnType_STRING, Transform: transform.FromField("Identity.DisplayName"), Description: "Display name of the identity."},
-			{Name: "identity_email", Type: proto.ColumnType_STRING, Transform: transform.FromField("Identity.Email"), Description: "Email identity for the identity."},
-			{Name: "identity_family_name", Type: proto.ColumnType_STRING, Transform: transform.FromField("Identity.FamilyName"), Description: "Family name of the identity."},
-			{Name: "identity_given_name", Type: proto.ColumnType_STRING, Transform: transform.FromField("Identity.GivenName"), Description: "Given name of the identity."},
-			{Name: "identity_last_login_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromField("Identity.LastLoginTimestamp"), Description: "Last login timestamp."},
-			{Name: "identity_profile_id", Type: proto.ColumnType_STRING, Transform: transform.FromField("Identity.ProfileID"), Description: "Profile id of the identity."},
-			{Name: "identity_trunk_title", Type: proto.ColumnType_STRING, Transform: transform.FromField("Identity.Trunk.Title"), Description: "Full title (including ancestor trunk) of the grant identity."},
-			{Name: "level_title", Type: proto.ColumnType_STRING, Transform: transform.FromField("Level.Title"), Description: "The title of the level."},
-			{Name: "level_trunk_title", Type: proto.ColumnType_STRING, Transform: transform.FromField("Level.Trunk.Title"), Description: "Full title (including ancestor trunk) of the level."},
-			{Name: "level_uri", Type: proto.ColumnType_STRING, Transform: transform.FromField("Level.URI"), Description: "The URI of the level."},
-			{Name: "resource_type_trunk_title", Type: proto.ColumnType_STRING, Transform: transform.FromField("Resource.Type.Trunk.Title"), Description: "Full title (including ancestor trunk) of the grant type."},
-			{Name: "resource_trunk_title", Type: proto.ColumnType_STRING, Transform: transform.FromField("Resource.Trunk.Title"), Description: "Full title (including ancestor trunk) of the resource."},
-			{Name: "resource_type_uri", Type: proto.ColumnType_STRING, Transform: transform.FromField("Resource.Type.URI"), Description: "URI of the resource type."},
-			{Name: "identity_akas", Type: proto.ColumnType_JSON, Transform: transform.FromField("Identity.Akas"), Description: "AKA (also known as) identifiers for the identity"},
-			// Other columns
-			{Name: "create_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromField("Turbot.CreateTimestamp").NullIfEqual(""), Description: "The create time of the grant."},
+			{Name: "id", Type: proto.ColumnType_INT, Transform: transform.FromValue(), Description: "Unique identifier of the grant.", Hydrate: grantHydrateGrantId},
+			{Name: "resource_id", Type: proto.ColumnType_INT, Transform: transform.FromValue(), Description: "Unique identifier of the resource.", Hydrate: grantHydrateResourceId},
+			{Name: "identity_status", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "Status of the identity.", Hydrate: grantHydrateIdentityStatus},
+			{Name: "identity_display_name", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "Display name of the identity.", Hydrate: grantHydrateIdentityDisplayName},
+			{Name: "identity_email", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "Email identity for the identity.", Hydrate: grantHydrateIdentityEmail},
+			{Name: "identity_family_name", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "Family name of the identity.", Hydrate: grantHydrateIdentityFamilyName},
+			{Name: "identity_given_name", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "Given name of the identity.", Hydrate: grantHydrateIdentityGivenName},
+			{Name: "identity_last_login_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromValue(), Description: "Last login timestamp.", Hydrate: grantHydrateIdentityLastLoginTimestamp},
+			{Name: "identity_profile_id", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "Profile id of the identity.", Hydrate: grantHydrateIdentityProfileId},
+			{Name: "identity_trunk_title", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "Full title (including ancestor trunk) of the grant identity.", Hydrate: grantHydrateIdentityTrunkTitle},
+			{Name: "level_title", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "The title of the level.", Hydrate: grantHydrateLevelTitle},
+			{Name: "level_trunk_title", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "Full title (including ancestor trunk) of the level.", Hydrate: grantHydrateLevelTrunkTitle},
+			{Name: "level_uri", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "The URI of the level.", Hydrate: grantHydrateLevelUri},
+			{Name: "resource_type_trunk_title", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "Full title (including ancestor trunk) of the grant type.", Hydrate: grantHydrateResourceTypeTrunkTitle},
+			{Name: "resource_trunk_title", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "Full title (including ancestor trunk) of the resource.", Hydrate: grantHydrateResourceTrunkTitle},
+			{Name: "resource_type_uri", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "URI of the resource type.", Hydrate: grantHydrateResourceTypeUri},
+			{Name: "identity_akas", Type: proto.ColumnType_JSON, Transform: transform.FromValue(), Description: "AKA (also known as) identifiers for the identity", Hydrate: grantHydrateIdentityAkas},
+			{Name: "create_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromValue().NullIfEqual(""), Description: "The create time of the grant.", Hydrate: grantHydrateCreateTimestamp},
 			{Name: "filter", Type: proto.ColumnType_STRING, Transform: transform.FromQual("filter"), Description: "Filter used for this grant list."},
-			{Name: "timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromField("Turbot.Timestamp").NullIfEqual(""), Description: "Timestamp when the grant was last modified (created, updated or deleted)."},
-			{Name: "update_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromField("Turbot.UpdateTimestamp"), Description: "When the grant was last updated in Turbot."},
-			{Name: "version_id", Type: proto.ColumnType_INT, Transform: transform.FromField("Turbot.VersionID").NullIfEqual(""), Description: "Unique identifier for this version of the identity."},
+			{Name: "timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromValue().NullIfEqual(""), Description: "Timestamp when the grant was last modified (created, updated or deleted).", Hydrate: grantHydrateTimestamp},
+			{Name: "update_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromValue(), Description: "When the grant was last updated in Turbot.", Hydrate: grantHydrateUpdateTimestamp},
+			{Name: "version_id", Type: proto.ColumnType_INT, Transform: transform.FromValue().NullIfEqual(""), Description: "Unique identifier for this version of the identity.", Hydrate: grantHydrateVersionId},
 			{Name: "workspace", Type: proto.ColumnType_STRING, Hydrate: plugin.HydrateFunc(getTurbotGuardrailsWorkspace).WithCache(), Transform: transform.FromValue(), Description: "Specifies the workspace URL."},
 		},
 	}
@@ -53,64 +52,64 @@ func tableGuardrailsGrant(ctx context.Context) *plugin.Table {
 
 const (
 	grants = `
-	query MyQuery($filter: [String!], $paging: String) {
+	query MyQuery($filter: [String!], $paging: String, $includeGrantResourceAkas: Boolean!, $includeGrantResourceTitle: Boolean!, $includeGrantResourceTrunkTitle: Boolean!, $includeGrantResourceTypeURI: Boolean!, $includeGrantResourceTypeTrunkTitle: Boolean!, $includeGrantResourceId: Boolean!, $includeGrantResourceCreateTimestamp: Boolean!, $includeGrantResourceDeleteTimestamp: Boolean!, $includeGrantResourceTimestamp: Boolean!, $includeGrantResourceVersionId: Boolean!, $includeGrantResourceUpdateTimestamp: Boolean!, $includeGrantIdentityAkas: Boolean!, $includeGrantIdentityEmail: Boolean!, $includeGrantIdentityStatus: Boolean!, $includeGrantIdentityGivenName: Boolean!, $includeGrantIdentityProfileId: Boolean!, $includeGrantIdentityFamilyName: Boolean!, $includeGrantIdentityDisplayName: Boolean!, $includeGrantIdentityLastLoginTimestamp: Boolean!, $includeGrantIdentityTrunkTitle: Boolean!, $includeGrantLevelTitle: Boolean!, $includeGrantLevelURI: Boolean!, $includeGrantLevelTrunkTitle: Boolean!, $includeGrantTurbotId: Boolean!, $includeGrantTurbotCreateTimestamp: Boolean!, $includeGrantTurbotDeleteTimestamp: Boolean!, $includeGrantTurbotTimestamp: Boolean!, $includeGrantTurbotVersionId: Boolean!, $includeGrantTurbotUpdateTimestamp: Boolean!) {
 		grants(filter: $filter, paging: $paging) {
 		  items {
 			resource {
-			  akas
-			  title
+			  akas @include(if: $includeGrantResourceAkas)
+			  title @include(if: $includeGrantResourceTitle)
 			  trunk {
-				title
+				title @include(if: $includeGrantResourceTrunkTitle)
 			  }
 			  type {
-				uri
+				uri @include(if: $includeGrantResourceTypeURI)
 				trunk {
-				  title
+				  title @include(if: $includeGrantResourceTypeTrunkTitle)
 				}
 			  }
 			  turbot {
-				id
-				createTimestamp
-				deleteTimestamp
-				timestamp
-				versionId
-				updateTimestamp
+				id @include(if: $includeGrantResourceId)
+				createTimestamp @include(if: $includeGrantResourceCreateTimestamp)
+				deleteTimestamp @include(if: $includeGrantResourceDeleteTimestamp)
+				timestamp @include(if: $includeGrantResourceTimestamp)
+				versionId @include(if: $includeGrantResourceVersionId)
+				updateTimestamp @include(if: $includeGrantResourceUpdateTimestamp)
 			  }
 			}
-			identity {
-			  akas
-			  email: get(path: "email")
-			  status: get(path: "status")
-			  givenName: get(path: "givenName")
-			  profileId: get(path: "profileId")
-			  familyName: get(path: "familyName")
-			  displayName: get(path: "displayName")
-			  lastLoginTimestamp: get(path: "lastLoginTimestamp")
-			  trunk {
-				title
-			  }
+		identity {
+			akas @include(if: $includeGrantIdentityAkas)
+			email: get(path: "email") @include(if: $includeGrantIdentityEmail)
+			status: get(path: "status") @include(if: $includeGrantIdentityStatus)
+			givenName: get(path: "givenName") @include(if: $includeGrantIdentityGivenName)
+			profileId: get(path: "profileId") @include(if: $includeGrantIdentityProfileId)
+			familyName: get(path: "familyName") @include(if: $includeGrantIdentityFamilyName)
+			displayName: get(path: "displayName") @include(if: $includeGrantIdentityDisplayName)
+			lastLoginTimestamp: get(path: "lastLoginTimestamp") @include(if: $includeGrantIdentityLastLoginTimestamp)
+			trunk {
+			title @include(if: $includeGrantIdentityTrunkTitle)
 			}
-			level {
-			  title
-			  uri
-			  trunk {
-				title
-			  }
-			}
-			turbot {
-			  id
-			  createTimestamp
-			  deleteTimestamp
-			  timestamp
-			  versionId
-			  updateTimestamp
-			}
-		  }
-		  paging {
-			next
-		  }
 		}
-	  }			
+		level {
+			title @include(if: $includeGrantLevelTitle)
+			uri @include(if: $includeGrantLevelURI)
+			trunk {
+			title @include(if: $includeGrantLevelTrunkTitle)
+			}
+		}
+		turbot {
+			id @include(if: $includeGrantTurbotId)
+			createTimestamp @include(if: $includeGrantTurbotCreateTimestamp)
+			deleteTimestamp @include(if: $includeGrantTurbotDeleteTimestamp)
+			timestamp @include(if: $includeGrantTurbotTimestamp)
+			versionId @include(if: $includeGrantTurbotVersionId)
+			updateTimestamp @include(if: $includeGrantTurbotUpdateTimestamp)
+		}
+		}
+		paging {
+		next
+	}
+	}
+	}
 `
 )
 
@@ -159,10 +158,16 @@ func listGrants(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData)
 	plugin.Logger(ctx).Debug("guardrails_grants.listGrants", "quals", quals)
 	plugin.Logger(ctx).Debug("guardrails_grants.listGrants", "filters", filters)
 
-	nextToken := ""
+	variables := map[string]interface{}{
+		"filter":     filters,
+		"next_token": "",
+	}
+
+	appendGrantColumnIncludes(&variables, d.QueryContext.Columns)
+
 	for {
 		result := &GrantInfo{}
-		err = conn.DoRequest(grants, map[string]interface{}{"filter": filters, "next_token": nextToken}, result)
+		err = conn.DoRequest(grants, variables, result)
 		if err != nil {
 			plugin.Logger(ctx).Error("guardrails_grants.listGrants", "query_error", err)
 		}
@@ -177,7 +182,8 @@ func listGrants(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData)
 		if !pageResults || result.Grants.Paging.Next == "" {
 			break
 		}
-		nextToken = result.Grants.Paging.Next
+
+		variables["next_token"] = result.Grants.Paging.Next
 	}
 
 	return nil, err
