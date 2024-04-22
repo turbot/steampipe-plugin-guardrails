@@ -45,7 +45,7 @@ func tableGuardrailsActiveGrant(ctx context.Context) *plugin.Table {
 			{Name: "timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromValue().NullIfEqual(""), Description: "Timestamp when the grant was last modified (created, updated or deleted).", Hydrate: activeGrantHydrateTimestamp},
 			{Name: "update_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromValue(), Description: "When the grant was last updated in Turbot.", Hydrate: activeGrantHydrateUpdateTimestamp},
 			{Name: "version_id", Type: proto.ColumnType_INT, Transform: transform.FromValue().NullIfEqual(""), Description: "Unique identifier for this version of the identity.", Hydrate: activeGrantHydrateVersionId},
-			{Name: "workspace", Type: proto.ColumnType_STRING, Hydrate: plugin.HydrateFunc(getTurbotGuardrailsWorkspace).WithCache(), Transform: transform.FromValue(), Description: "Specifies the workspace URL."},
+			{Name: "workspace", Type: proto.ColumnType_STRING, Hydrate: getTurbotGuardrailsWorkspace, Transform: transform.FromValue(), Description: "Specifies the workspace URL."},
 		},
 	}
 }

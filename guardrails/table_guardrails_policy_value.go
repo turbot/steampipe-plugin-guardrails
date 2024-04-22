@@ -51,7 +51,7 @@ func tableGuardrailsPolicyValue(ctx context.Context) *plugin.Table {
 			{Name: "timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromValue(), Description: "Timestamp when the policy value was last modified (created, updated or deleted).", Hydrate: policyValueHydrateTimestamp},
 			{Name: "update_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromValue(), Description: "When the policy value was last updated in Turbot.", Hydrate: policyValueHydrateUpdateTimestamp},
 			{Name: "version_id", Type: proto.ColumnType_INT, Transform: transform.FromValue(), Description: "Unique identifier for this version of the policy value.", Hydrate: policyValueHydrateVersionId},
-			{Name: "workspace", Type: proto.ColumnType_STRING, Hydrate: plugin.HydrateFunc(getTurbotGuardrailsWorkspace).WithCache(), Transform: transform.FromValue(), Description: "Specifies the workspace URL."},
+			{Name: "workspace", Type: proto.ColumnType_STRING, Hydrate: getTurbotGuardrailsWorkspace, Transform: transform.FromValue(), Description: "Specifies the workspace URL."},
 		},
 	}
 }

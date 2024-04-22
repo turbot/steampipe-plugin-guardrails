@@ -10,6 +10,7 @@ import (
 	"github.com/turbot/steampipe-plugin-guardrails/apiClient"
 
 	"github.com/turbot/steampipe-plugin-sdk/v5/grpc/proto"
+	"github.com/turbot/steampipe-plugin-sdk/v5/memoize"
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
@@ -126,12 +127,16 @@ func escapeQualString(_ context.Context, quals map[string]*proto.QualValue, qual
 	return s
 }
 
-func getTurbotGuardrailsWorkspace(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
-	// Load workspace name from cache
-	cacheKey := "getTurbotGuardrailsWorkspaceInfo"
-	if cachedData, ok := d.ConnectionManager.Cache.Get(cacheKey); ok {
-		return cachedData.(string), nil
-	}
+// if the caching is required other than per connection, build a cache key for the call and use it in Memoize.
+var getTurbotGuardrailsWorkspaceMemoized = plugin.HydrateFunc(getTurbotGuardrailsWorkspaceUncached).Memoize(memoize.WithCacheKeyFunction(getTurbotGuardrailsWorkspaceInfoCacheKey))
+
+// declare a wrapper hydrate function to call the memoized function
+// - this is required when a memoized function is used for a column definition
+func getTurbotGuardrailsWorkspace(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
+	return getTurbotGuardrailsWorkspaceMemoized(ctx, d, h)
+}
+
+func getTurbotGuardrailsWorkspaceUncached(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
 
 	// Start with an empty Turbot config
 	config := apiClient.ClientConfig{Credentials: apiClient.ClientCredentials{}}
@@ -162,6 +167,12 @@ func getTurbotGuardrailsWorkspace(ctx context.Context, d *plugin.QueryData, _ *p
 	}
 
 	return nil, nil
+}
+
+// Build a cache key for the call to getTurbotGuardrailsWorkspaceInfoCacheKey.
+func getTurbotGuardrailsWorkspaceInfoCacheKey(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
+	key := "getTurbotGuardrailsWorkspaceInfo"
+	return key, nil
 }
 
 // Get QualValueList as an list of items
