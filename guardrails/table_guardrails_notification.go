@@ -46,7 +46,7 @@ func tableGuardrailsNotification(ctx context.Context) *plugin.Table {
 			{Name: "icon", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "Icon for this notification type.", Hydrate: notificationHydrateIcon},
 			{Name: "message", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "Message for the notification.", Hydrate: notificationHydrateMessage},
 			{Name: "notification_type", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "Type of the notification: resource, action, policySetting, control, grant, activeGrant.", Hydrate: notificationHydrateNotificationType},
-			{Name: "create_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromValue(), Description: "When the resource was first discovered by Turbot. (It may have been created earlier.)", Hydrate: notificationHydrateCreateTimestamp, Sort: plugin.SortDesc },
+			{Name: "create_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromValue(), Description: "When the resource was first discovered by Turbot. (It may have been created earlier.)", Hydrate: notificationHydrateCreateTimestamp, Sort: plugin.SortAll },
 			{Name: "filter", Type: proto.ColumnType_STRING, Transform: transform.FromQual("filter"), Description: "Filter used to search for notifications."},
 
 			// Actor info for the notification
@@ -461,7 +461,12 @@ func listNotification(ctx context.Context, d *plugin.QueryData, _ *plugin.Hydrat
 	// Add the logic for sorting create_timestamp column
 	if (len(d.QueryContext.SortOrder) > 0) {
 		for _, sort := range d.QueryContext.SortOrder {
-			filters = append(filters, fmt.Sprintf("sort:-%s", sort.Column))
+			// Constant for ASC
+			if sort.Order.String() == "asc" {
+				filters = append(filters, fmt.Sprintf("sort:%s", sort.Column))
+			} else {
+				filters = append(filters, fmt.Sprintf("sort:-%s", sort.Column))
+			}			
 		}
 	}
 
