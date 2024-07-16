@@ -72,7 +72,7 @@ For users with multiple workspaces and more complex authentication use cases, he
 
 ### Credentials via key pair
 
-The Turbot Guardrails plugin allows you to set static credentials with the `access_key`, `secret_key`, `workspace` and `insecure_skip_verify` arguments in any connection profile.
+The Turbot Guardrails plugin allows you to set static credentials with the `access_key`, `secret_key`, `workspace`, and `insecure_skip_verify` arguments in any connection profile.
 
 ```hcl
 connection "guardrails" {
