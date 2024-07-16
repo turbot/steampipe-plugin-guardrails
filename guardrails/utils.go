@@ -2,10 +2,13 @@ package turbot
 
 import (
 	"context"
+	"crypto/tls"
 	"fmt"
+	"net/http"
 	"strconv"
 	"strings"
 
+	"github.com/machinebox/graphql"
 	"github.com/turbot/go-kit/types"
 	"github.com/turbot/steampipe-plugin-guardrails/apiClient"
 
@@ -44,8 +47,13 @@ func connect(ctx context.Context, d *plugin.QueryData) (*apiClient.Client, error
 		config.Credentials.SecretKey = *guardrailsConfig.SecretKey
 	}
 
+	clientOptions, err := getClientOptions(guardrailsConfig)
+	if err != nil {
+		return nil, fmt.Errorf("Error creating HTTP client options: %w", err)
+	}
+
 	// Create the client
-	client, err := apiClient.CreateClient(config)
+	client, err := apiClient.CreateClient(config, clientOptions...)
 	if err != nil {
 		return nil, fmt.Errorf("Error creating Turbot Guardrails client: %s", err.Error())
 	}
@@ -58,6 +66,20 @@ func connect(ctx context.Context, d *plugin.QueryData) (*apiClient.Client, error
 
 	// Done
 	return client, nil
+}
+
+// getClientOptions returns the appropriate client options based on the guardrails configuration
+func getClientOptions(guardrailsConfig guardrailsConfig) ([]graphql.ClientOption, error) {
+	if guardrailsConfig.InsecureSkipVerify != nil && *guardrailsConfig.InsecureSkipVerify {
+		transport := &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		}
+		clientWithOption := &http.Client{
+			Transport: transport,
+		}
+		return []graphql.ClientOption{graphql.WithHTTPClient(clientWithOption)}, nil
+	}
+	return nil, nil
 }
 
 func getMapValue(_ context.Context, d *transform.TransformData) (interface{}, error) {
