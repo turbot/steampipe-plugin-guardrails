@@ -1,3 +1,17 @@
+## v0.17.0 [2024-07-18]
+
+_What's new?_
+
+- Added the `insecure_skip_verify` connection config argument to support bypassing the `SSL/TLS` certificate verification while querying the tables. ([#48](https://github.com/turbot/steampipe-plugin-guardrails/pull/48))
+
+_Enhancements_
+
+- The Plugin and the Steampipe Anywhere binaries are now built with the `netgo` package.
+
+_Dependencies_
+
+- Recompiled plugin with [steampipe-plugin-sdk v5.10.1](https://github.com/turbot/steampipe-plugin-sdk/blob/main/CHANGELOG.md#v5101-2024-05-09) that adds support for connection key columns. ([#49](https://github.com/turbot/steampipe-plugin-guardrails/pull/49))
+
 ## v0.16.0 [2024-02-05]
 
 _Enhancements_
