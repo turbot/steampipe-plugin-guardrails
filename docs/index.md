@@ -72,7 +72,7 @@ For users with multiple workspaces and more complex authentication use cases, he
 
 ### Credentials via key pair
 
-The Turbot Guardrails plugin allows you to set static credentials with the `access_key`, `secret_key`, and `workspace` arguments in any connection profile.
+The Turbot Guardrails plugin allows you to set static credentials with the `access_key`, `secret_key`, `workspace`, and `insecure_skip_verify` arguments in any connection profile.
 
 ```hcl
 connection "guardrails" {
@@ -80,6 +80,7 @@ connection "guardrails" {
   access_key = "c8e2c2ed-1ca8-429b-b369-010e3cf75aac"
   secret_key = "a3d8385d-47f7-40c5-a90c-bfdf5b43c8dd"
   workspace  = "https://turbot-acme.cloud.turbot.com/"
+  insecure_skip_verify = false
 }
 ```
 
@@ -110,10 +111,8 @@ export TURBOT_ACCESS_KEY=86835f29-1c88-46d9-b6ce-cbe5016842d3
 export TURBOT_WORKSPACE=https://turbot-acme.cloud.turbot.com
 ```
 
-You can also change the default profile to a named profile with the TURBOT_PROFILE  environment variable:
+You can also change the default profile to a named profile with the TURBOT_PROFILE environment variable:
 
 ```sh
 export TURBOT_PROFILE=turbot-acme
 ```
-
-

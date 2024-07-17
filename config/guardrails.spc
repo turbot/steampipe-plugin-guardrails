@@ -15,4 +15,7 @@ connection "guardrails" {
   # workspace  = "https://turbot-acme.cloud.turbot.com/"
   # access_key = "c8e2c2ed-1ca8-429b-b369-010e3cf75aac"
   # secret_key = "a3d8385d-47f7-40c5-a90c-bfdf5b43c8dd"
+
+  # Optional: Enable or disable SSL/TLS certificate verification. Defaults to false.
+  # insecure_skip_verify = false
 }

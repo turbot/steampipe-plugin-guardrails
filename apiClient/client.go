@@ -29,7 +29,7 @@ type Client struct {
 	Graphql   *graphql.Client
 }
 
-func CreateClient(config ClientConfig) (*Client, error) {
+func CreateClient(config ClientConfig, opts ...graphql.ClientOption) (*Client, error) {
 	// if accessKeyId and secretAccessKey were not directly specified (either via provider parameters or environment variables)
 	// look for a credentials file
 
@@ -40,7 +40,7 @@ func CreateClient(config ClientConfig) (*Client, error) {
 	return &Client{
 		AccessKey: credentials.AccessKey,
 		SecretKey: credentials.SecretKey,
-		Graphql:   graphql.NewClient(credentials.Workspace),
+		Graphql:   graphql.NewClient(credentials.Workspace, opts...),
 	}, nil
 }
 

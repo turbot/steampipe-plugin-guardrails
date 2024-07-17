@@ -5,10 +5,11 @@ import (
 )
 
 type guardrailsConfig struct {
-	Profile   *string `hcl:"profile"`
-	AccessKey *string `hcl:"access_key"`
-	SecretKey *string `hcl:"secret_key"`
-	Workspace *string `hcl:"workspace"`
+	Profile            *string `hcl:"profile"`
+	AccessKey          *string `hcl:"access_key"`
+	SecretKey          *string `hcl:"secret_key"`
+	Workspace          *string `hcl:"workspace"`
+	InsecureSkipVerify *bool   `hcl:"insecure_skip_verify,optional"`
 }
 
 func ConfigInstance() interface{} {
