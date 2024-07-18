@@ -36,7 +36,7 @@ func tableGuardrailsTag(ctx context.Context) *plugin.Table {
 			{Name: "timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromValue(), Description: "Timestamp when the tag was last modified (created, updated or deleted).", Hydrate: tagHydrateTimestamp},
 			{Name: "update_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromValue(), Description: "When the tag was last updated in Turbot.", Hydrate: tagHydrateUpdateTimestamp},
 			{Name: "version_id", Type: proto.ColumnType_INT, Transform: transform.FromValue(), Description: "Unique identifier for this version of the tag.", Hydrate: tagHydrateVersionID},
-			{Name: "workspace", Type: proto.ColumnType_STRING, Hydrate: plugin.HydrateFunc(getTurbotGuardrailsWorkspace).WithCache(), Transform: transform.FromValue(), Description: "Specifies the workspace URL."},
+			{Name: "workspace", Type: proto.ColumnType_STRING, Hydrate: getTurbotGuardrailsWorkspace, Transform: transform.FromValue(), Description: "Specifies the workspace URL."},
 		},
 	}
 }

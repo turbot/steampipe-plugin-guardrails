@@ -48,7 +48,7 @@ func tableGuardrailsPolicyType(ctx context.Context) *plugin.Table {
 			{Name: "secret_level", Type: proto.ColumnType_STRING, Transform: transform.FromValue(), Description: "Secret Level: SECRET, CONFIDENTIAL or NONE.", Hydrate: policyTypeHydrateSecretLevel},
 			{Name: "update_timestamp", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromValue(), Description: "When the policy type was last updated in Turbot.", Hydrate: policyTypeHydrateUpdateTimestamp},
 			{Name: "version_id", Type: proto.ColumnType_INT, Transform: transform.FromValue(), Description: "Unique identifier for this version of the policy type.", Hydrate: policyTypeHydrateVersionId},
-			{Name: "workspace", Type: proto.ColumnType_STRING, Hydrate: plugin.HydrateFunc(getTurbotGuardrailsWorkspace).WithCache(), Transform: transform.FromValue(), Description: "Specifies the workspace URL."},
+			{Name: "workspace", Type: proto.ColumnType_STRING, Hydrate: getTurbotGuardrailsWorkspace, Transform: transform.FromValue(), Description: "Specifies the workspace URL."},
 		},
 	}
 }
