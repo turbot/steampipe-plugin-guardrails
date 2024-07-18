@@ -155,17 +155,17 @@ var getTurbotGuardrailsWorkspaceMemoized = plugin.HydrateFunc(getTurbotGuardrail
 
 // Build a cache key for the call to getTurbotGuardrailsWorkspace.
 func getTurbotGuardrailsWorkspaceCacheKey(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
-	key := "getTurbotGuardrailsWorkspaceInfo"
+	key := "getTurbotGuardrailsWorkspaceUrl"
 	return key, nil
 }
 
 func getTurbotGuardrailsWorkspace(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (any, error) {
-	projectId, err := getTurbotGuardrailsWorkspaceMemoized(ctx, d, h)
+	workspaceUrl, err := getTurbotGuardrailsWorkspaceMemoized(ctx, d, h)
 	if err != nil {
 		return nil, err
 	}
 
-	return projectId, nil
+	return workspaceUrl, nil
 }
 
 func getTurbotGuardrailsWorkspaceUncached(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
