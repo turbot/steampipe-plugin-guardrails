@@ -1,3 +1,9 @@
+## v0.17.1 [2024-07-18]
+
+_Bug fixes_
+
+- Fixed plugin loading issues by eliminating the need for manual caching, ensuring smoother and more reliable plugin installations. ([#50](https://github.com/turbot/steampipe-plugin-guardrails/pull/50))
+
 ## v0.17.0 [2024-07-18]
 
 _What's new?_
