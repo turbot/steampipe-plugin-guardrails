@@ -13,6 +13,7 @@ import (
 	"github.com/turbot/steampipe-plugin-guardrails/apiClient"
 
 	"github.com/turbot/steampipe-plugin-sdk/v5/grpc/proto"
+	"github.com/turbot/steampipe-plugin-sdk/v5/memoize"
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
@@ -148,12 +149,26 @@ func escapeQualString(_ context.Context, quals map[string]*proto.QualValue, qual
 	return s
 }
 
-func getTurbotGuardrailsWorkspace(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
-	// Load workspace name from cache
-	cacheKey := "getTurbotGuardrailsWorkspaceInfo"
-	if cachedData, ok := d.ConnectionManager.Cache.Get(cacheKey); ok {
-		return cachedData.(string), nil
+// if the caching is required other than per connection, build a cache key for the call and use it in Memoize
+// since getTurbotGuardrailsWorkspace is a call, caching should be per connection
+var getTurbotGuardrailsWorkspaceMemoized = plugin.HydrateFunc(getTurbotGuardrailsWorkspaceUncached).Memoize(memoize.WithCacheKeyFunction(getTurbotGuardrailsWorkspaceCacheKey))
+
+// Build a cache key for the call to getTurbotGuardrailsWorkspace.
+func getTurbotGuardrailsWorkspaceCacheKey(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
+	key := "getTurbotGuardrailsWorkspaceInfo"
+	return key, nil
+}
+
+func getTurbotGuardrailsWorkspace(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (any, error) {
+	projectId, err := getTurbotGuardrailsWorkspaceMemoized(ctx, d, h)
+	if err != nil {
+		return nil, err
 	}
+
+	return projectId, nil
+}
+
+func getTurbotGuardrailsWorkspaceUncached(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
 
 	// Start with an empty Turbot config
 	config := apiClient.ClientConfig{Credentials: apiClient.ClientCredentials{}}

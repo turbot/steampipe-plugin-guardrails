@@ -32,7 +32,7 @@ func tableGuardrailsModVersion(ctx context.Context) *plugin.Table {
 			{Name: "filter", Type: proto.ColumnType_STRING, Transform: transform.FromQual("filter"), Description: "Filter used to search for mod versions."},
 			{Name: "mod_peer_dependency", Type: proto.ColumnType_JSON, Description: "Peer dependencies of the mod.", Transform: transform.FromValue(), Hydrate: modVersionHydratePeerDependencies},
 			// Other columns
-			{Name: "workspace", Type: proto.ColumnType_STRING, Hydrate: plugin.HydrateFunc(getTurbotGuardrailsWorkspace).WithCache(), Transform: transform.FromValue(), Description: "Specifies the workspace URL."},
+			{Name: "workspace", Type: proto.ColumnType_STRING, Hydrate: getTurbotGuardrailsWorkspace, Transform: transform.FromValue(), Description: "Specifies the workspace URL."},
 		},
 	}
 }
