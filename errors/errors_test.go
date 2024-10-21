@@ -77,7 +77,7 @@ func TestExtractErrorCode(t *testing.T) {
 	}
 	for _, test := range tests {
 		log.Println(test.name)
-		errCode, err := ExtractErrorCode(errors.Errorf(test.err))
+		errCode, err := ExtractErrorCode(errors.New(test.err))
 		assert.Equal(t, test.expected.code, errCode)
 		assert.ObjectsAreEqual(test.expected.err, err)
 	}
