@@ -1,6 +1,7 @@
 ---
 title: "Steampipe Table: guardrails_mod_version - Query Guardrails Mod Versions using SQL"
 description: "Allows users to query Guardrails Mod Versions, providing insights into the different mod versions and their associated metadata."
+folder: "Mod"
 ---
 
 # Table: guardrails_mod_version - Query Guardrails Mod Versions using SQL

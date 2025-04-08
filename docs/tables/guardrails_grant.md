@@ -1,6 +1,7 @@
 ---
 title: "Steampipe Table: guardrails_grant - Query Guardrails Grants using SQL"
 description: "Allows users to query Guardrails Grants, specifically the grantee, grantor, and guardrail details, providing insights into the permissions and rules set within a system."
+folder: "Grant"
 ---
 
 # Table: guardrails_grant - Query Guardrails Grants using SQL

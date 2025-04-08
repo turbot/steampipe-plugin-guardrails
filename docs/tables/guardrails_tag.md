@@ -1,6 +1,7 @@
 ---
 title: "Steampipe Table: guardrails_tag - Query Guardrails Tags using SQL"
 description: "Allows users to query Guardrails Tags, providing critical insights into the tag data associated with Guardrails resources."
+folder: "Tag"
 ---
 
 # Table: guardrails_tag - Query Guardrails Tags using SQL

@@ -1,6 +1,7 @@
 ---
 title: "Steampipe Table: guardrails_smart_folder - Query Guardrails Smart Folders using SQL"
 description: "Allows users to query Guardrails Smart Folders, specifically providing insights into the organization and grouping of guardrails based on their attributes."
+folder: "Smart Folder"
 ---
 
 # Table: guardrails_smart_folder - Query Guardrails Smart Folders using SQL
