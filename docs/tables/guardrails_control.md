@@ -1,6 +1,7 @@
 ---
 title: "Steampipe Table: guardrails_control - Query Guardrails Controls using SQL"
 description: "Allows users to query Guardrails Controls, specifically the control status, control category, and control standard, providing insights into the guardrails compliance and security posture."
+folder: "Control"
 ---
 
 # Table: guardrails_control - Query Guardrails Controls using SQL

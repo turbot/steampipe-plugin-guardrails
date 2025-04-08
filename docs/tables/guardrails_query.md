@@ -1,6 +1,7 @@
 ---
 title: "Steampipe Table: guardrails_query - Query Guardrails using SQL"
 description: "Allows users to query Guardrails, providing critical insights about the resource types, permissions, and any settings."
+folder: "Query"
 ---
 
 # Table: guardrails_query - Query Guardrails using SQL

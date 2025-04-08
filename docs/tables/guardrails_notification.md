@@ -1,6 +1,7 @@
 ---
 title: "Steampipe Table: guardrails_notification - Query Guardrails Notifications using SQL"
 description: "Allows users to query Guardrails Notifications, particularly the notification details including the type, status, and related metadata, providing insights into the system's security and compliance status."
+folder: "Notification"
 ---
 
 # Table: guardrails_notification - Query Guardrails Notifications using SQL

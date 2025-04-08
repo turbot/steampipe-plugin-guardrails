@@ -1,6 +1,7 @@
 ---
 title: "Steampipe Table: guardrails_resource - Query Guardrails Resources using SQL"
 description: "Allows users to query Guardrails Resources, providing insights into the security, compliance, and operational risk of their cloud infrastructure."
+folder: "Resource"
 ---
 
 # Table: guardrails_resource - Query Guardrails Resources using SQL

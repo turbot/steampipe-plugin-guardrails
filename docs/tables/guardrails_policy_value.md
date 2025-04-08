@@ -1,6 +1,7 @@
 ---
 title: "Steampipe Table: guardrails_policy_value - Query Guardrails Policy Values using SQL"
 description: "Allows users to query Guardrails Policy Values, providing insights into policy configurations and associated metadata."
+folder: "Policy"
 ---
 
 # Table: guardrails_policy_value - Query Guardrails Policy Values using SQL

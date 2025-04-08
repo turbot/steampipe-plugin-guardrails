@@ -1,6 +1,7 @@
 ---
 title: "Steampipe Table: guardrails_active_grant - Query Guardrails Active Grants using SQL"
 description: "Allows users to query Active Grants in Guardrails, providing insights into the current permissions and access levels granted within the system."
+folder: "Active Grant"
 ---
 
 # Table: guardrails_active_grant - Query Guardrails Active Grants using SQL

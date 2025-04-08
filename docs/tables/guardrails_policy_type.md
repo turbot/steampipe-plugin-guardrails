@@ -1,6 +1,7 @@
 ---
 title: "Steampipe Table: guardrails_policy_type - Query Guardrails Policy Types using SQL"
 description: "Allows users to query Policy Types in Guardrails, specifically providing details about each policy type, including its name, description, and associated metadata."
+folder: "Policy"
 ---
 
 # Table: guardrails_policy_type - Query Guardrails Policy Types using SQL

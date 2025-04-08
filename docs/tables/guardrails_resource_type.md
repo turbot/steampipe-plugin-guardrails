@@ -1,6 +1,7 @@
 ---
 title: "Steampipe Table: guardrails_resource_type - Query Guardrails Resource Types using SQL"
 description: "Allows users to query Guardrails Resource Types, specifically providing details on the resource type, description, and associated metadata. It offers insights into the resource categorization and description used within the Guardrails service."
+folder: "Resource"
 ---
 
 # Table: guardrails_resource_type - Query Guardrails Resource Types using SQL
