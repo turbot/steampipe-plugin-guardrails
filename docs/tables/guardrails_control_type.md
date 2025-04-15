@@ -1,6 +1,7 @@
 ---
 title: "Steampipe Table: guardrails_control_type - Query Guardrails Control Types using SQL"
 description: "Allows users to query Guardrails Control Types, specifically the control type, severity, and category, providing insights into the control type classification and its criticality."
+folder: "Control"
 ---
 
 # Table: guardrails_control_type - Query Guardrails Control Types using SQL
