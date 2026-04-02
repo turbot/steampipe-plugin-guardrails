@@ -6,6 +6,7 @@ import (
 	"regexp"
 	"strconv"
 
+	"github.com/turbot/steampipe-plugin-guardrails/errors"
 	"github.com/turbot/steampipe-plugin-sdk/v5/grpc/proto"
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
@@ -148,6 +149,12 @@ func listResource(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateDat
 		err = conn.DoRequest(queryResourceList, variables, result)
 		if err != nil {
 			plugin.Logger(ctx).Error("guardrails_resource.listResource", "query_error", err)
+			// If a resource is deleted mid-query, the API returns a Not Found error.
+			// Log the warning and continue rather than failing the entire query.
+			if errors.NotFoundError(err) {
+				plugin.Logger(ctx).Warn("guardrails_resource.listResource", "resource_not_found", "A resource may have been deleted mid-query, skipping page", "error", err)
+				break
+			}
 			return nil, err
 		}
 		for _, r := range result.Resources.Items {
