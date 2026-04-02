@@ -1,3 +1,9 @@
+## v1.2.2 [2026-04-02]
+
+_Bug fixes_
+
+- Fixed Steampipe Anywhere releases failing by fixing upstream workflows.
+
 ## v1.2.1 [2026-04-02]
 
 _Bug fixes_
