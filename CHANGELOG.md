@@ -1,3 +1,9 @@
+## v1.2.1 [2026-04-02]
+
+_Bug fixes_
+
+- Fixed `guardrails_resource` table queries failing when a resource is deleted mid-query. ([#103](https://github.com/turbot/steampipe-plugin-guardrails/pull/103))
+
 ## v1.2.0 [2025-10-13]
 
 _Dependencies_
