@@ -1,3 +1,9 @@
+## v1.2.3 [2026-04-03]
+
+_Bug fixes_
+
+- Fixed AMD64 FDW builds in upstream Steampipe Anywhere workflows.
+
 ## v1.2.2 [2026-04-02]
 
 _Bug fixes_
