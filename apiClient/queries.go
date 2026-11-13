@@ -31,7 +31,7 @@ func turbotActiveGrantMetadataFragment(prefix string) string {
 
 // add the given prefix to each line of the multi-line inputString
 func applyPrefix(prefix, inputString string) string {
-	return strings.Replace(inputString, "\n", "\n"+prefix, -1)
+	return strings.ReplaceAll(inputString, "\n", "\n"+prefix)
 }
 
 // validation
@@ -343,7 +343,7 @@ func getResourceTypeIdQuery(aka string) string {
 func readResourceListQuery(filter string, properties map[string]string) string {
 	var propertiesString bytes.Buffer
 	for alias, propertyPath := range properties {
-		propertiesString.WriteString(fmt.Sprintf("\t\t\t%s: get(path: \"%s\")\n", alias, propertyPath))
+		fmt.Fprintf(&propertiesString, "\t\t\t%s: get(path: \"%s\")\n", alias, propertyPath)
 	}
 	return fmt.Sprintf(`{
 	resources(filter:"%s") {
@@ -466,10 +466,10 @@ func buildResourceProperties(resourceProperties []interface{}) string {
 		property, ok := propertyPath.(map[string]string)
 		if ok {
 			for alias, property := range property {
-				propertiesString.WriteString(fmt.Sprintf("\t\t\t%s: get(path: \"%s\")\n", alias, property))
+				fmt.Fprintf(&propertiesString, "\t\t\t%s: get(path: \"%s\")\n", alias, property)
 			}
 		} else {
-			propertiesString.WriteString(fmt.Sprintf("\t\t\t%s: get(path: \"%s\")\n", propertyPath, propertyPath))
+			fmt.Fprintf(&propertiesString, "\t\t\t%s: get(path: \"%s\")\n", propertyPath, propertyPath)
 		}
 
 	}

@@ -4,6 +4,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"log"
 	"os"
+	"path/filepath"
 	"testing"
 )
 
@@ -79,6 +80,13 @@ func TestCredentialsPrecedence(t *testing.T) {
 			},
 		},
 	}
+	credentialsFile := filepath.Join(t.TempDir(), "credentials.yml")
+	profile := "test:\n  accessKey: xxbd857-XXXX-XXXX-XXXX-xxxxx039ff1x\n  secretKey: 36xxb4f-XXXX-XXXX-XXXX-c91f44axx4f6\n  workspace: https://example.com/\n"
+	if err := os.WriteFile(credentialsFile, []byte(profile), 0600); err != nil {
+		t.Fatal(err)
+	}
+	t.Setenv("TURBOT_SHARED_CREDENTIALS_FILE", credentialsFile)
+
 	for _, test := range tests {
 		log.Println(test.name)
 		credentials, _ := GetCredentials(test.Config)

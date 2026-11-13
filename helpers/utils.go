@@ -51,21 +51,21 @@ func YamlStringsAreEqual(yaml1, yaml2 string) (bool, error) {
 	var yaml1intermediate, yaml2intermediate interface{}
 
 	if err := yaml.Unmarshal([]byte(yaml1), &yaml1intermediate); err != nil {
-		return false, fmt.Errorf("Error unmarshaling yaml string: %s", err)
+		return false, fmt.Errorf("error unmarshaling yaml string: %s", err)
 	}
 
 	if err := yaml.Unmarshal([]byte(yaml2), &yaml2intermediate); err != nil {
-		return false, fmt.Errorf("Error unmarshaling yaml string: %s", err)
+		return false, fmt.Errorf("error unmarshaling yaml string: %s", err)
 	}
 
 	s1, err := yaml.Marshal(yaml1intermediate)
 	if err != nil {
-		return false, fmt.Errorf("Error marshaling yaml string: %s", err)
+		return false, fmt.Errorf("error marshaling yaml string: %s", err)
 	}
 
 	s2, err := yaml.Marshal(yaml2intermediate)
 	if err != nil {
-		return false, fmt.Errorf("Error marshaling yaml string: %s", err)
+		return false, fmt.Errorf("error marshaling yaml string: %s", err)
 	}
 
 	if string(s1) == string(s2) {

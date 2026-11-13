@@ -12,10 +12,10 @@ import (
 	"github.com/turbot/go-kit/types"
 	"github.com/turbot/steampipe-plugin-guardrails/apiClient"
 
-	"github.com/turbot/steampipe-plugin-sdk/v5/grpc/proto"
-	"github.com/turbot/steampipe-plugin-sdk/v5/memoize"
-	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"
-	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
+	"github.com/turbot/steampipe-plugin-sdk/v6/grpc/proto"
+	"github.com/turbot/steampipe-plugin-sdk/v6/memoize"
+	"github.com/turbot/steampipe-plugin-sdk/v6/plugin"
+	"github.com/turbot/steampipe-plugin-sdk/v6/plugin/transform"
 )
 
 const (
@@ -26,7 +26,7 @@ func connect(ctx context.Context, d *plugin.QueryData) (*apiClient.Client, error
 
 	// Load connection from cache, which preserves throttling protection etc
 	cacheKey := "guardrails"
-	if cachedData, ok := d.ConnectionManager.Cache.Get(cacheKey); ok {
+	if cachedData, ok := d.ConnectionCache.Get(ctx, cacheKey); ok {
 		return cachedData.(*apiClient.Client), nil
 	}
 
@@ -50,20 +50,20 @@ func connect(ctx context.Context, d *plugin.QueryData) (*apiClient.Client, error
 
 	clientOptions, err := getClientOptions(guardrailsConfig)
 	if err != nil {
-		return nil, fmt.Errorf("Error creating HTTP client options: %w", err)
+		return nil, fmt.Errorf("error creating HTTP client options: %w", err)
 	}
 
 	// Create the client
 	client, err := apiClient.CreateClient(config, clientOptions...)
 	if err != nil {
-		return nil, fmt.Errorf("Error creating Turbot Guardrails client: %s", err.Error())
+		return nil, fmt.Errorf("error creating Turbot Guardrails client: %s", err.Error())
 	}
 	if err = client.Validate(); err != nil {
-		return nil, fmt.Errorf("Error validating Turbot Guardrails client: %s", err.Error())
+		return nil, fmt.Errorf("error validating Turbot Guardrails client: %s", err.Error())
 	}
 
 	// Save to cache
-	d.ConnectionManager.Cache.Set(cacheKey, client)
+	_ = d.ConnectionCache.Set(ctx, cacheKey, client)
 
 	// Done
 	return client, nil
@@ -144,8 +144,8 @@ func pathToArray(_ context.Context, d *transform.TransformData) (interface{}, er
 
 func escapeQualString(_ context.Context, quals map[string]*proto.QualValue, qualName string) string {
 	s := quals[qualName].GetStringValue()
-	s = strings.Replace(s, "\\", "\\\\", -1)
-	s = strings.Replace(s, "'", "\\'", -1)
+	s = strings.ReplaceAll(s, "\\", "\\\\")
+	s = strings.ReplaceAll(s, "'", "\\'")
 	return s
 }
 
@@ -211,8 +211,8 @@ func getQualListValues(ctx context.Context, quals map[string]*proto.QualValue, q
 			values := make([]string, 0)
 			for _, value := range quals[qualName].GetListValue().Values {
 				str := value.GetStringValue()
-				str = strings.Replace(str, "\\", "\\\\", -1)
-				str = strings.Replace(str, "'", "\\'", -1)
+				str = strings.ReplaceAll(str, "\\", "\\\\")
+				str = strings.ReplaceAll(str, "'", "\\'")
 				values = append(values, fmt.Sprintf("'%s'", str))
 			}
 			return strings.Join(values, ",")
